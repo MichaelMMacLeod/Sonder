@@ -1,6 +1,6 @@
-public class Projectile extends Moveable {
+class Projectile extends Moveable {
 
-    private Ship parent;
+    private final Ship parent;
 
     public Projectile(Drawn shape,
                       double[] velocityOfParent,

@@ -2,14 +2,12 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.Dimension;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-public class Sonder {
+class Sonder {
 
     private static GamePanel gamePanel;
     private static final int MS_PER_UPDATE = 10;
-    private static boolean on = true;
 
     public static void main(String[] args) {
         System.setProperty("sun.java2d.opengl", "true");
@@ -20,11 +18,7 @@ public class Sonder {
 
         gamePanel = new GamePanel(width, height);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        SwingUtilities.invokeLater(Sonder::createAndShowGUI);
 
         gameLoop();
     }
@@ -33,7 +27,8 @@ public class Sonder {
         double previous = System.currentTimeMillis();
         double lag = 0;
 
-        while (on) {
+        // TODO: add a key to exit the application
+        while (true) {
             double current = System.currentTimeMillis();
             double elapsed = current - previous;
             previous = current;
@@ -50,7 +45,7 @@ public class Sonder {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Sonder");
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setUndecorated(false);
 
         gamePanel.setBackground(Color.WHITE);

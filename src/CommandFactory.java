@@ -7,7 +7,7 @@ public final class CommandFactory {
     private final HashMap<String, Command> commands;
 
     private CommandFactory() {
-        commands = new HashMap<String, Command>();
+        commands = new HashMap<>();
     }
 
     public void addCommand(final String name, final Command command) {
@@ -26,8 +26,6 @@ public final class CommandFactory {
     }
 
     public static CommandFactory init() {
-        final CommandFactory cf = new CommandFactory();
-
-        return cf;
+        return new CommandFactory();
     }
 }

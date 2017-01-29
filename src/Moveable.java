@@ -1,13 +1,13 @@
 import java.util.Arrays;
 
-public abstract class Moveable {
+abstract class Moveable {
 
-    protected Drawn shape;
-    protected double deceleration;
+    final Drawn shape;
+    final double deceleration;
 
-    protected double[] vector;
+    double[] vector;
 
-    public Moveable(Drawn shape, double deceleration) {
+    Moveable(Drawn shape, double deceleration) {
         this.shape = shape;
         this.deceleration = deceleration;
         vector = new double[2];

@@ -1,7 +1,6 @@
 import java.awt.geom.Point2D;
 import java.awt.Graphics;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +10,14 @@ import java.util.ArrayList;
  * always stay within the width and height of the screen, while non-focuses 
  * may be off screen.
  */
-public class Camera {
+class Camera {
 
     /**
      * Lists of shapes which are displayed on screen by the Draw method.
      */
 
     // These shapes will always be kept on screen.
-    private ArrayList<Drawn> focusesList;
+    private final ArrayList<Drawn> focusesList;
 
     public void removeFocus(Drawn focus) {
         focusesList.remove(focus);
@@ -29,7 +28,7 @@ public class Camera {
     }
 
     // These shapes can be off screen.
-    private ArrayList<Drawn> nonFocusList;
+    private final ArrayList<Drawn> nonFocusList;
 
     /**
      * Adds an object to focuses or nonFocuses.
@@ -48,8 +47,8 @@ public class Camera {
      * Creates a camera object.
      */
     public Camera() {
-        focusesList = new ArrayList<Drawn>();
-        nonFocusList = new ArrayList<Drawn>();
+        focusesList = new ArrayList<>();
+        nonFocusList = new ArrayList<>();
     }
 
     /**
@@ -215,8 +214,6 @@ public class Camera {
             }
 
             // Calculate center of shape.
-
-            double rotation = nonFocus.getRotation();
 
             Point2D.Double shapeCenter = new Point2D.Double();
 

@@ -4,19 +4,19 @@ import java.util.Arrays;
 
 public class Ship extends Moveable {
 
-    private double acceleration;
-    private double rotationSpeed;
+    private final double acceleration;
+    private final double rotationSpeed;
 
-    private Drawn healthBar;
-    private Drawn healthBarOutline;
-    private double maxHealth;
+    private final Drawn healthBar;
+    private final Drawn healthBarOutline;
+    private final double maxHealth;
     private double health;
-    private double percentHealthOnHit;
+    private final double percentHealthOnHit;
 
-    private Drawn shield;
-    private double maxShieldHealth;
+    private final Drawn shield;
+    private final double maxShieldHealth;
     private double shieldHealth;
-    private double shieldHealthRegen;
+    private final double shieldHealthRegen;
 
     private String[] keys =
             {

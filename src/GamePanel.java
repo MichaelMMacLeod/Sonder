@@ -7,18 +7,19 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-public class GamePanel extends JPanel {
+class GamePanel extends JPanel {
 
     /**
      * Initial size of the window. To get the current size, use JPanel's
      * getWidth() and getHeight().
      */
-    private int width, height;
+    private final int width;
+    private final int height;
 
     /**
      * Tracks which keys are pressed.
      */
-    private InputManager input;
+    private final InputManager input;
 
     /**
      * Draws objects on the screen using a graphics object.
@@ -66,7 +67,7 @@ public class GamePanel extends JPanel {
 
             cf.addCommand(keys[0], () -> player.rotate(false));
             cf.addCommand(keys[1], () -> player.rotate(true));
-            cf.addCommand(keys[2], () -> player.thrust());
+            cf.addCommand(keys[2], player::thrust);
             cf.addCommand(keys[3], () -> {
                 Drawn d = new Drawn(
                         Drawn.SQUARE,
@@ -96,7 +97,7 @@ public class GamePanel extends JPanel {
 
         // Initialize players
 
-        players = new ArrayList<Ship>();
+        players = new ArrayList<>();
 
         players.add(
                 new Ship(
@@ -164,7 +165,7 @@ public class GamePanel extends JPanel {
         // Add objects to the camera and the update list.
 
         camera = new Camera();
-        updates = new ArrayList<Moveable>();
+        updates = new ArrayList<>();
 
         for (Ship player : players) {
 

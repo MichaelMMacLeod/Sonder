@@ -22,7 +22,7 @@ public class Drawn {
      * Signifies if the polygon should be filled in or outlined.
      */
 
-    private boolean fill;
+    private final boolean fill;
 
     public boolean fillPolygon() {
         return fill;
@@ -32,9 +32,9 @@ public class Drawn {
      * X and y coordinates of the shape in space.
      */
 
-    private Point2D.Double location;
+    private final Point2D.Double location;
 
-    protected Point2D.Double getPoint() {
+    Point2D.Double getPoint() {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
@@ -53,12 +53,12 @@ public class Drawn {
         return center;
     }
 
-    protected void setLocation(double x, double y) {
+    void setLocation(double x, double y) {
         location.x = x;
         location.y = y;
     }
 
-    protected void translate(double dx, double dy) {
+    void translate(double dx, double dy) {
         location.x += dx;
         location.y += dy;
     }
@@ -69,7 +69,7 @@ public class Drawn {
 
     private double size;
 
-    protected void setSize(double size) {
+    void setSize(double size) {
         this.size = size;
     }
 
@@ -86,15 +86,13 @@ public class Drawn {
     /**
      * Returns transformed vertices.
      */
-    protected double[][] getVertices() {
+    double[][] getVertices() {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
         transform(tx, ty, vertices, rotation, location.x, location.y, size);
 
-        double[][] verts = {tx, ty};
-
-        return verts;
+        return new double[][]{tx, ty};
     }
 
     /**
@@ -109,15 +107,15 @@ public class Drawn {
 
     private double rotation;
 
-    protected double getRotation() {
+    double getRotation() {
         return rotation;
     }
 
-    protected void rotate(double rotation) {
+    void rotate(double rotation) {
         this.rotation += rotation;
     }
 
-    protected void setRotation(double rotation) {
+    void setRotation(double rotation) {
         this.rotation = rotation;
     }
 
@@ -125,14 +123,10 @@ public class Drawn {
      * Color of the shape.
      */
 
-    private Color color;
+    private final Color color;
 
-    protected Color getColor() {
+    Color getColor() {
         return color;
-    }
-
-    protected void setColor(Color color) {
-        this.color = color;
     }
 
     /**
@@ -140,13 +134,13 @@ public class Drawn {
      */
 
     // TODO: find a better way to store shapes. Maybe try reading from a file.
-    protected static final double[][] TRIANGLE =
+    static final double[][] TRIANGLE =
             {
                     {-1, 1, -1},
                     {-1, 0, 1}
             };
 
-    protected static final double[][] SQUARE =
+    static final double[][] SQUARE =
             {
                     {-1, 1, 1, -1},
                     {-1, -1, 1, 1}
@@ -267,14 +261,14 @@ public class Drawn {
      *
      * @param otherShape is the other polygon
      */
-    protected boolean contains(Drawn otherShape) {
+    boolean contains(Drawn otherShape) {
         double[] tx = getVertices()[0];
         double[] ty = getVertices()[1];
 
         double[] otherx = otherShape.getVertices()[0];
         double[] othery = otherShape.getVertices()[1];
 
-        int otherVertices = 0;
+        int otherVertices;
 
         if (otherx.length < othery.length)
             otherVertices = otherx.length;
