@@ -26,7 +26,7 @@ public class Drawn {
 
     private final boolean fill;
 
-    public boolean fillPolygon() {
+    boolean fillPolygon() {
         return fill;
     }
 
