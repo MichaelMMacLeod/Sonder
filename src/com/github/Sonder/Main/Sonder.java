@@ -1,3 +1,5 @@
+package com.github.Sonder.Main;
+
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.Dimension;
@@ -43,7 +45,7 @@ class Sonder {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Sonder");
+        JFrame frame = new JFrame("com.github.Sonder.Maingithub.Sonder.Sonder");
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setUndecorated(false);

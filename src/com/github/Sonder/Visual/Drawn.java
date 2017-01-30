@@ -1,3 +1,5 @@
+package com.github.Sonder.Visual;
+
 import java.awt.geom.Point2D;
 import java.awt.Polygon;
 import java.awt.Color;
@@ -11,7 +13,7 @@ import java.util.Arrays;
  * The polygon has its center at (0, 0), a scale of 1, no translation, 
  * and no rotation.
  *
- * When asked for the polygon, Drawn returns it with the proper 
+ * When asked for the polygon, com.github.Sonder.Visual.Drawn returns it with the proper
  * transformations (scaling, translation, rotation).
  *
  * Also tracks the color of the polygon.
@@ -34,7 +36,7 @@ public class Drawn {
 
     private final Point2D.Double location;
 
-    Point2D.Double getPoint() {
+    public Point2D.Double getPoint() {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
@@ -107,7 +109,7 @@ public class Drawn {
 
     private double rotation;
 
-    double getRotation() {
+    public double getRotation() {
         return rotation;
     }
 
@@ -125,7 +127,7 @@ public class Drawn {
 
     private final Color color;
 
-    Color getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -134,13 +136,13 @@ public class Drawn {
      */
 
     // TODO: find a better way to store shapes. Maybe try reading from a file.
-    static final double[][] TRIANGLE =
+    public static final double[][] TRIANGLE =
             {
                     {-1, 1, -1},
                     {-1, 0, 1}
             };
 
-    static final double[][] SQUARE =
+    public static final double[][] SQUARE =
             {
                     {-1, 1, 1, -1},
                     {-1, -1, 1, 1}

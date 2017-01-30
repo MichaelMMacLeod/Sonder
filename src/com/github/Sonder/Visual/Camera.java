@@ -1,16 +1,18 @@
+package com.github.Sonder.Visual;
+
 import java.awt.geom.Point2D;
 import java.awt.Graphics;
 
 import java.util.ArrayList;
 
 /**
- * Displays Drawn objects using Graphics
+ * Displays com.github.Sonder.Visual.Drawn objects using Graphics
  *
- * Contains two lists of Drawn shapes: focuses and nonFocuses. Focuses will 
+ * Contains two lists of com.github.Sonder.Visual.Drawn shapes: focuses and nonFocuses. Focuses will
  * always stay within the width and height of the screen, while non-focuses 
  * may be off screen.
  */
-class Camera {
+public class Camera {
 
     /**
      * Lists of shapes which are displayed on screen by the Draw method.
@@ -118,7 +120,7 @@ class Camera {
             zoom = -1 / zoom + 2;
         }
 
-        // Drawn each focus.
+        // com.github.Sonder.Visual.Drawn each focus.
 
         for (Drawn focus : focuses) {
 
@@ -155,7 +157,7 @@ class Camera {
             shapeCenter.x /= vertices;
             shapeCenter.y /= vertices;
 
-            // Drawn identification circles around focuses.
+            // com.github.Sonder.Visual.Drawn identification circles around focuses.
 
             // Draw the circle.
             g.drawOval(
@@ -182,7 +184,7 @@ class Camera {
                 yVertsInt[i] = (int) yVerts[i];
             }
 
-            // Drawn the polygon.
+            // com.github.Sonder.Visual.Drawn the polygon.
 
             if (focus.fillPolygon())
                 g.fillPolygon(xVertsInt, yVertsInt, xVerts.length);
@@ -190,7 +192,7 @@ class Camera {
                 g.drawPolygon(xVertsInt, yVertsInt, xVertsInt.length);
         }
 
-        // Drawn each non-focus.
+        // com.github.Sonder.Visual.Drawn each non-focus.
 
         for (Drawn nonFocus : nonFocuses) {
 
@@ -234,7 +236,7 @@ class Camera {
                 yVertsInt[i] = (int) yVerts[i];
             }
 
-            // Drawn the polygon.
+            // com.github.Sonder.Visual.Drawn the polygon.
 
             if (nonFocus.fillPolygon())
                 g.fillPolygon(xVertsInt, yVertsInt, xVerts.length);

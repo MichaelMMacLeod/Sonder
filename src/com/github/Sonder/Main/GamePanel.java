@@ -1,3 +1,8 @@
+package com.github.Sonder.Main;
+
+import com.github.Sonder.Input.InputManager;
+import com.github.Sonder.Visual.*;
+
 import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +47,7 @@ class GamePanel extends JPanel {
     private final CommandFactory cf;
 
     /**
-     * Creates a GamePanel object.
+     * Creates a com.github.Sonder.GamePanelder.Main.GamePanel object.
      *
      * @param width  is the initial width of the window.
      * @param height is the initial height of the window.

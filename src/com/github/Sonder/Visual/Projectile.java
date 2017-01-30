@@ -1,4 +1,6 @@
-class Projectile extends Moveable {
+package com.github.Sonder.Visual;
+
+public class Projectile extends Moveable {
 
     private final Ship parent;
 

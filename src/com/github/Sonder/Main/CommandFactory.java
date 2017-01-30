@@ -1,3 +1,5 @@
+package com.github.Sonder.Main;
+
 import java.util.stream.Collectors;
 import java.util.HashMap;
 

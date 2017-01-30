@@ -1,3 +1,5 @@
+package com.github.Sonder.Input;
+
 import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
@@ -7,7 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.JPanel;
 
-class InputManager {
+public class InputManager {
 
     private final JPanel panel;
 

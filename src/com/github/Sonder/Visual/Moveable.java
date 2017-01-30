@@ -1,6 +1,8 @@
+package com.github.Sonder.Visual;
+
 import java.util.Arrays;
 
-abstract class Moveable {
+public abstract class Moveable {
 
     final Drawn shape;
     final double deceleration;
