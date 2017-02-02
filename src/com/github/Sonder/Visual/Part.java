@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import java.util.HashMap;
 
-public abstract class Part {
+public class Part {
     private final Ship2 parent;
 
     private final HashMap<String, Double> attributes;
@@ -26,14 +26,12 @@ public abstract class Part {
         this.actions = actions;
     }
 
-    public abstract void update();
-
     public Ship2.Command action(String key) {
         return actions.get(key);
     }
 
     public final String[] getKeys() {
-        return (String[]) actions.keySet().toArray();
+        return actions.keySet().toArray(new String[actions.size()]);
     }
 
     public final Drawn getShape() {

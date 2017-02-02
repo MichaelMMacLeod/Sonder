@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 
@@ -46,6 +47,8 @@ class GamePanel extends JPanel {
      */
     private final CommandFactory cf;
 
+    Ship2 tester;
+
     /**
      * Creates a com.github.Sonder.GamePanelder.Main.GamePanel object.
      *
@@ -63,6 +66,33 @@ class GamePanel extends JPanel {
         input = new InputManager(this);
 
         cf = CommandFactory.init();
+
+        tester = new Ship2();
+        HashMap<String, Ship2.Command> partCommands = new HashMap<>();
+        partCommands.put("thrust", () -> {
+            tester.vector[0] += Math.cos(tester.getRotation());
+            tester.vector[1] += Math.sin(tester.getRotation());
+        });
+        tester.addPart(
+                new Part(
+                        tester,
+                        new Drawn(
+                                Drawn.TRIANGLE,
+                                new Point2D.Double(-60, 0),
+                                30,
+                                0,
+                                new Point2D.Double(0, 0),
+                                Color.BLUE,
+                                false),
+                        new HashMap<String, Double>(),
+                        new Point2D.Double(0, 0),
+                        partCommands
+                )
+        );
+
+        for (Drawn shape : tester.getShapes()) {
+            camera.add(shape, true);
+        }
 
         for (Ship player : players) {
             String[] keys = player.getKeys();
@@ -92,6 +122,8 @@ class GamePanel extends JPanel {
                 updates.add(p);
             });
         }
+
+        input.addKey("r");
 
         cf.listCommands();
     }
@@ -205,6 +237,11 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     public void update() {
+
+        tester.update();
+        
+        if (input.held("r"))
+            tester.trigger("thrust");
 
         // Update all players
 
