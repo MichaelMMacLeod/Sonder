@@ -79,6 +79,7 @@ class GamePanel extends JPanel {
                         player.shape().getPoint(),
                         5,
                         player.shape().getRotation(),
+                        new Point2D.Double(0, 0),
                         player.shape().getColor(),
                         true);
                 Projectile p = new Projectile(
@@ -111,6 +112,7 @@ class GamePanel extends JPanel {
                                 new Point2D.Double(-60, 0),
                                 30,
                                 0,
+                                new Point2D.Double(0, 0),
                                 Color.BLUE,
                                 false),
                         0.05,
@@ -132,6 +134,7 @@ class GamePanel extends JPanel {
                                 new Point2D.Double(60, 0),
                                 30,
                                 Math.PI,
+                                new Point2D.Double(0, 0),
                                 Color.RED,
                                 false),
                         0.05,
@@ -153,6 +156,7 @@ class GamePanel extends JPanel {
                                 new Point2D.Double(0, 60),
                                 30,
                                 -Math.PI / 2,
+                                new Point2D.Double(0, 0),
                                 Color.BLACK,
                                 false),
                         0.05,
@@ -191,6 +195,7 @@ class GamePanel extends JPanel {
                         new Point2D.Double(),
                         120,
                         0,
+                        new Point2D.Double(0, 0),
                         Color.GREEN,
                         false),
                 false);

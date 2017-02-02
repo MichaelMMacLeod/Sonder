@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 
 public abstract class Part {
-    private HashMap<String, Double> attributes;
+    private final HashMap<String, Double> attributes;
 
     private final Drawn shape;
 

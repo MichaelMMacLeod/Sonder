@@ -21,6 +21,11 @@ import java.util.Arrays;
 public class Drawn {
 
     /**
+     * The point at which the shape is rotated around.
+     */
+    private final Point2D.Double anchor;
+
+    /**
      * Signifies if the polygon should be filled in or outlined.
      */
 
@@ -40,7 +45,7 @@ public class Drawn {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
-        transform(tx, ty, vertices, rotation, location.x, location.y, size);
+        transform(tx, ty, vertices, rotation, anchor, location.x, location.y, size);
 
         Point2D.Double center = new Point2D.Double();
 
@@ -92,7 +97,7 @@ public class Drawn {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
-        transform(tx, ty, vertices, rotation, location.x, location.y, size);
+        transform(tx, ty, vertices, rotation, anchor, location.x, location.y, size);
 
         return new double[][]{tx, ty};
     }
@@ -167,6 +172,7 @@ public class Drawn {
             Point2D.Double location,
             double size,
             double rotation,
+            Point2D.Double anchor,
             Color color,
             boolean fill) {
 
@@ -175,6 +181,7 @@ public class Drawn {
         this.location = new Point2D.Double(location.x, location.y);
         this.size = size;
         this.rotation = rotation;
+        this.anchor = anchor;
         this.color = color;
         this.fill = fill;
     }
@@ -187,7 +194,7 @@ public class Drawn {
      *              shape[1]. There must be an equal number of x and y
      *              vertices.
      */
-    public void setShape(double[][] shape) {
+    void setShape(double[][] shape) {
 
         // Get vertices
 
@@ -227,8 +234,8 @@ public class Drawn {
      * @param xpoints      are the x coordinates to be transformed.
      * @param ypoints      are the y coordinates to be transformed.
      * @param npoints      is the number of points.
-     * @param angle        is the angle of rotation in radians. Assumes that
-     *                     the centroid of the vertices is located at (0, 0).
+     * @param angle        is the angle of rotation in radians.
+     * @param anchor       is the point which the vertices are rotated around.
      * @param xtranslation is the translation in the x dimension.
      * @param ytranslation is the translation in the y dimension.
      * @param scale        is the scalar value.
@@ -238,6 +245,7 @@ public class Drawn {
             double[] ypoints,
             int npoints,
             double angle,
+            Point2D.Double anchor,
             double xtranslation,
             double ytranslation,
             double scale) {
@@ -248,13 +256,18 @@ public class Drawn {
         double[] ypointsNew = new double[npoints];
 
         for (int i = 0; i < npoints; i++) {
+            xpoints[i] -= anchor.x;
+            ypoints[i] -= anchor.y;
+        }
+
+        for (int i = 0; i < npoints; i++) {
             xpointsNew[i] = xpoints[i] * cos - ypoints[i] * sin;
             ypointsNew[i] = xpoints[i] * sin + ypoints[i] * cos;
         }
 
         for (int i = 0; i < npoints; i++) {
-            xpoints[i] = xpointsNew[i] * scale + xtranslation;
-            ypoints[i] = ypointsNew[i] * scale + ytranslation;
+            xpoints[i] = (xpointsNew[i] + anchor.x) * scale + xtranslation;
+            ypoints[i] = (ypointsNew[i] + anchor.y) * scale + ytranslation;
         }
     }
 

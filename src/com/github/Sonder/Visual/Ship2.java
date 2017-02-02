@@ -24,9 +24,5 @@ public class Ship2 {
     public Ship2(Part[] parts, String[] keys) {
         this.parts = parts;
         this.keys = keys;
-
-        for (Part part : this.parts) {
-
-        }
     }
 }

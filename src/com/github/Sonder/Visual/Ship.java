@@ -65,6 +65,7 @@ public class Ship extends Moveable {
                         shape().getPoint().y),
                 shieldHealth,
                 0,
+                new Point2D.Double(0, 0),
                 shape().getColor(),
                 false);
 
@@ -79,6 +80,7 @@ public class Ship extends Moveable {
                         shape().getPoint().y),
                 1,
                 0,
+                new Point2D.Double(0, 0),
                 shape().getColor(),
                 true);
         healthBarOutline = new Drawn(
@@ -92,6 +94,7 @@ public class Ship extends Moveable {
                         shape().getPoint().y),
                 1,
                 0,
+                new Point2D.Double(0, 0),
                 shape().getColor(),
                 false);
     }
