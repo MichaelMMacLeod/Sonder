@@ -1,16 +1,18 @@
 package com.github.Sonder.server;
 
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Sonder extends Thread {
 
     private static final int MS_PER_UPDATE = 10;
 
+    private ArrayList<Socket> players;
+
     public void run() {
         double previous = System.currentTimeMillis();
         double lag = 0;
 
-        // TODO: add a key to exit the application
         while (true) {
             double current = System.currentTimeMillis();
             double elapsed = current - previous;
