@@ -16,12 +16,12 @@ public class SonderClient {
         Scanner scan = new Scanner(System.in);
 
         log("Enter IP address of server: ");
-        String serverAddres = scan.nextLine();
+        String serverAddress = scan.nextLine();
 
         log("Enter port number: ");
         int port = scan.nextInt();
 
-        Socket socket = new Socket(serverAddres, port);
+        Socket socket = new Socket(serverAddress, port);
     }
 
     private void log(String text) {

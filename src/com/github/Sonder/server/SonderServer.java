@@ -14,6 +14,8 @@ public class SonderServer {
 
     private static ArrayList<Player> players;
 
+    private static final int MS_PER_UPDATE = 10;
+
     private static ServerSocket socket;
 
     private static boolean serverOn = true;
@@ -44,11 +46,36 @@ public class SonderServer {
 
         InputListener inputListener = new InputListener();
         inputListener.start();
+
+        Sonder sonder = new Sonder();
+        sonder.start();
+    }
+
+    private static class Sonder extends Thread {
+        public void run() {
+            double previous = System.currentTimeMillis();
+            double lag = 0;
+
+            while (true) {
+                double current = System.currentTimeMillis();
+                double elapsed = current - previous;
+                previous = current;
+                lag += elapsed;
+
+                while (serverOn && lag >= MS_PER_UPDATE) {
+                    update();
+                    lag -= MS_PER_UPDATE;
+                }
+            }
+        }
+
+        private static void update() {
+            log("updated");
+        }
     }
 
     private static class InputListener extends Thread {
         public void run() {
-
             Scanner scan = new Scanner(System.in);
 
             while (serverOn) {
