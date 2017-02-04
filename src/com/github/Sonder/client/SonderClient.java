@@ -1,6 +1,5 @@
 package com.github.Sonder.client;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -8,15 +7,13 @@ import java.util.Scanner;
 
 public class SonderClient {
 
-    private Scanner scan;
-
     public static void main(String[] args) throws IOException {
         SonderClient client = new SonderClient();
         client.connect();
     }
 
-    public void connect() throws IOException {
-        scan = new Scanner(System.in);
+    private void connect() throws IOException {
+        Scanner scan = new Scanner(System.in);
 
         log("Enter IP address of server: ");
         String serverAddres = scan.nextLine();

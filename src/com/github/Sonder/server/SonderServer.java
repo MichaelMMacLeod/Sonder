@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class SonderServer {
 
@@ -13,17 +14,21 @@ public class SonderServer {
 
     private static ArrayList<Player> players;
 
+    private static ServerSocket socket;
+
+    private static boolean serverOn = true;
+
     public static void main(String[] args) throws IOException {
         log("Starting SonderServer...");
 
         players = new ArrayList<>();
 
-        ServerSocket listener = new ServerSocket(DEFAULT_PORT);
+        socket = new ServerSocket(DEFAULT_PORT);
 
         if (args.length > 0) {
             try {
                 int port = Integer.parseInt(args[0]);
-                listener = new ServerSocket(port);
+                socket = new ServerSocket(port);
                 log("Started server on custom port: " + port);
             } catch (Exception e) {
                 log("Error: Port '" + args[0] + "' is not a number");
@@ -34,13 +39,51 @@ public class SonderServer {
             log("Started server on default port: " + DEFAULT_PORT);
         }
 
-        try {
-            while (true) {
-                players.add(new Player(listener.accept()));
-                log("Total connected players: " + players.size());
+        ConnectionListener connectionListener = new ConnectionListener();
+        connectionListener.start();
+
+        InputListener inputListener = new InputListener();
+        inputListener.start();
+    }
+
+    private static class InputListener extends Thread {
+        public void run() {
+
+            Scanner scan = new Scanner(System.in);
+
+            while (serverOn) {
+                switch (scan.nextLine()) {
+                    case "stop":
+                        log("Stopping SonderServer...");
+                        serverOn = false;
+                        try {
+                            socket.close();
+                        } catch (IOException e) {
+                            log("Error: Couldn't close server properly: " + e);
+                        }
+                        break;
+                    case "list":
+                        for (int i = 0; i < players.size(); i++) {
+                            log("Player #" + i + ": " + players.get(i));
+                        }
+                        break;
+                    default: break;
+                }
             }
-        } catch(IOException e) {
-            log("Error: Couldn't connect player: " + e);
+        }
+    }
+
+    private static class ConnectionListener extends Thread {
+        public void run() {
+            while (serverOn) {
+                try {
+                    players.add(new Player(socket.accept()));
+                } catch (IOException e) {
+                    if (serverOn) {
+                        log("Error: Couldn't connect player: " + e);
+                    }
+                }
+            }
         }
     }
 
@@ -51,6 +94,10 @@ public class SonderServer {
         public Player(Socket socket) {
             this.socket = socket;
             log("New connection: " + socket);
+        }
+
+        public String toString() {
+            return socket.toString();
         }
     }
 
