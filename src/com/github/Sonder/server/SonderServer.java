@@ -1,11 +1,12 @@
 package com.github.Sonder.server;
 
-import java.io.IOException;
+import java.io.*;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SonderServer {
@@ -56,7 +57,7 @@ public class SonderServer {
             double previous = System.currentTimeMillis();
             double lag = 0;
 
-            while (true) {
+            while (serverOn) {
                 double current = System.currentTimeMillis();
                 double elapsed = current - previous;
                 previous = current;
@@ -70,7 +71,7 @@ public class SonderServer {
         }
 
         private static void update() {
-            log("updated");
+
         }
     }
 
@@ -88,6 +89,7 @@ public class SonderServer {
                         } catch (IOException e) {
                             log("Error: Couldn't close server properly: " + e);
                         }
+                        System.exit(0);
                         break;
                     case "list":
                         for (int i = 0; i < players.size(); i++) {
@@ -118,9 +120,32 @@ public class SonderServer {
 
         private Socket socket;
 
-        public Player(Socket socket) {
+        private ObjectInputStream in;
+        private ObjectOutputStream out;
+
+        public Player(Socket socket) throws IOException {
             this.socket = socket;
+
+            out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
+
+            in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+
+            start();
+
             log("New connection: " + socket);
+        }
+
+        public void run() {
+            while (serverOn) {
+                try {
+                    HashMap<String, Object> input = (HashMap<String, Object>) in.readObject();
+                    boolean[] keys = (boolean[]) input.get("keys");
+                    log(Boolean.toString(keys[0]));
+                } catch (IOException | ClassNotFoundException e) {
+                    log("Error: Couldn't get user input from " + this + ": " + e);
+                }
+            }
         }
 
         public String toString() {
