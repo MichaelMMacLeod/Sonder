@@ -116,43 +116,6 @@ public class SonderServer {
         }
     }
 
-    private static class Player extends Thread {
-
-        private Socket socket;
-
-        private ObjectInputStream in;
-        private ObjectOutputStream out;
-
-        public Player(Socket socket) throws IOException {
-            this.socket = socket;
-
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.flush();
-
-            in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-
-            start();
-
-            log("New connection: " + socket);
-        }
-
-        public void run() {
-            while (serverOn) {
-                try {
-                    HashMap<String, Object> input = (HashMap<String, Object>) in.readObject();
-                    boolean[] keys = (boolean[]) input.get("keys");
-                    log(Boolean.toString(keys[0]));
-                } catch (IOException | ClassNotFoundException e) {
-                    log("Error: Couldn't get user input from " + this + ": " + e);
-                }
-            }
-        }
-
-        public String toString() {
-            return socket.toString();
-        }
-    }
-
     private static void log(String text) {
         System.out.println("[SonderServer] " + text);
     }

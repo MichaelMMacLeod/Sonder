@@ -1,21 +1,55 @@
 package com.github.Sonder.client;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 import java.net.Socket;
 
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class SonderClient {
 
     private static boolean clientOn = true;
-
     private static Socket socket;
+    private static GamePanel gamePanel;
+    private static final int MS_PER_UPDATE = 10;
 
     public static void main(String[] args) throws IOException {
         SonderClient client = new SonderClient();
         client.connect();
+
+        // Start GUI
+
+        System.setProperty("sun.java2d.opengl", "true");
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+
+        gamePanel = new GamePanel(width, height, socket);
+
+        SwingUtilities.invokeLater(SonderClient::createAndShowGUI);
+
+        gameLoop();
+    }
+
+    private static void gameLoop() {
+        double previous = System.currentTimeMillis();
+        double lag = 0;
+
+        while (true) {
+            double current = System.currentTimeMillis();
+            double elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
+
+            while (lag >= MS_PER_UPDATE) {
+                gamePanel.update();
+                gamePanel.repaint();
+                lag -= MS_PER_UPDATE;
+            }
+        }
     }
 
     private void connect() throws IOException {
@@ -36,33 +70,32 @@ public class SonderClient {
     private class InputListener extends Thread {
 
         private ObjectInputStream in;
-        private ObjectOutputStream out;
 
         public InputListener() throws IOException {
             in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.flush();
         }
 
         public void run() {
             while (clientOn) {
-                HashMap<String, Object> output = new HashMap<String, Object>();
-                output.put("keys", new boolean[]
-                        {
-                                true,
-                                false,
-                                false,
-                                false
-                        });
-                try {
-                    out.writeObject(output);
-                } catch (IOException e) {
-                    log("Error: Couldn't write object to server: " + e);
-                }
 
             }
         }
+    }
+
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("Sonder");
+
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setUndecorated(false);
+
+        gamePanel.setBackground(Color.WHITE);
+
+        frame.add(gamePanel);
+        frame.pack();
+
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
     }
 
     private void log(String text) {
