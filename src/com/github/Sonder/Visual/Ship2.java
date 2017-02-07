@@ -19,8 +19,13 @@ public class Ship2 {
         }
         return shapes.toArray(new Drawn[0]);
     }
+
     public double getRotation() {
         return rotation;
+    }
+
+    public void rotate(double theta) {
+        rotation += theta;
     }
 
     public void move() {
