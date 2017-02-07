@@ -45,7 +45,7 @@ class Sonder {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("com.github.Sonder.Maingithub.Sonder.Sonder");
+        JFrame frame = new JFrame("Sonder");
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setUndecorated(false);
