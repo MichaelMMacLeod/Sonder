@@ -1,9 +1,16 @@
 package com.github.Sonder.Visual;
 
-public class Part {
-    private Drawn shape;
+import java.awt.*;
+import java.awt.geom.Point2D;
 
-    public Part(Drawn shape) {
-        this.shape = shape;
+public class Part extends Drawn {
+    public Part(
+            double[][] shape,
+            Point2D.Double location,
+            double size,
+            double rotation,
+            Color color,
+            boolean fill) {
+        super(shape, location, size, rotation, color, fill);
     }
 }

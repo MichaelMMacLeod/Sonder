@@ -8,7 +8,11 @@ public class PartCollection {
     private double rotation;
     private ArrayList<Part> parts;
 
-//    public double[][][] getVertices() {
-//
-//    }
+    public void addPart(Part part) {
+        parts.add(part);
+    }
+
+    public Drawn[] getParts() {
+        return parts.toArray(new Part[0]);
+    }
 }
