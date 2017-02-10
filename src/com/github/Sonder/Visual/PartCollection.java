@@ -4,8 +4,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class PartCollection {
-    // TODO: make location hold centroid of parts, update each time addPart is called or shapes move
-    private Point2D.Double location;
+
+    /**
+     * Contains the centroid of all parts.
+     */
+    private final Point2D.Double location;
+
     private double rotation;
     private ArrayList<Part> parts;
 
@@ -17,6 +21,15 @@ public class PartCollection {
 
     public void addPart(Part part) {
         parts.add(part);
+
+        location.setLocation(0, 0);
+        for (Part p : parts) {
+            Point2D.Double point = p.getPoint();
+            location.x += point.x;
+            location.y += point.y;
+        }
+        location.x /= parts.size();
+        location.y /= parts.size();
     }
 
     public Drawn[] getShapes() {

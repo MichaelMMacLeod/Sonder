@@ -31,7 +31,7 @@ class GamePanel extends JPanel {
     private PartCollection player;
 
     /**
-     * Creates a com.github.Sonder.GamePanelder.Main.GamePanel object.
+     * Creates a GamePanel object.
      *
      * @param width  is the initial width of the window.
      * @param height is the initial height of the window.
@@ -49,7 +49,20 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new PartCollection();
-        Part engine = new Part(Drawn.TRIANGLE, new Point2D.Double(0, 0), 30, 0, Color.RED, true);
+        Part hull = new Part(
+                Drawn.TRIANGLE,
+                new Point2D.Double(0, 0),
+                30,
+                0,
+                Color.RED,
+                true);
+        Part engine = new Part(
+                Drawn.SQUARE,
+                new Point2D.Double(-50, 0),
+                30, 0,
+                Color.ORANGE,
+                true);
+        player.addPart(hull);
         player.addPart(engine);
         objects.add(player);
     }
