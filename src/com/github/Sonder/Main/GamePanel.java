@@ -26,10 +26,9 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    /**
-     * Draws objects on the screen using a graphics object.
-     */
-    private Camera camera;
+    private ArrayList<PartCollection> objects;
+
+    private PartCollection player;
 
     /**
      * Creates a com.github.Sonder.GamePanelder.Main.GamePanel object.
@@ -46,6 +45,13 @@ class GamePanel extends JPanel {
         // Initialize command factory and controls.
 
         input = new InputManager(this);
+
+        objects = new ArrayList<>();
+
+        player = new PartCollection();
+        Part engine = new Part(Drawn.TRIANGLE, new Point2D.Double(0, 0), 30, 0, Color.RED, true);
+        player.addPart(engine);
+        objects.add(player);
     }
 
     /**
@@ -69,6 +75,16 @@ class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        // TODO: try creating the allShapes array when you create individual shapes; doing it each time repaint() is called is slow.
+        ArrayList<Drawn> allShapes = new ArrayList<>();
+        for (int i = 0; i < objects.size(); i++) {
+            Drawn[] collectionShapes = objects.get(i).getShapes();
+            for (int j = 0; j < collectionShapes.length; j++) {
+                allShapes.add(collectionShapes[j]);
+            }
+        }
+
+        Camera.draw(g, getWidth(), getHeight(), allShapes.toArray(new Drawn[0]), player.getLocation());
     }
 
     /**

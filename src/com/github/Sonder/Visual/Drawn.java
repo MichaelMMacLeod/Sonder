@@ -103,6 +103,10 @@ public class Drawn {
 
     private int vertices;
 
+    int getNumberOfVertices() {
+        return vertices;
+    }
+
     /**
      * Rotation of the shape.
      */
