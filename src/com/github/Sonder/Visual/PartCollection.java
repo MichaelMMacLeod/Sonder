@@ -16,6 +16,14 @@ public class PartCollection {
         parts = new ArrayList<>();
     }
 
+    public void trigger(String key) {
+        for (Part part : parts) {
+            if (part.hasAction(key)) {
+                part.trigger(key);
+            }
+        }
+    }
+
     public void addPart(Part part) {
         parts.add(part);
         updateAnchor();
@@ -50,5 +58,10 @@ public class PartCollection {
 
     public Point2D.Double getLocation() {
         return new Point2D.Double(anchor.x, anchor.y);
+    }
+
+    @FunctionalInterface
+    interface Command {
+        void apply();
     }
 }
