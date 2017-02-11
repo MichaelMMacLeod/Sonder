@@ -7,13 +7,31 @@ public class PartCollection {
 
     private final Point2D.Double anchor;
 
+    private Point2D.Double vector;
+
     private double rotation;
     private final ArrayList<Part> parts;
 
     public PartCollection() {
+        vector = new Point2D.Double();
         anchor = new Point2D.Double();
         rotation = 0;
         parts = new ArrayList<>();
+    }
+
+    public void thrust(double force) {
+        vector.x += force * Math.cos(rotation);
+        vector.y += force * Math.sin(rotation);
+    }
+
+    public void update() {
+        translate(vector.x, vector.y);
+    }
+
+    private void translate(double dx, double dy) {
+        for (Part part : parts) {
+            part.translate(dx, dy);
+        }
     }
 
     public void trigger(String key) {

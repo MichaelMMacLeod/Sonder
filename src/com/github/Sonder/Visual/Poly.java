@@ -17,21 +17,21 @@ public class Poly {
     private Color color;
     private boolean isFilled;
 
-    public double getX() {
+    double getX() {
         return center.x;
     }
-    public double getY() {
+    double getY() {
         return center.y;
     }
 
-    public double[] getXVertices() {
+    double[] getXVertices() {
         return Arrays.copyOf(xverts, nverts);
     }
-    public double[] getYVertices() {
+    double[] getYVertices() {
         return Arrays.copyOf(yverts, nverts);
     }
 
-    public int getNumberOfVertices() {
+    int getNumberOfVertices() {
         return nverts;
     }
 
@@ -39,14 +39,14 @@ public class Poly {
         return rotation;
     }
 
-    public Color getColor() {
+    Color getColor() {
         return color;
     }
-    public boolean isFilled() {
+    boolean isFilled() {
         return isFilled;
     }
 
-    public void setAnchor(double x, double y) {
+    void setAnchor(double x, double y) {
         anchor.x = x;
         anchor.y = y;
     }
@@ -95,6 +95,15 @@ public class Poly {
         this.isFilled = isFilled;
     }
 
+    void translate(double dx, double dy) {
+        for (int i = 0; i < nverts; i++) {
+            xverts[i] += dx;
+            yverts[i] += dy;
+        }
+
+        updateCenter();
+    }
+
     private void updateCenter() {
         center.x = 0;
         center.y = 0;
@@ -108,7 +117,7 @@ public class Poly {
         center.y /= nverts;
     }
 
-    public void rotate(double theta) {
+    void rotate(double theta) {
         rotation += theta;
 
         double cos = Math.cos(theta), sin = Math.sin(theta);

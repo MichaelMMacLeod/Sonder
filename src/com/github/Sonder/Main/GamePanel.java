@@ -26,7 +26,7 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    private final ArrayList<PartCollection> objects;
+    private ArrayList<PartCollection> objects;
 
     private PartCollection player;
 
@@ -36,13 +36,11 @@ class GamePanel extends JPanel {
      * @param width  is the initial width of the window.
      * @param height is the initial height of the window.
      */
-    public GamePanel(int width, int height) {
+    GamePanel(int width, int height) {
         this.width = width;
         this.height = height;
 
         restart();
-
-        // Initialize command factory and controls.
 
         input = new InputManager(this);
 
@@ -50,7 +48,12 @@ class GamePanel extends JPanel {
         input.addKey("w");
         input.addKey("d");
         input.addKey("s");
+    }
 
+    /**
+     * Resets the game to its initial state.
+     */
+    private void restart() {
         objects = new ArrayList<>();
 
         player = new PartCollection();
@@ -78,21 +81,17 @@ class GamePanel extends JPanel {
     }
 
     /**
-     * Resets the game to its initial state.
-     */
-    private void restart() {
-
-    }
-
-    /**
      * Calculates logic updates.
      */
-    public void update() {
+    void update() {
         if (input.held("a"))
             player.rotate(-Math.PI / 256);
         if (input.held("d"))
             player.rotate(Math.PI / 256);
+        if (input.held("w"))
+            player.thrust(0.01);
 
+        player.update();
     }
 
     /**
