@@ -1,17 +1,17 @@
 package com.github.Sonder.Visual;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 
-public class Part extends Drawn {
+public class Part extends Poly {
     public Part(
-            double[][] shape,
-            Point2D.Double location,
-            double size,
-            double rotation,
-            Point2D.Double rotationAnchor,
+            double[] xverts,
+            double[] yverts,
+            double x,
+            double y,
+            double anchorx,
+            double anchory,
             Color color,
-            boolean fill) {
-        super(shape, location, size, rotation, rotationAnchor, color, fill);
+            boolean isFilled) {
+        super(xverts, yverts, x, y, anchorx, anchory, color, isFilled);
     }
 }

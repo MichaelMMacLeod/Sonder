@@ -5,45 +5,50 @@ import java.util.ArrayList;
 
 public class PartCollection {
 
-    /**
-     * Contains the centroid of all parts.
-     */
-    private final Point2D.Double location;
+    private final Point2D.Double anchor;
 
     private double rotation;
-    private ArrayList<Part> parts;
+    private final ArrayList<Part> parts;
 
     public PartCollection() {
-        location = new Point2D.Double(0, 0);
+        anchor = new Point2D.Double();
         rotation = 0;
         parts = new ArrayList<>();
     }
 
     public void addPart(Part part) {
         parts.add(part);
+        updateAnchor();
+    }
 
-        location.setLocation(0, 0);
+    private void updateAnchor() {
+        anchor.setLocation(0, 0);
+
         for (Part p : parts) {
-            Point2D.Double point = p.getPoint();
-            location.x += point.x;
-            location.y += point.y;
+            anchor.x += p.getX();
+            anchor.y += p.getY();
         }
-        location.x /= parts.size();
-        location.y /= parts.size();
+
+        anchor.x /= parts.size();
+        anchor.y /= parts.size();
+
+        System.out.println(anchor);
     }
 
     public void rotate(double theta) {
+        rotation += theta;
+
         for (Part part : parts) {
-            part.setAnchor(location.x, location.y);
+            part.setAnchor(anchor.x, anchor.y);
             part.rotate(theta);
         }
     }
 
-    public Drawn[] getShapes() {
+    public Poly[] getShapes() {
         return parts.toArray(new Part[0]);
     }
 
     public Point2D.Double getLocation() {
-        return location;
+        return new Point2D.Double(anchor.x, anchor.y);
     }
 }

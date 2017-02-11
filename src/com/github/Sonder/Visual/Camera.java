@@ -3,8 +3,6 @@ package com.github.Sonder.Visual;
 import java.awt.geom.Point2D;
 import java.awt.Graphics;
 
-import java.util.ArrayList;
-
 public class Camera {
 
     private Camera() {}
@@ -14,13 +12,13 @@ public class Camera {
     public static void draw(Graphics g,
                      double width,
                      double height,
-                     Drawn[] shapes,
+                     Poly[] shapes,
                      Point2D.Double focus) {
-        for (Drawn shape : shapes) {
+        for (Poly shape : shapes) {
             g.setColor(shape.getColor());
 
-            double[] xVertices = shape.getVertices()[0];
-            double[] yVertices = shape.getVertices()[1];
+            double[] xVertices = shape.getXVertices();
+            double[] yVertices = shape.getYVertices();
 
             int vertices = shape.getNumberOfVertices();
 
@@ -37,7 +35,7 @@ public class Camera {
                 integerYVertices[i] = (int) yVertices[i];
             }
 
-            if (shape.fillPolygon())
+            if (shape.isFilled())
                 g.fillPolygon(integerXVertices, integerYVertices, vertices);
             else
                 g.drawPolygon(integerXVertices, integerYVertices, vertices);

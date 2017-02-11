@@ -3,12 +3,12 @@ package com.github.Sonder.Main;
 import com.github.Sonder.Input.InputManager;
 import com.github.Sonder.Visual.*;
 
-import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JPanel;
 
@@ -26,7 +26,7 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    private ArrayList<PartCollection> objects;
+    private final ArrayList<PartCollection> objects;
 
     private PartCollection player;
 
@@ -55,21 +55,23 @@ class GamePanel extends JPanel {
 
         player = new PartCollection();
         Part hull = new Part(
-                Drawn.TRIANGLE,
-                new Point2D.Double(0, 0),
-                30,
+                new double[] {-30, 30, -30},
+                new double[] {-30,  0,  30},
                 0,
-                new Point2D.Double(0, 0),
-                Color.RED,
-                true);
+                0,
+                0,
+                0,
+                Color.BLACK,
+                false);
         Part engine = new Part(
-                Drawn.SQUARE,
-                new Point2D.Double(-50, 0),
+                new double[] {-30,  30, 30, -30},
+                new double[] {-30, -30, 30,  30},
+                -50,
+                0,
                 30,
                 0,
-                new Point2D.Double(0, 0),
-                Color.ORANGE,
-                true);
+                Color.BLACK,
+                false);
         player.addPart(hull);
         player.addPart(engine);
         objects.add(player);
@@ -87,9 +89,9 @@ class GamePanel extends JPanel {
      */
     public void update() {
         if (input.held("a"))
-            player.rotate(-Math.PI / 64);
+            player.rotate(-Math.PI / 256);
         if (input.held("d"))
-            player.rotate(Math.PI / 64);
+            player.rotate(Math.PI / 256);
 
     }
 
@@ -101,15 +103,12 @@ class GamePanel extends JPanel {
         super.paintComponent(g);
 
         // TODO: try creating the allShapes array when you create individual shapes; doing it each time repaint() is called is slow.
-        ArrayList<Drawn> allShapes = new ArrayList<>();
-        for (int i = 0; i < objects.size(); i++) {
-            Drawn[] collectionShapes = objects.get(i).getShapes();
-            for (int j = 0; j < collectionShapes.length; j++) {
-                allShapes.add(collectionShapes[j]);
-            }
+        ArrayList<Poly> allShapes = new ArrayList<>();
+        for (PartCollection object : objects) {
+            Collections.addAll(allShapes, object.getShapes());
         }
 
-        Camera.draw(g, getWidth(), getHeight(), allShapes.toArray(new Drawn[0]), player.getLocation());
+        Camera.draw(g, getWidth(), getHeight(), allShapes.toArray(new Poly[0]), player.getLocation());
     }
 
     /**
