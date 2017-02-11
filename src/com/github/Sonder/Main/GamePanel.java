@@ -84,9 +84,7 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
-        engine.addAction("thrust", () -> {
-            player.thrust(0.1);
-        });
+        engine.addAction("thrust", () -> player.thrust(0.1));
         Part wing1 = new Part(
                 new double[] {-30, 30, -30},
                 new double[] {-30, 30,  30},
@@ -124,7 +122,6 @@ class GamePanel extends JPanel {
                 false);
         homeMarker.addPart(block);
         objects.add(homeMarker);
-
     }
 
     /**

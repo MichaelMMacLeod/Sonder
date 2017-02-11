@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Part extends Poly {
-    HashMap<String, Command> actions;
+    private final HashMap<String, Command> actions;
 
     public Part(
             double[] xverts,

@@ -7,7 +7,7 @@ public class PartCollection {
 
     private final Point2D.Double anchor;
 
-    private Point2D.Double vector;
+    private final Point2D.Double vector;
 
     private double rotation;
     private final ArrayList<Part> parts;
