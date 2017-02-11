@@ -32,6 +32,7 @@ public class PartCollection {
         for (Part part : parts) {
             part.translate(dx, dy);
         }
+        updateAnchor();
     }
 
     public void trigger(String key) {
@@ -57,8 +58,6 @@ public class PartCollection {
 
         anchor.x /= parts.size();
         anchor.y /= parts.size();
-
-        System.out.println(anchor);
     }
 
     public void rotate(double theta) {

@@ -57,7 +57,7 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new PartCollection();
-        Part hull = new Part(
+        Part front = new Part(
                 new double[] {-30, 30, -30},
                 new double[] {-30,  0,  30},
                 0,
@@ -66,18 +66,62 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
-        Part engine = new Part(
+        Part hull = new Part(
                 new double[] {-30,  30, 30, -30},
                 new double[] {-30, -30, 30,  30},
                 -50,
                 0,
-                30,
+                0,
                 0,
                 Color.BLACK,
                 false);
+        Part engine = new Part(
+                new double[] { -5,   5,  5,  -5},
+                new double[] {-25, -25, 25,  25},
+                -85,
+                0,
+                0,
+                0,
+                Color.BLACK,
+                false);
+        Part wing1 = new Part(
+                new double[] {-30, 30, -30},
+                new double[] {-30, 30,  30},
+                -60,
+                -50,
+                0,
+                0,
+                Color.BLACK,
+                false);
+        Part wing2 = new Part(
+                new double[] {-30, 30, -30},
+                new double[] {-30, -30,  30},
+                -60,
+                50,
+                0,
+                0,
+                Color.BLACK,
+                false);
+        player.addPart(front);
         player.addPart(hull);
         player.addPart(engine);
+        player.addPart(wing1);
+        player.addPart(wing2);
         objects.add(player);
+
+        PartCollection homeMarker = new PartCollection();
+        Part block = new Part(
+                new double[] {-300,  300, 300, -300},
+                new double[] {-300, -300, 300,  300},
+                0,
+                0,
+                0,
+                0,
+                Color.GREEN,
+                false);
+        homeMarker.addPart(block);
+        objects.add(homeMarker);
+
     }
 
     /**
@@ -85,11 +129,11 @@ class GamePanel extends JPanel {
      */
     void update() {
         if (input.held("a"))
-            player.rotate(-Math.PI / 256);
+            player.rotate(-Math.PI / 128);
         if (input.held("d"))
-            player.rotate(Math.PI / 256);
+            player.rotate(Math.PI / 128);
         if (input.held("w"))
-            player.thrust(0.01);
+            player.thrust(0.1);
 
         player.update();
     }
