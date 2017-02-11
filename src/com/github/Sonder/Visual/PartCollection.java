@@ -76,9 +76,4 @@ public class PartCollection {
     public Point2D.Double getLocation() {
         return new Point2D.Double(anchor.x, anchor.y);
     }
-
-    @FunctionalInterface
-    interface Command {
-        void apply();
-    }
 }

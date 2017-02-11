@@ -1,5 +1,7 @@
 package com.github.Sonder.Visual;
 
+import com.github.Sonder.Command.Command;
+
 import java.awt.*;
 import java.util.HashMap;
 
@@ -16,6 +18,7 @@ public class Part extends Poly {
             Color color,
             boolean isFilled) {
         super(xverts, yverts, x, y, anchorx, anchory, color, isFilled);
+        actions = new HashMap<>();
     }
 
     public void addAction(String key, Command action) {

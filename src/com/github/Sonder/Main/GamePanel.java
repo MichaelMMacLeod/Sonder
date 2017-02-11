@@ -84,6 +84,9 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
+        engine.addAction("thrust", () -> {
+            player.thrust(0.1);
+        });
         Part wing1 = new Part(
                 new double[] {-30, 30, -30},
                 new double[] {-30, 30,  30},
@@ -133,7 +136,7 @@ class GamePanel extends JPanel {
         if (input.held("d"))
             player.rotate(Math.PI / 128);
         if (input.held("w"))
-            player.thrust(0.1);
+            player.trigger("thrust");
 
         player.update();
     }
