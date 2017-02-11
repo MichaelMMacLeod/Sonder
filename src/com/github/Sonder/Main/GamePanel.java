@@ -85,6 +85,40 @@ class GamePanel extends JPanel {
                 Color.BLACK,
                 false);
         engine.addAction("thrust", () -> player.thrust(0.1));
+        Part smallEngine1 = new Part(
+                new double[] { -5,   5,  5,  -5},
+                new double[] {-20, -20, 20,  20},
+                -85,
+                60,
+                0,
+                0,
+                Color.BLACK,
+                false);
+        smallEngine1.addAction("thrust", () -> {
+            player.thrust(0.05);
+            player.rotate(-Math.PI / 128);
+        });
+        smallEngine1.addAction("rotate counter clockwise", () -> {
+            player.thrust(0.05);
+            player.rotate(-Math.PI / 128);
+        });
+        Part smallEngine2 = new Part(
+                new double[] { -5,   5,  5,  -5},
+                new double[] {-20, -20, 20,  20},
+                -85,
+                -60,
+                0,
+                0,
+                Color.BLACK,
+                false);
+        smallEngine2.addAction("thrust", () -> {
+           player.thrust(0.05);
+           player.rotate(Math.PI / 128);
+        });
+        smallEngine2.addAction("rotate clockwise", () -> {
+            player.thrust(0.05);
+            player.rotate(Math.PI / 128);
+        });
         Part wing1 = new Part(
                 new double[] {-30, 30, -30},
                 new double[] {-30, 30,  30},
@@ -108,6 +142,8 @@ class GamePanel extends JPanel {
         player.addPart(engine);
         player.addPart(wing1);
         player.addPart(wing2);
+        player.addPart(smallEngine1);
+        player.addPart(smallEngine2);
         objects.add(player);
 
         PartCollection homeMarker = new PartCollection();
@@ -129,9 +165,9 @@ class GamePanel extends JPanel {
      */
     void update() {
         if (input.held("a"))
-            player.rotate(-Math.PI / 128);
+            player.trigger("rotate counter clockwise");
         if (input.held("d"))
-            player.rotate(Math.PI / 128);
+            player.trigger("rotate clockwise");
         if (input.held("w"))
             player.trigger("thrust");
 
