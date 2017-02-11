@@ -46,6 +46,11 @@ class GamePanel extends JPanel {
 
         input = new InputManager(this);
 
+        input.addKey("a");
+        input.addKey("w");
+        input.addKey("d");
+        input.addKey("s");
+
         objects = new ArrayList<>();
 
         player = new PartCollection();
@@ -54,12 +59,15 @@ class GamePanel extends JPanel {
                 new Point2D.Double(0, 0),
                 30,
                 0,
+                new Point2D.Double(0, 0),
                 Color.RED,
                 true);
         Part engine = new Part(
                 Drawn.SQUARE,
                 new Point2D.Double(-50, 0),
-                30, 0,
+                30,
+                0,
+                new Point2D.Double(0, 0),
                 Color.ORANGE,
                 true);
         player.addPart(hull);
@@ -78,6 +86,10 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     public void update() {
+        if (input.held("a"))
+            player.rotate(-Math.PI / 64);
+        if (input.held("d"))
+            player.rotate(Math.PI / 64);
 
     }
 

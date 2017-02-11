@@ -9,8 +9,9 @@ public class Part extends Drawn {
             Point2D.Double location,
             double size,
             double rotation,
+            Point2D.Double rotationAnchor,
             Color color,
             boolean fill) {
-        super(shape, location, size, rotation, color, fill);
+        super(shape, location, size, rotation, rotationAnchor, color, fill);
     }
 }

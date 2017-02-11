@@ -32,6 +32,13 @@ public class PartCollection {
         location.y /= parts.size();
     }
 
+    public void rotate(double theta) {
+        for (Part part : parts) {
+            part.setAnchor(location.x, location.y);
+            part.rotate(theta);
+        }
+    }
+
     public Drawn[] getShapes() {
         return parts.toArray(new Part[0]);
     }

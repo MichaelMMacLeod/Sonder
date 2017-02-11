@@ -40,7 +40,7 @@ public class Drawn {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
-        transform(tx, ty, vertices, rotation, location.x, location.y, size);
+        transform(tx, ty, vertices, rotation, rotationAnchor, location.x, location.y, size);
 
         Point2D.Double center = new Point2D.Double();
 
@@ -92,7 +92,7 @@ public class Drawn {
         double[] tx = Arrays.copyOf(xVertices, vertices);
         double[] ty = Arrays.copyOf(yVertices, vertices);
 
-        transform(tx, ty, vertices, rotation, location.x, location.y, size);
+        transform(tx, ty, vertices, rotation, rotationAnchor, location.x, location.y, size);
 
         return new double[][]{tx, ty};
     }
@@ -126,6 +126,17 @@ public class Drawn {
     }
 
     /**
+     * Center of rotation. Will point to this.location if this object is not initialized with a point of rotation.
+     */
+
+    private final Point2D.Double rotationAnchor;
+
+    public void setAnchor(double x, double y) {
+        rotationAnchor.x = x;
+        rotationAnchor.y = y;
+    }
+
+    /**
      * Color of the shape.
      */
 
@@ -153,7 +164,7 @@ public class Drawn {
             };
 
     /**
-     * Creates a shape defined by a series of vertices
+     * Creates a shape defined by a series of vertices which rotates around its center
      *
      * @param shape    is the set of vertices defining the shape. X vertices
      *                 are stored in shape[0]. Y vertices are stored in
@@ -177,6 +188,43 @@ public class Drawn {
         setShape(shape);
 
         this.location = new Point2D.Double(location.x, location.y);
+        this.rotationAnchor = location;
+
+        this.size = size;
+        this.rotation = rotation;
+        this.color = color;
+        this.fill = fill;
+    }
+
+    /**
+     * Creates a shape defined by a series of vertices which rotates around a certain anchor point.
+     *
+     * @param shape          is the set of vertices defining the shape. X vertices
+     *                       are stored in shape[0]. Y vertices are stored in
+     *                       shape[1]. There must be an equal number of x and y
+     *                       vertices.
+     * @param location       is the (x, y) coordinate of the shape.
+     * @param size           is the size of the shape.
+     * @param rotation       is the angle of rotation in radians.
+     * @param rotationAnchor is the point the shape rotates around.
+     * @param color          is the color of the shape.
+     * @param fill           is true if the polygon should be drawn filled in, or
+     *                       false if it should be drawn outlined.
+     */
+    public Drawn(
+            double[][] shape,
+            Point2D.Double location,
+            double size,
+            double rotation,
+            Point2D.Double rotationAnchor,
+            Color color,
+            boolean fill) {
+
+        setShape(shape);
+
+        this.location = new Point2D.Double(location.x, location.y);
+        this.rotationAnchor = new Point2D.Double(rotationAnchor.x, rotationAnchor.y);
+
         this.size = size;
         this.rotation = rotation;
         this.color = color;
@@ -226,22 +274,23 @@ public class Drawn {
     }
 
     /**
-     * Applies a transformation to a series of points.
+     * Applies a transformation to a series of points where their center of rotation is not (0, 0).
      *
      * @param xpoints      are the x coordinates to be transformed.
      * @param ypoints      are the y coordinates to be transformed.
      * @param npoints      is the number of points.
-     * @param angle        is the angle of rotation in radians. Assumes that
-     *                     the centroid of the vertices is located at (0, 0).
+     * @param angle        is the angle of rotation in radians.
+     * @param anchor       is the location the coordinates will be rotated around.
      * @param xtranslation is the translation in the x dimension.
      * @param ytranslation is the translation in the y dimension.
      * @param scale        is the scalar value.
      */
-    private static void transform(
+    public static void transform(
             double[] xpoints,
             double[] ypoints,
             int npoints,
             double angle,
+            Point2D.Double anchor,
             double xtranslation,
             double ytranslation,
             double scale) {
@@ -252,13 +301,18 @@ public class Drawn {
         double[] ypointsNew = new double[npoints];
 
         for (int i = 0; i < npoints; i++) {
+            xpoints[i] -= anchor.x;
+            ypoints[i] -= anchor.y;
+        }
+
+        for (int i = 0; i < npoints; i++) {
             xpointsNew[i] = xpoints[i] * cos - ypoints[i] * sin;
             ypointsNew[i] = xpoints[i] * sin + ypoints[i] * cos;
         }
 
         for (int i = 0; i < npoints; i++) {
-            xpoints[i] = xpointsNew[i] * scale + xtranslation;
-            ypoints[i] = ypointsNew[i] * scale + ytranslation;
+            xpoints[i] = (xpointsNew[i] + anchor.x) * scale + xtranslation;
+            ypoints[i] = (ypointsNew[i] + anchor.y) * scale + ytranslation;
         }
     }
 
