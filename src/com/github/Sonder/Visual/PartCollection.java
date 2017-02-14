@@ -19,9 +19,29 @@ public class PartCollection {
         parts = new ArrayList<>();
     }
 
-    public void thrust(double force) {
-        vector.x += force * Math.cos(rotation);
-        vector.y += force * Math.sin(rotation);
+    public double getAnchorX() {
+        return anchor.x;
+    }
+
+    public double getAnchorY() {
+        return anchor.y;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void translateVector(double dx, double dy) {
+        vector.x += dx;
+        vector.y += dy;
+    }
+
+    public void thrust() {
+        for (Part part : parts) {
+            if (part instanceof Engine) {
+                part.update();
+            }
+        }
     }
 
     public void update() {
@@ -33,14 +53,6 @@ public class PartCollection {
             part.translate(dx, dy);
         }
         updateAnchor();
-    }
-
-    public void trigger(String key) {
-        for (Part part : parts) {
-            if (part.hasAction(key)) {
-                part.trigger(key);
-            }
-        }
     }
 
     public void addPart(Part part) {

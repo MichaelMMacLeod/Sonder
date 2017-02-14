@@ -1,7 +1,7 @@
 package com.github.Sonder.Visual;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.Graphics;
 
 public class Camera {
 

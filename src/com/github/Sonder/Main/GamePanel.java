@@ -57,7 +57,8 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new PartCollection();
-        Part front = new Part(
+        Part front = new Hull(
+                player,
                 new double[] {-30, 30, -30},
                 new double[] {-30,  0,  30},
                 0,
@@ -66,7 +67,8 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
-        Part hull = new Part(
+        Part hull = new Hull(
+                player,
                 new double[] {-30,  30, 30, -30},
                 new double[] {-30, -30, 30,  30},
                 -50,
@@ -75,7 +77,8 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
-        Part engine = new Part(
+        Part engine = new Engine(
+                player,
                 new double[] { -5,   5,  5,  -5},
                 new double[] {-25, -25, 25,  25},
                 -85,
@@ -83,9 +86,10 @@ class GamePanel extends JPanel {
                 0,
                 0,
                 Color.BLACK,
-                false);
-        engine.addAction("thrust", () -> player.thrust(0.1));
-        Part smallEngine1 = new Part(
+                false,
+                0.05);
+        Part smallEngine1 = new Engine(
+                player,
                 new double[] { -5,   5,  5,  -5},
                 new double[] {-20, -20, 20,  20},
                 -85,
@@ -93,16 +97,10 @@ class GamePanel extends JPanel {
                 0,
                 0,
                 Color.BLACK,
-                false);
-        smallEngine1.addAction("thrust", () -> {
-            player.thrust(0.05);
-            player.rotate(-Math.PI / 128);
-        });
-        smallEngine1.addAction("rotate counter clockwise", () -> {
-            player.thrust(0.05);
-            player.rotate(-Math.PI / 128);
-        });
-        Part smallEngine2 = new Part(
+                false,
+                0.05);
+        Part smallEngine2 = new Engine(
+                player,
                 new double[] { -5,   5,  5,  -5},
                 new double[] {-20, -20, 20,  20},
                 -85,
@@ -110,16 +108,10 @@ class GamePanel extends JPanel {
                 0,
                 0,
                 Color.BLACK,
-                false);
-        smallEngine2.addAction("thrust", () -> {
-           player.thrust(0.05);
-           player.rotate(Math.PI / 128);
-        });
-        smallEngine2.addAction("rotate clockwise", () -> {
-            player.thrust(0.05);
-            player.rotate(Math.PI / 128);
-        });
-        Part wing1 = new Part(
+                false,
+                0.05);
+        Part wing1 = new Hull(
+                player,
                 new double[] {-30, 30, -30},
                 new double[] {-30, 30,  30},
                 -60,
@@ -128,7 +120,8 @@ class GamePanel extends JPanel {
                 0,
                 Color.BLACK,
                 false);
-        Part wing2 = new Part(
+        Part wing2 = new Hull(
+                player,
                 new double[] {-30, 30, -30},
                 new double[] {-30, -30,  30},
                 -60,
@@ -146,30 +139,30 @@ class GamePanel extends JPanel {
         player.addPart(smallEngine2);
         objects.add(player);
 
-        PartCollection homeMarker = new PartCollection();
-        Part block = new Part(
-                new double[] {-300,  300, 300, -300},
-                new double[] {-300, -300, 300,  300},
-                0,
-                0,
-                0,
-                0,
-                Color.GREEN,
-                false);
-        homeMarker.addPart(block);
-        objects.add(homeMarker);
+//        PartCollection homeMarker = new PartCollection();
+//        Part block = new Hull(
+//                new double[] {-300,  300, 300, -300},
+//                new double[] {-300, -300, 300,  300},
+//                0,
+//                0,
+//                0,
+//                0,
+//                Color.GREEN,
+//                false);
+//        homeMarker.addPart(block);
+//        objects.add(homeMarker);
     }
 
     /**
      * Calculates logic updates.
      */
     void update() {
-        if (input.held("a"))
-            player.trigger("rotate counter clockwise");
-        if (input.held("d"))
-            player.trigger("rotate clockwise");
+//        if (input.held("a"))
+//            player.trigger("rotate counter clockwise");
+//        if (input.held("d"))
+//            player.trigger("rotate clockwise");
         if (input.held("w"))
-            player.trigger("thrust");
+            player.thrust();
 
         player.update();
     }

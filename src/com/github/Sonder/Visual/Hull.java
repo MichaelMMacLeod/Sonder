@@ -2,10 +2,8 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 
-public abstract class Part extends Poly {
-    protected PartCollection parent;
-
-    public Part(
+public class Hull extends Part {
+    public Hull(
             PartCollection parent,
             double[] xverts,
             double[] yverts,
@@ -15,9 +13,11 @@ public abstract class Part extends Poly {
             double anchory,
             Color color,
             boolean isFilled) {
-        super(xverts, yverts, x, y, anchorx, anchory, color, isFilled);
-        this.parent = parent;
+        super(parent, xverts, yverts, x, y, anchorx, anchory, color, isFilled);
     }
 
-    public abstract void update();
+    @Override
+    public void update() {
+
+    }
 }

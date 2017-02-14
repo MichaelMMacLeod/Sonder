@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
-    private final Point2D.Double center;
+    final Point2D.Double center;
 
     private final double[] xverts, yverts;
     private final int nverts;
