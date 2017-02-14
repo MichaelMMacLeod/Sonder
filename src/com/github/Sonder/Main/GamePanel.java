@@ -26,9 +26,9 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    private ArrayList<PartCollection> objects;
+    private ArrayList<Poly> objects;
 
-    private PartCollection player;
+    private Part player;
 
     /**
      * Creates a GamePanel object.
@@ -56,115 +56,26 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new PartCollection();
-        Part front = new Hull(
-                player,
-                new double[] {-30, 30, -30},
-                new double[] {-30,  0,  30},
-                0,
-                0,
-                0,
-                0,
-                Color.BLACK,
-                false);
-        Part hull = new Hull(
-                player,
-                new double[] {-30,  30, 30, -30},
-                new double[] {-30, -30, 30,  30},
-                -50,
-                0,
-                0,
-                0,
-                Color.BLACK,
-                false);
-        Part engine = new Engine(
-                player,
-                new double[] { -5,   5,  5,  -5},
-                new double[] {-25, -25, 25,  25},
-                -85,
-                0,
-                0,
-                0,
-                Color.BLACK,
-                false,
-                0.05);
-        Part smallEngine1 = new Engine(
-                player,
-                new double[] { -5,   5,  5,  -5},
-                new double[] {-20, -20, 20,  20},
-                -85,
-                60,
-                0,
-                0,
-                Color.BLACK,
-                false,
-                0.05);
-        Part smallEngine2 = new Engine(
-                player,
-                new double[] { -5,   5,  5,  -5},
-                new double[] {-20, -20, 20,  20},
-                -85,
-                -60,
-                0,
-                0,
-                Color.BLACK,
-                false,
-                0.05);
-        Part wing1 = new Hull(
-                player,
-                new double[] {-30, 30, -30},
-                new double[] {-30, 30,  30},
-                -60,
-                -50,
-                0,
-                0,
-                Color.BLACK,
-                false);
-        Part wing2 = new Hull(
-                player,
-                new double[] {-30, 30, -30},
-                new double[] {-30, -30,  30},
-                -60,
-                50,
-                0,
-                0,
-                Color.BLACK,
-                false);
-        player.addPart(front);
-        player.addPart(hull);
-        player.addPart(engine);
-        player.addPart(wing1);
-        player.addPart(wing2);
-        player.addPart(smallEngine1);
-        player.addPart(smallEngine2);
-        objects.add(player);
+        player = new Part(null, 0, 0, Color.BLACK);
+        Part part2 = new Part(player, 20, 20, Color.GREEN);
+        Part part3 = new Part(part2, 40, 40, Color.PINK);
 
-//        PartCollection homeMarker = new PartCollection();
-//        Part block = new Hull(
-//                new double[] {-300,  300, 300, -300},
-//                new double[] {-300, -300, 300,  300},
-//                0,
-//                0,
-//                0,
-//                0,
-//                Color.GREEN,
-//                false);
-//        homeMarker.addPart(block);
-//        objects.add(homeMarker);
+        for (Part part : player.getParts()) {
+            objects.add(part);
+        }
+
+        part3.detatch();
+
+        Part reference = new Part(null, 0, 0, Color.CYAN);
+        objects.add(reference);
     }
 
     /**
      * Calculates logic updates.
      */
     void update() {
-//        if (input.held("a"))
-//            player.trigger("rotate counter clockwise");
-//        if (input.held("d"))
-//            player.trigger("rotate clockwise");
         if (input.held("w"))
-            player.thrust();
-
-        player.update();
+            player.translate(0.5, 0.5);
     }
 
     /**
@@ -173,14 +84,7 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        // TODO: try creating the allShapes array when you create individual shapes; doing it each time repaint() is called is slow.
-        ArrayList<Poly> allShapes = new ArrayList<>();
-        for (PartCollection object : objects) {
-            Collections.addAll(allShapes, object.getShapes());
-        }
-
-        Camera.draw(g, getWidth(), getHeight(), allShapes.toArray(new Poly[0]), player.getLocation());
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getX(), player.getY());
     }
 
     /**

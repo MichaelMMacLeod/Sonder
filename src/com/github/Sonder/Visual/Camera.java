@@ -9,11 +9,13 @@ public class Camera {
 
     private static double zoom = 1;
 
-    public static void draw(Graphics g,
-                     double width,
-                     double height,
-                     Poly[] shapes,
-                     Point2D.Double focus) {
+    public static void draw(
+            Graphics g,
+            double width,
+            double height,
+            Poly[] shapes,
+            double fx,
+            double fy) {
         for (Poly shape : shapes) {
             g.setColor(shape.getColor());
 
@@ -23,8 +25,8 @@ public class Camera {
             int vertices = shape.getNumberOfVertices();
 
             for (int i = 0; i < vertices; i++) {
-                xVertices[i] = (xVertices[i] - focus.x) * zoom + width / 2;
-                yVertices[i] = (yVertices[i] - focus.y) * zoom + height / 2;
+                xVertices[i] = (xVertices[i] - fx) * zoom + width / 2;
+                yVertices[i] = (yVertices[i] - fy) * zoom + height / 2;
             }
 
             int[] integerXVertices = new int[vertices];
