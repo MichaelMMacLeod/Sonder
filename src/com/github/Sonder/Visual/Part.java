@@ -25,6 +25,7 @@ public class Part extends Poly {
         children = new ArrayList<>();
     }
 
+    @Override
     public void rotate(double theta) {
         Point2D.Double anchorPoint = anchorPoint();
         rotate(theta, anchorPoint.x, anchorPoint.y);
