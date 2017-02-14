@@ -8,7 +8,7 @@ public class Part extends Poly {
     private ArrayList<Part> children;
     private Part parent;
 
-    public Part(Part parent, double x, double y, Color color) {
+    public Part(Part parent, double x, double y, Color color, boolean isFilled) {
         super(
                 new double[] {-30,  30, 30, -30},
                 new double[] {-30, -30, 30,  30},
@@ -17,12 +17,34 @@ public class Part extends Poly {
                 0,
                 0,
                 color,
-                false);
+                isFilled);
         this.parent = parent;
         if (this.parent != null) {
             this.parent.addChild(this);
         }
         children = new ArrayList<>();
+    }
+
+    private Point2D.Double anchorPoint() {
+        Point2D.Double thisAnchor = new Point2D.Double(getX(), getY());
+
+        if (children.size() == 0) {
+            return thisAnchor;
+        }
+
+        ArrayList<Point2D.Double> childAnchors = new ArrayList<>();
+        for (Part child : children) {
+            childAnchors.add(child.anchorPoint());
+        }
+
+        for (Point2D.Double childAnchor : childAnchors) {
+            thisAnchor.x += childAnchor.x;
+            thisAnchor.y += childAnchor.y;
+        }
+        thisAnchor.x /= (childAnchors.size() + 1);
+        thisAnchor.y /= (childAnchors.size() + 1);
+
+        return thisAnchor;
     }
 
     private void orphan(Part child) {
@@ -37,7 +59,6 @@ public class Part extends Poly {
     @Override
     public void translate(double dx, double dy) {
         super.translate(dx, dy);
-        System.out.println(new Point2D.Double(getX(), getY()));
         for (Part child : children) {
             child.translate(dx, dy);
         }

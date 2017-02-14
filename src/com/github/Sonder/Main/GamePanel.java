@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -56,9 +57,9 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Part(null, 0, 0, Color.BLACK);
-        Part part2 = new Part(player, 20, 20, Color.GREEN);
-        Part part3 = new Part(part2, 40, 40, Color.PINK);
+        player = new Part(null, 0, 0, Color.BLACK, false);
+        Part part2 = new Part(player, 60, 0, Color.GREEN, false);
+        Part part3 = new Part(part2, 60, 60, Color.PINK, false);
 
         for (Part part : player.getParts()) {
             objects.add(part);
@@ -66,7 +67,7 @@ class GamePanel extends JPanel {
 
         part3.detach();
 
-        Part reference = new Part(null, 0, 0, Color.CYAN);
+        Part reference = new Part(null, 0, 0, Color.CYAN, false);
         objects.add(reference);
     }
 
