@@ -76,7 +76,11 @@ class GamePanel extends JPanel {
      */
     void update() {
         if (input.held("w"))
-            player.translate(0.5, 0.5);
+            player.translate(Math.cos(player.getRotation()), Math.sin(player.getRotation()));
+        if (input.held("a"))
+            player.rotate(-Math.PI / 64);
+        if (input.held("d"))
+            player.rotate(Math.PI / 64);
     }
 
     /**
@@ -85,7 +89,8 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getX(), player.getY());
+        Point2D.Double playerAnchor = player.anchorPoint();
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), playerAnchor.x, playerAnchor.y);
     }
 
     /**

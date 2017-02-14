@@ -25,7 +25,20 @@ public class Part extends Poly {
         children = new ArrayList<>();
     }
 
-    private Point2D.Double anchorPoint() {
+    public void rotate(double theta) {
+        Point2D.Double anchorPoint = anchorPoint();
+        rotate(theta, anchorPoint.x, anchorPoint.y);
+    }
+
+    private void rotate(double theta, double x, double y) {
+        setAnchor(x, y);
+        super.rotate(theta);
+        for (Part child : children) {
+            child.rotate(theta, x, y);
+        }
+    }
+
+    public Point2D.Double anchorPoint() {
         Point2D.Double thisAnchor = new Point2D.Double(getX(), getY());
 
         if (children.size() == 0) {
