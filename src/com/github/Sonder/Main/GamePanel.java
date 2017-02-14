@@ -64,7 +64,7 @@ class GamePanel extends JPanel {
             objects.add(part);
         }
 
-        part3.detatch();
+        part3.detach();
 
         Part reference = new Part(null, 0, 0, Color.CYAN);
         objects.add(reference);

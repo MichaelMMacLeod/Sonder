@@ -29,7 +29,7 @@ public class Part extends Poly {
         children.remove(child);
     }
 
-    public void detatch() {
+    public void detach() {
         parent.orphan(this);
         parent = null;
     }
