@@ -75,12 +75,14 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     void update() {
+        Point2D.Double playerAnchor = player.anchorPoint();
+
         if (input.held("w"))
             player.translate(Math.cos(player.getRotation()), Math.sin(player.getRotation()));
         if (input.held("a"))
-            player.rotate(-Math.PI / 64);
+            player.rotate(-Math.PI / 64, playerAnchor.x, playerAnchor.y);
         if (input.held("d"))
-            player.rotate(Math.PI / 64);
+            player.rotate(Math.PI / 64, playerAnchor.x, playerAnchor.y);
     }
 
     /**

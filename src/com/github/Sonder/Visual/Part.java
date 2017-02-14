@@ -26,14 +26,8 @@ public class Part extends Poly {
     }
 
     @Override
-    public void rotate(double theta) {
-        Point2D.Double anchorPoint = anchorPoint();
-        rotate(theta, anchorPoint.x, anchorPoint.y);
-    }
-
-    private void rotate(double theta, double x, double y) {
-        setAnchor(x, y);
-        super.rotate(theta);
+    public void rotate(double theta, double x, double y) {
+        super.rotate(theta, x, y);
         for (Part child : children) {
             child.rotate(theta, x, y);
         }

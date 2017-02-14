@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
-    final Point2D.Double center;
+    private final Point2D.Double center;
 
     private final double[] xverts, yverts;
     private final int nverts;
@@ -17,10 +17,10 @@ public class Poly {
     private Color color;
     private boolean isFilled;
 
-    public double getX() {
+    double getX() {
         return center.x;
     }
-    public double getY() {
+    double getY() {
         return center.y;
     }
 
@@ -46,7 +46,7 @@ public class Poly {
         return isFilled;
     }
 
-    void setAnchor(double x, double y) {
+    private void setAnchor(double x, double y) {
         anchor.x = x;
         anchor.y = y;
     }
@@ -117,7 +117,9 @@ public class Poly {
         center.y /= nverts;
     }
 
-    void rotate(double theta) {
+    void rotate(double theta, double x, double y) {
+        setAnchor(x, y);
+
         rotation += theta;
 
         double cos = Math.cos(theta), sin = Math.sin(theta);
