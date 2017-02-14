@@ -8,7 +8,9 @@ public class Part extends Poly {
     private ArrayList<Part> children;
     private Part parent;
 
-    public Part(Part parent, double x, double y, Color color, boolean isFilled) {
+    private Point2D.Double vector;
+
+    public Part(Part parent, double x, double y, Color color, boolean isFilled, Point2D.Double vector) {
         super(
                 new double[] {-30,  30, 30, -30},
                 new double[] {-30, -30, 30,  30},
@@ -22,7 +24,24 @@ public class Part extends Poly {
         if (this.parent != null) {
             this.parent.addChild(this);
         }
+
+        this.vector = vector;
+
         children = new ArrayList<>();
+    }
+
+    // TODO: move this to an Engine subclass of Part
+    public void thrust(double force) {
+        vector.x += force * Math.cos(getRotation());
+        vector.y += force * Math.sin(getRotation());
+    }
+
+    public void update() {
+        translate(vector.x, vector.y);
+    }
+
+    public Point2D.Double getVector() {
+        return vector;
     }
 
     @Override

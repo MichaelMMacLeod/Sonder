@@ -57,9 +57,9 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Part(null, 0, 0, Color.BLACK, false);
-        Part part2 = new Part(player, 60, 0, Color.GREEN, false);
-        Part part3 = new Part(part2, 60, 60, Color.PINK, false);
+        player = new Part(null, 0, 0, Color.BLACK, false, new Point2D.Double(0, 0));
+        Part part2 = new Part(player, 60, 0, Color.GREEN, false, player.getVector());
+        Part part3 = new Part(part2, 60, 60, Color.PINK, false, part2.getVector());
 
         for (Part part : player.getParts()) {
             objects.add(part);
@@ -67,7 +67,7 @@ class GamePanel extends JPanel {
 
         part3.detach();
 
-        Part reference = new Part(null, 0, 0, Color.CYAN, false);
+        Part reference = new Part(null, 0, 0, Color.CYAN, false, new Point2D.Double(0, 0));
         objects.add(reference);
     }
 
@@ -78,11 +78,13 @@ class GamePanel extends JPanel {
         Point2D.Double playerAnchor = player.anchorPoint();
 
         if (input.held("w"))
-            player.translate(Math.cos(player.getRotation()), Math.sin(player.getRotation()));
+            player.thrust(0.05);
         if (input.held("a"))
             player.rotate(-Math.PI / 64, playerAnchor.x, playerAnchor.y);
         if (input.held("d"))
             player.rotate(Math.PI / 64, playerAnchor.x, playerAnchor.y);
+
+        player.update();
     }
 
     /**
