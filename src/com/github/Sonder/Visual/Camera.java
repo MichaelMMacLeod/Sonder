@@ -17,7 +17,10 @@ public class Camera {
             double fx,
             double fy) {
         for (Poly shape : shapes) {
-            g.setColor(shape.getColor());
+            Graphics2D g2 = (Graphics2D) g;
+
+            g2.setColor(shape.getColor());
+            g2.setStroke(new BasicStroke(3));
 
             double[] xVertices = shape.getXVertices();
             double[] yVertices = shape.getYVertices();
@@ -38,9 +41,9 @@ public class Camera {
             }
 
             if (shape.isFilled())
-                g.fillPolygon(integerXVertices, integerYVertices, vertices);
+                g2.fillPolygon(integerXVertices, integerYVertices, vertices);
             else
-                g.drawPolygon(integerXVertices, integerYVertices, vertices);
+                g2.drawPolygon(integerXVertices, integerYVertices, vertices);
         }
     }
 }

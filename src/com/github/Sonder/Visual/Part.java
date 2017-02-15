@@ -10,16 +10,16 @@ public class Part extends Poly {
 
     private Point2D.Double vector;
 
-    public Part(Part parent, double x, double y, Color color, boolean isFilled, Point2D.Double vector) {
-        super(
-                new double[] {-30,  30, 30, -30},
-                new double[] {-30, -30, 30,  30},
-                x,
-                y,
-                0,
-                0,
-                color,
-                isFilled);
+    public Part(
+            Part parent,
+            Point2D.Double vector,
+            double[] xverts,
+            double[] yverts,
+            double x,
+            double y,
+            Color color,
+            boolean isFilled) {
+        super(xverts, yverts, x, y, 0, 0, color, isFilled);
         this.parent = parent;
         if (this.parent != null) {
             this.parent.addChild(this);
@@ -28,6 +28,24 @@ public class Part extends Poly {
         this.vector = vector;
 
         children = new ArrayList<>();
+    }
+
+    public Part(
+            Part parent,
+            Point2D.Double vector,
+            double x,
+            double y,
+            Color color,
+            boolean isFilled) {
+        this(
+                parent,
+                vector,
+                new double[] {-30,  30, 30, -30},
+                new double[] {-30, -30, 30,  30},
+                x,
+                y,
+                color,
+                isFilled);
     }
 
     // TODO: move this to an Engine subclass of Part
