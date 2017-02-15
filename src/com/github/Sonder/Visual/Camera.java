@@ -7,7 +7,9 @@ public class Camera {
 
     private Camera() {}
 
-    private static double zoom = 1;
+    private static double zoom = 2;
+
+    private static int gridSize = 400;
 
     public static void draw(
             Graphics g,
@@ -16,6 +18,18 @@ public class Camera {
             Poly[] shapes,
             double fx,
             double fy) {
+        int offsetx = -(int) (fy % gridSize);
+        int offsety = -(int) (fx % gridSize);
+
+        g.setColor(Color.LIGHT_GRAY);
+
+        for (int i = offsetx; i < height; i += gridSize * zoom) {
+            g.drawLine(0, i, (int) width, i);
+        }
+        for (int i = offsety; i < width; i += gridSize * zoom) {
+            g.drawLine(i, 0, i, (int) height);
+        }
+
         for (Poly shape : shapes) {
             Graphics2D g2 = (Graphics2D) g;
 
