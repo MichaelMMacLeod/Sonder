@@ -7,7 +7,7 @@ public class Camera {
 
     private Camera() {}
 
-    private static double zoom = 2;
+    private static double zoom = 1;
 
     private static int gridSize = 400;
 
