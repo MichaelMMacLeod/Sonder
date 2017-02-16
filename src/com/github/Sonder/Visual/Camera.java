@@ -7,7 +7,7 @@ public class Camera {
 
     private Camera() {}
 
-    private static double zoom = 2;
+    private static double zoom = 1;
 
     private static int gridSize = 400;
 
@@ -34,7 +34,6 @@ public class Camera {
             Graphics2D g2 = (Graphics2D) g;
 
             g2.setColor(shape.getColor());
-            g2.setStroke(new BasicStroke(3));
 
             double[] xVertices = shape.getXVertices();
             double[] yVertices = shape.getYVertices();
