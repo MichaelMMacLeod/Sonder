@@ -7,7 +7,7 @@ public class Camera {
 
     private Camera() {}
 
-    private static double zoom = 1;
+    private static double zoom = 2;
 
     private static int gridSize = 400;
 
@@ -23,10 +23,10 @@ public class Camera {
 
         g.setColor(Color.LIGHT_GRAY);
 
-        for (int i = offsetx; i < height; i += gridSize * zoom) {
+        for (int i = offsetx; i < height; i += gridSize) {
             g.drawLine(0, i, (int) width, i);
         }
-        for (int i = offsety; i < width; i += gridSize * zoom) {
+        for (int i = offsety; i < width; i += gridSize) {
             g.drawLine(i, 0, i, (int) height);
         }
 
