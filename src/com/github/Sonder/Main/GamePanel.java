@@ -57,74 +57,14 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Part(
-                null,
+        player = new Hull(
                 new Point2D.Double(0, 0),
-                0, 0,
-                Color.BLACK,
-                false);
-
-        Part wingTop = new Part(
-                player,
-                new Point2D.Double(),
-                new double[] {-60,  0, 30, -30},
-                new double[] {-30, -30, 30,  30},
-                -15,
-                -60,
-                Color.BLACK,
-                false);
-        Part wingBot = new Part(
-                player,
-                player.getVector(),
-                new double[] {-60,  0, 30, -30},
-                new double[] {30, 30, -30,  -30},
-                -15,
-                60,
-                Color.BLACK,
-                false);
-        Part front = new Part(
-                player,
-                player.getVector(),
-                new double[] {-30, 69, -30},
-                new double[] {-30, 0, 30},
-                63,
                 0,
-                Color.BLACK,
-                false);
-        Part engineCenter = new Part(
-                player,
-                player.getVector(),
-                new double[] {-10, 10, 10, -10},
-                new double[] {-25, -25, 25, 25},
-                -40,
-                0,
-                Color.BLACK,
-                false);
-        Part engineTop = new Part(
-                wingTop,
-                wingTop.getVector(),
-                new double[] {-20, 0, -20},
-                new double[] {-20, 20, 20},
-                -47,
-                -50,
-                Color.BLACK,
-                false);
-        Part engineBot = new Part(
-                wingTop,
-                wingTop.getVector(),
-                new double[] {-20, 0, -20},
-                new double[] {20, -20, -20},
-                -47,
-                50,
-                Color.BLACK,
-                false);
+                0);
 
         for (Part part : player.getParts()) {
             objects.add(part);
         }
-
-        Part reference = new Part(null, new Point2D.Double(0, 0), 0, 0, Color.CYAN, false);
-        objects.add(reference);
     }
 
     /**

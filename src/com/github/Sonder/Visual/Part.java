@@ -2,16 +2,27 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.nio.channels.Pipe;
 import java.util.ArrayList;
 
-public class Part extends Poly {
+public abstract class Part extends Poly {
     private ArrayList<Part> children;
     private Part parent;
 
     private Point2D.Double vector;
 
+    /**
+     * Constructs a Part with no parent.
+     *
+     * @param vector   is the initial direction and speed of the Part.
+     * @param xverts   are the x vertices of the Part's polygon.
+     * @param yverts   are the y vertices of the Part's polygon.
+     * @param x        is the x location of the centroid of the polygon in space.
+     * @param y        is the y location of the centroid of the polygon in space.
+     * @param color    is the color of the polygon.
+     * @param isFilled is true if the polygon should be colored in.
+     */
     public Part(
-            Part parent,
             Point2D.Double vector,
             double[] xverts,
             double[] yverts,
@@ -20,32 +31,41 @@ public class Part extends Poly {
             Color color,
             boolean isFilled) {
         super(xverts, yverts, x, y, 0, 0, color, isFilled);
-        this.parent = parent;
-        if (this.parent != null) {
-            this.parent.addChild(this);
-        }
+
+        this.parent = null;
 
         this.vector = vector;
 
         children = new ArrayList<>();
     }
 
+    /**
+     * Constructs a Part with a parent.
+     *
+     * @param parent   is the parent Part.
+     * @param xverts   are the x vertices of the Part's polygon.
+     * @param yverts   are the y vertices of the Part's polygon.
+     * @param x        is the x location of the centroid of the polygon in space.
+     * @param y        is the y location of the centroid of the polygon in space.
+     * @param color    is the color of the polygon.
+     * @param isFilled is true if the polygon should be colored in.
+     */
     public Part(
             Part parent,
-            Point2D.Double vector,
+            double[] xverts,
+            double[] yverts,
             double x,
             double y,
             Color color,
             boolean isFilled) {
-        this(
-                parent,
-                vector,
-                new double[] {-30,  30, 30, -30},
-                new double[] {-30, -30, 30,  30},
-                x,
-                y,
-                color,
-                isFilled);
+        super(xverts, yverts, x, y, 0, 0, color, isFilled);
+
+        this.parent = parent;
+        this.parent.addChild(this);
+
+        this.vector = parent.getVector();
+
+        children = new ArrayList<>();
     }
 
     // TODO: move this to an Engine subclass of Part
@@ -99,6 +119,7 @@ public class Part extends Poly {
     public void detach() {
         parent.orphan(this);
         parent = null;
+        vector = new Point2D.Double(vector.x, vector.y);
     }
 
     @Override
