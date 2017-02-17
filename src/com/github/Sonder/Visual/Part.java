@@ -2,7 +2,6 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 
 public abstract class Part extends Poly {

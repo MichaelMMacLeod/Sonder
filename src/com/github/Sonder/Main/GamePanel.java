@@ -61,6 +61,33 @@ class GamePanel extends JPanel {
                 new Point2D.Double(0, 0),
                 0,
                 0);
+        Part hullTop = new Hull(
+                player,
+                0,
+                -20);
+        Part hullBot = new Hull(
+                player,
+                0,
+                20);
+        Part hullFront = new Hull(
+                player,
+                20,
+                0);
+        Part engine = new Engine(
+                player,
+                -15,
+                0,
+                0.05);
+        Part engineTop = new Engine(
+                hullTop,
+                -15,
+                -20,
+                0.05);
+        Part engineBot = new Engine(
+                hullBot,
+                -15,
+                20,
+                0.05);
 
         for (Part part : player.getParts()) {
             objects.add(part);
