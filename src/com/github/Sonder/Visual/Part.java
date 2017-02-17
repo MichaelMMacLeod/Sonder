@@ -8,7 +8,7 @@ public abstract class Part extends Poly {
     private ArrayList<Part> children;
     private Part parent;
 
-    private Point2D.Double vector;
+    Point2D.Double vector;
 
     /**
      * Constructs a Part with no parent.
@@ -67,10 +67,14 @@ public abstract class Part extends Poly {
         children = new ArrayList<>();
     }
 
-    // TODO: move this to an Engine subclass of Part
-    public void thrust(double force) {
-        vector.x += force * Math.cos(getRotation());
-        vector.y += force * Math.sin(getRotation());
+    public void thrust() {
+        if (this instanceof Engine) {
+            thrust();
+        }
+
+        for (Part child : children) {
+            child.thrust();
+        }
     }
 
     public void update() {

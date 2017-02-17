@@ -101,7 +101,7 @@ class GamePanel extends JPanel {
         Point2D.Double playerAnchor = player.anchorPoint();
 
         if (input.held("w"))
-            player.thrust(0.05);
+            player.thrust();
         if (input.held("a"))
             player.rotate(-Math.PI / 64, playerAnchor.x, playerAnchor.y);
         if (input.held("d"))
