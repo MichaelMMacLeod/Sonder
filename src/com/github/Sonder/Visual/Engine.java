@@ -52,6 +52,8 @@ public class Engine extends Part {
     }
 
     public void thrust() {
+        super.thrust();
+
         vector.x += force * Math.cos(getRotation());
         vector.y += force * Math.sin(getRotation());
     }

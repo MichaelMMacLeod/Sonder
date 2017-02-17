@@ -68,10 +68,6 @@ public abstract class Part extends Poly {
     }
 
     public void thrust() {
-        if (this instanceof Engine) {
-            thrust();
-        }
-
         for (Part child : children) {
             child.thrust();
         }
