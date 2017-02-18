@@ -9,7 +9,6 @@ import java.awt.Graphics;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.swing.JPanel;
 
@@ -72,6 +71,9 @@ class GamePanel extends JPanel {
                 p2,
                 0
         );
+        Part p5 = new Hull(
+                p4,
+                3);
 
         objects.addAll(player.getParts());
     }
@@ -94,7 +96,6 @@ class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenterX(), player.getCenterY());
-        System.out.println("x: " + player.getCenterX() + " " + player.getCenterY());
     }
 
     /**

@@ -17,10 +17,10 @@ public class Poly {
     private Color fill;
     private double opacity;
 
-    public void setOutline(Color color) {
+    void setOutline(Color color) {
         outline = color;
     }
-    public void setFill(Color color) {
+    void setFill(Color color) {
         fill = color;
     }
 
@@ -56,7 +56,7 @@ public class Poly {
         return opacity;
     }
 
-    public Poly(
+    Poly(
             double[] xverts,
             double[] yverts,
             int nverts,

@@ -13,11 +13,11 @@ import javax.swing.KeyStroke;
 import javax.swing.JPanel;
 
 public class InputManager {
-    private JPanel panel;
+    private final JPanel panel;
 
-    private ArrayList<String> keyValues;
-    private ArrayList<Boolean> keys;
-    private ArrayList<Boolean> keysChecked;
+    private final ArrayList<String> keyValues;
+    private final ArrayList<Boolean> keys;
+    private final ArrayList<Boolean> keysChecked;
 
     private Point mouse;
     private boolean mouseDown;
@@ -30,9 +30,9 @@ public class InputManager {
         mouseDown = false;
         mouseDownChecked = false;
 
-        keyValues = new ArrayList<String>();
-        keys = new ArrayList<Boolean>();
-        keysChecked = new ArrayList<Boolean>();
+        keyValues = new ArrayList<>();
+        keys = new ArrayList<>();
+        keysChecked = new ArrayList<>();
 
         MouseAdapter adapter = new MouseAdapter() {
             public void mouseMoved(MouseEvent e) {
