@@ -2,36 +2,36 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Area;
-import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
-    private final Point2D.Double center;
+    private double cx;
+    private double cy;
 
     private final double[] xverts, yverts;
     private final int nverts;
 
     private double rotation;
-    private final Point2D.Double anchor;
 
-    private Color color;
-    private boolean isFilled;
+    private Color outline;
+    private Color fill;
+    private double opacity;
 
     public double getX() {
-        return center.x;
+        return cx;
     }
     public double getY() {
-        return center.y;
+        return cy;
     }
 
-    double[] getXVertices() {
+    public double[] getXVertices() {
         return Arrays.copyOf(xverts, nverts);
     }
-    double[] getYVertices() {
+    public double[] getYVertices() {
         return Arrays.copyOf(yverts, nverts);
     }
 
-    int getNumberOfVertices() {
+    public int getNumberOfVertices() {
         return nverts;
     }
 
@@ -39,116 +39,117 @@ public class Poly {
         return rotation;
     }
 
-    Color getColor() {
-        return color;
+    public Color getOutline() {
+        return outline;
     }
-    boolean isFilled() {
-        return isFilled;
+    public Color getFill() {
+        return fill;
     }
-
-    private void setAnchor(double x, double y) {
-        anchor.x = x;
-        anchor.y = y;
+    public double getOpacity() {
+        return opacity;
     }
 
-    Poly(double[] xverts,
-         double[] yverts,
-         double x,
-         double y,
-         double anchorx,
-         double anchory,
-         Color color,
-         boolean isFilled) {
-        if (xverts.length != yverts.length) {
-            System.out.println("Error: unequal number of vertices");
-        }
+    public Poly(
+            double[] xverts,
+            double[] yverts,
+            int nverts,
+            double cx,
+            double cy,
+            double x,
+            double y,
+            Color outline,
+            Color fill,
+            double opacity) {
+        this.xverts = Arrays.copyOf(xverts, nverts);
+        this.yverts = Arrays.copyOf(yverts, nverts);
+        this.nverts = nverts;
+        this.cx = cx;
+        this.cy = cy;
+        this.outline = outline;
+        this.fill = fill;
+        this.opacity = opacity;
 
-        nverts = xverts.length < yverts.length ? xverts.length : yverts.length;
+        setLocation(x, y);
+    }
 
-        center = new Point2D.Double();
+    private void setLocation(double x, double y) {
+        double xdiff = x - cx;
+        double ydiff = y - cy;
 
-        for (int i = 0; i < nverts; i++) {
-            center.x += xverts[i];
-            center.y += yverts[i];
-        }
-        center.x /= nverts;
-        center.y /= nverts;
-
-        double xdiff = x - center.x;
-        double ydiff = y - center.y;
+        cx += xdiff;
+        cy += ydiff;
 
         for (int i = 0; i < nverts; i++) {
             xverts[i] += xdiff;
             yverts[i] += ydiff;
         }
-
-        center.x += xdiff;
-        center.y += ydiff;
-
-        this.xverts = Arrays.copyOf(xverts, nverts);
-        this.yverts = Arrays.copyOf(yverts, nverts);
-
-        this.rotation = 0;
-
-        anchor = new Point2D.Double(anchorx, anchory);
-        this.color = color;
-        this.isFilled = isFilled;
     }
 
-    void translate(double dx, double dy) {
+    public void translate(double dx, double dy) {
+        cx += dx;
+        cy += dy;
+
         for (int i = 0; i < nverts; i++) {
             xverts[i] += dx;
             yverts[i] += dy;
         }
-
-        updateCenter();
     }
 
-    private void updateCenter() {
-        center.x = 0;
-        center.y = 0;
-
-        for (int i = 0; i < nverts; i++) {
-            center.x += xverts[i];
-            center.y += yverts[i];
-        }
-
-        center.x /= nverts;
-        center.y /= nverts;
-    }
-
-    void rotate(double theta, double x, double y) {
-        setAnchor(x, y);
-
+    public void rotate(double theta, double x, double y) {
         rotation += theta;
 
-        double cos = Math.cos(theta), sin = Math.sin(theta);
+        double cos = Math.cos(theta);
+        double sin = Math.sin(theta);
 
         for (int i = 0; i < nverts; i++) {
-            xverts[i] -= anchor.x;
-            yverts[i] -= anchor.y;
+            xverts[i] -= x;
+            yverts[i] -= y;
         }
+        cx -= x;
+        cy -= y;
 
-        double[] xvertsNew = new double[nverts];
-        double[] yvertsNew = new double[nverts];
+        double[] xprimes = new double[nverts];
+        double[] yprimes = new double[nverts];
+        double cxprime;
+        double cyprime;
 
         for (int i = 0; i < nverts; i++) {
-            xvertsNew[i] = xverts[i] * cos - yverts[i] * sin;
-            yvertsNew[i] = xverts[i] * sin + yverts[i] * cos;
+            xprimes[i] = xverts[i] * cos - yverts[i] * sin;
+            yprimes[i] = xverts[i] * sin + yverts[i] * cos;
         }
+        cxprime = cx * cos - cy * sin;
+        cyprime = cx * sin + cy * cos;
 
         for (int i = 0; i < nverts; i++) {
-            xverts[i] = xvertsNew[i] + anchor.x;
-            yverts[i] = yvertsNew[i] + anchor.y;
+            xverts[i] = xprimes[i] + x;
+            yverts[i] = yprimes[i] + y;
         }
-
-        updateCenter();
+        cx = cxprime + x;
+        cy = cyprime + y;
     }
 
-    public void scale(double scalar) {
+    public void rotate(double theta) {
+        rotation += theta;
+
+        double cos = Math.cos(theta);
+        double sin = Math.sin(theta);
+
         for (int i = 0; i < nverts; i++) {
-            xverts[i] *= scalar;
-            yverts[i] *= scalar;
+            xverts[i] -= cx;
+            yverts[i] -= cy;
+        }
+
+        double[] xprimes = new double[nverts];
+        double[] yprimes = new double[nverts];
+
+        for (int i = 0; i < nverts; i++) {
+            xprimes[i] = xverts[i] * cos - yverts[i] * sin;
+            yprimes[i] = xverts[i] * sin + yverts[i] * cos;
+        }
+
+        for (int i = 0; i < nverts; i++) {
+            xverts[i] = xprimes[i] + cx;
+            yverts[i] = yprimes[i] + cy;
         }
     }
 
