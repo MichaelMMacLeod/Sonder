@@ -71,10 +71,8 @@ class GamePanel extends JPanel {
                 p2,
                 0
         );
-        objects.add(player);
-        objects.add(p1);
-        objects.add(p2);
-        objects.add(p4);
+
+        objects.addAll(player.getParts());
     }
 
     /**

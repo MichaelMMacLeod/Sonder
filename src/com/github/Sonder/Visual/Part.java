@@ -2,6 +2,7 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Part extends Poly {
@@ -131,5 +132,18 @@ public abstract class Part extends Poly {
         }
 
         return y / linked.length;
+    }
+
+    public ArrayList<Part> getParts() {
+        ArrayList<Part> allParts = new ArrayList<>();
+        allParts.add(this);
+
+        for (Part link : linked) {
+            if (link != null) {
+                allParts.addAll(link.getParts());
+            }
+        }
+
+        return allParts;
     }
 }
