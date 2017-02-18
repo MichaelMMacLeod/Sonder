@@ -160,6 +160,20 @@ public class Poly {
         }
     }
 
+    public boolean contains(double x, double y) {
+        int[] ixverts = new int[nverts];
+        int[] iyverts = new int[nverts];
+
+        for (int i = 0; i < nverts; i++) {
+            ixverts[i] = (int) xverts[i];
+            iyverts[i] = (int) yverts[i];
+        }
+
+        Polygon p = new Polygon(ixverts, iyverts, nverts);
+
+        return p.contains(x, y);
+    }
+
     public boolean contains(Poly other) {
         double[] otherx = other.getXVertices();
         double[] othery = other.getYVertices();
