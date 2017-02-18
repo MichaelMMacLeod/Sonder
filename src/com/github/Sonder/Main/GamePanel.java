@@ -67,10 +67,14 @@ class GamePanel extends JPanel {
         Part p2 = new Hull(
                 p1,
                 0);
-
+        Part p4 = new Hull(
+                p2,
+                0
+        );
         objects.add(player);
         objects.add(p1);
         objects.add(p2);
+        objects.add(p4);
     }
 
     /**
@@ -86,8 +90,7 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Point2D.Double playerAnchor = new Point2D.Double(player.getX(), player.getY());
-        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), playerAnchor.x, playerAnchor.y);
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenterX(), player.getCenterY());
     }
 
     /**

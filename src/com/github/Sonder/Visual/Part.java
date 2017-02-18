@@ -9,7 +9,6 @@ public abstract class Part extends Poly {
     private final double[] xlinks;
     private final double[] ylinks;
     private final double[] linkRotations;
-    private final int nlinks;
 
     private Part source;
 
@@ -64,7 +63,6 @@ public abstract class Part extends Poly {
         this.xlinks = Arrays.copyOf(xlinks, nlinks);
         this.ylinks = Arrays.copyOf(ylinks, nlinks);
         this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
-        this.nlinks = nlinks;
     }
 
     public Part(
@@ -105,10 +103,33 @@ public abstract class Part extends Poly {
         this.xlinks = Arrays.copyOf(xlinks, nlinks);
         this.ylinks = Arrays.copyOf(ylinks, nlinks);
         this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
-        this.nlinks = nlinks;
     }
 
     private void link(Part part, int link) {
         linked[link] = part;
+    }
+
+    public double getCenterX() {
+        double x = getX();
+
+        for (Part link : linked) {
+            if (link != null) {
+                x += link.getCenterX();
+            }
+        }
+
+        return x / linked.length;
+    }
+
+    public double getCenterY() {
+        double y = getY();
+
+        for (Part link : linked) {
+            if (link != null) {
+                y += link.getY();
+            }
+        }
+
+        return y / linked.length;
     }
 }
