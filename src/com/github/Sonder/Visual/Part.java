@@ -4,11 +4,12 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
-public class Part extends Poly {
-    private Part[] linked;
-    private double[] xlinks;
-    private double[] ylinks;
-    private double[] linkRotations;
+public abstract class Part extends Poly {
+    private final Part[] linked;
+    private final double[] xlinks;
+    private final double[] ylinks;
+    private final double[] linkRotations;
+    private final int nlinks;
 
     private Part source;
 
@@ -29,28 +30,41 @@ public class Part extends Poly {
     }
 
     public Part(
-            double vectorx,
-            double vectory,
+            Point2D.Double vector,
             double[] xverts,
             double[] yverts,
+            int nverts,
+            double cx,
+            double cy,
             double x,
             double y,
-            Color color,
-            boolean isFilled,
+            Color outline,
+            Color fill,
+            double opacity,
             double[] xlinks,
             double[] ylinks,
             double[] linkRotations,
-            int links) {
-        super(xverts, yverts, x, y, 0, 0, color, isFilled);
+            int nlinks) {
+        super(
+                xverts,
+                yverts,
+                nverts,
+                cx, cy,
+                x,
+                y,
+                outline,
+                fill,
+                opacity);
 
         source = null;
 
-        vector = new Point2D.Double(vectorx, vectory);
+        this.vector = vector;
 
-        linked = new Part[links];
-        this.xlinks = Arrays.copyOf(xlinks, links);
-        this.ylinks = Arrays.copyOf(ylinks, links);
-        this.linkRotations = Arrays.copyOf(linkRotations, links);
+        linked = new Part[nlinks];
+        this.xlinks = Arrays.copyOf(xlinks, nlinks);
+        this.ylinks = Arrays.copyOf(ylinks, nlinks);
+        this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
+        this.nlinks = nlinks;
     }
 
     public Part(
@@ -58,25 +72,40 @@ public class Part extends Poly {
             int link,
             double[] xverts,
             double[] yverts,
-            Color color,
-            boolean isFilled,
+            int nverts,
+            double cx,
+            double cy,
+            Color outline,
+            Color fill,
+            double opacity,
             double[] xlinks,
             double[] ylinks,
             double[] linkRotations,
-            int links) {
-        super(xverts, yverts, source.getLinkX(link), source.getLinkY(link), 0, 0, color, isFilled);
+            int nlinks) {
+        super(
+                xverts,
+                yverts,
+                nverts,
+                cx,
+                cy,
+                source.getLinkX(link) + source.getX(),
+                source.getLinkY(link) + source.getY(),
+                outline,
+                fill,
+                opacity);
 
         this.source = source;
         this.source.link(this, link);
 
         vector = source.getVector();
 
-        rotate(source.getLinkRotation(link), getX(), getY());
+        rotate(source.getLinkRotation(link));
 
-        linked = new Part[links];
-        this.xlinks = Arrays.copyOf(xlinks, links);
-        this.ylinks = Arrays.copyOf(ylinks, links);
-        this.linkRotations = Arrays.copyOf(linkRotations, links);
+        linked = new Part[nlinks];
+        this.xlinks = Arrays.copyOf(xlinks, nlinks);
+        this.ylinks = Arrays.copyOf(ylinks, nlinks);
+        this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
+        this.nlinks = nlinks;
     }
 
     private void link(Part part, int link) {

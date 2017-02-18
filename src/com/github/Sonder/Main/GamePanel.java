@@ -57,64 +57,27 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Part(
+        player = new Hull(
+                new Point2D.Double(),
                 0,
-                0,
-                new double[] {-10,  10, 10, -10},
-                new double[] {-10, -10, 10,  10},
-                0,
-                0,
-                Color.BLACK,
-                false,
-                new double[] {-20, 0, 20, 0},
-                new double[] {0, -20, 0, 20},
-                new double[] {Math.PI, Math.PI / 2, 0, -Math.PI / 2},
-                4);
-        Part part0 = new Part(
+                0);
+        Part p1 = new Hull(
                 player,
-                0,
-                new double[] {-10,  10, 10, -10},
-                new double[] {-10, -10, 10,  10},
-                Color.RED,
-                false,
-                new double[] {-20, 0, 20, 0},
-                new double[] {0, -20, 0, 20},
-                new double[] {Math.PI, Math.PI / 2, 0, -Math.PI / 2},
-                4);
-        Part part1 = new Part(
-                player,
-                1,
-                new double[] {-10,  10, 10, -10},
-                new double[] {-10, -10, 10,  10},
-                Color.BLUE,
-                false,
-                new double[] {-20, 0, 20, 0},
-                new double[] {0, -20, 0, 20},
-                new double[] {Math.PI, Math.PI / 2, 0, -Math.PI / 2},
-                4);
+                3);
+        Part p2 = new Hull(
+                p1,
+                0);
 
         objects.add(player);
-        objects.add(part0);
-        objects.add(part1);
-//        for (Part part : player.getParts()) {
-//            objects.add(part);
-//        }
+        objects.add(p1);
+        objects.add(p2);
     }
 
     /**
      * Calculates logic updates.
      */
     void update() {
-//        Point2D.Double playerAnchor = player.anchorPoint();
-//
-//        if (input.held("w"))
-//            player.thrust();
-//        if (input.held("a"))
-//            player.rotate(-Math.PI / 64, playerAnchor.x, playerAnchor.y);
-//        if (input.held("d"))
-//            player.rotate(Math.PI / 64, playerAnchor.x, playerAnchor.y);
-//
-//        player.update();
+
     }
 
     /**
@@ -123,7 +86,6 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-//        Point2D.Double playerAnchor = player.anchorPoint();
         Point2D.Double playerAnchor = new Point2D.Double(player.getX(), player.getY());
         Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), playerAnchor.x, playerAnchor.y);
     }
