@@ -61,6 +61,7 @@ class GamePanel extends JPanel {
                 new Point2D.Double(),
                 200,
                 200);
+        player.setFill(Color.GRAY);
 //        Part p1 = new Hull(
 //                player,
 //                3);
@@ -93,6 +94,7 @@ class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenterX(), player.getCenterY());
+        System.out.println("x: " + player.getCenterX() + " " + player.getCenterY());
     }
 
     /**

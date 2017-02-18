@@ -94,7 +94,6 @@ public abstract class Part extends Poly {
                 opacity);
 
         this.source = source;
-        this.source.link(this, link);
 
         vector = source.getVector();
 
@@ -104,10 +103,14 @@ public abstract class Part extends Poly {
         this.xlinks = Arrays.copyOf(xlinks, nlinks);
         this.ylinks = Arrays.copyOf(ylinks, nlinks);
         this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
+
+        this.source.link(this, link);
     }
 
     private void link(Part part, int link) {
         linked[link] = part;
+        part.setFill(getFill());
+        part.setOutline(getOutline());
     }
 
     public double getCenterX() {
@@ -157,5 +160,27 @@ public abstract class Part extends Poly {
         }
 
         return allParts;
+    }
+
+    @Override
+    public void setOutline(Color color) {
+        super.setOutline(color);
+
+        for (Part link : linked) {
+            if (link != null) {
+                link.setOutline(color);
+            }
+        }
+    }
+
+    @Override
+    public void setFill(Color color) {
+        super.setFill(color);
+
+        for (Part link : linked) {
+            if (link != null) {
+                link.setFill(color);
+            }
+        }
     }
 }
