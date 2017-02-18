@@ -15,21 +15,21 @@ public abstract class Part extends Poly {
 
     private Point2D.Double vector;
 
-    double getLinkX(int link) {
+    private double getLinkX(int link) {
         return xlinks[link];
     }
-    double getLinkY(int link) {
+    private double getLinkY(int link) {
         return ylinks[link];
     }
-    double getLinkRotation(int link) {
+    private double getLinkRotation(int link) {
         return linkRotations[link];
     }
 
-    Point2D.Double getVector() {
+    private Point2D.Double getVector() {
         return vector;
     }
 
-    public Part(
+    Part(
             Point2D.Double vector,
             double[] xverts,
             double[] yverts,
@@ -66,7 +66,7 @@ public abstract class Part extends Poly {
         this.linkRotations = Arrays.copyOf(linkRotations, nlinks);
     }
 
-    public Part(
+    Part(
             Part source,
             int link,
             double[] xverts,
