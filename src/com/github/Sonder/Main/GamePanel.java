@@ -59,18 +59,18 @@ class GamePanel extends JPanel {
 
         player = new Hull(
                 new Point2D.Double(),
-                0,
-                0);
-        Part p1 = new Hull(
-                player,
-                3);
-        Part p2 = new Hull(
-                p1,
-                0);
-        Part p4 = new Hull(
-                p2,
-                0
-        );
+                200,
+                200);
+//        Part p1 = new Hull(
+//                player,
+//                3);
+//        Part p2 = new Hull(
+//                p1,
+//                0);
+//        Part p4 = new Hull(
+//                p2,
+//                0
+//        );
 
         objects.addAll(player.getParts());
     }
@@ -79,7 +79,11 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     void update() {
-
+        double mousex = input.getMouseX() - getWidth() / 2 + player.getX();
+        double mousey = input.getMouseY() - getHeight() / 2 + player.getY();
+        if (input.held("mouse")) {
+            System.out.println(mousex + " " + mousey);
+        }
     }
 
     /**

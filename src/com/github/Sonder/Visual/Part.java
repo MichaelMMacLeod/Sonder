@@ -113,25 +113,37 @@ public abstract class Part extends Poly {
     public double getCenterX() {
         double x = getX();
 
+        int count = 0;
         for (Part link : linked) {
             if (link != null) {
                 x += link.getCenterX();
+                count++;
             }
         }
 
-        return x / linked.length;
+        if (count != 0) {
+            return x / count;
+        }
+
+        return x;
     }
 
     public double getCenterY() {
         double y = getY();
 
+        int count = 0;
         for (Part link : linked) {
             if (link != null) {
                 y += link.getY();
+                count++;
             }
         }
 
-        return y / linked.length;
+        if (count != 0) {
+            return y / count;
+        }
+
+        return y;
     }
 
     public ArrayList<Part> getParts() {
