@@ -17,10 +17,10 @@ public class Poly {
     private Color color;
     private boolean isFilled;
 
-    double getX() {
+    public double getX() {
         return center.x;
     }
-    double getY() {
+    public double getY() {
         return center.y;
     }
 
