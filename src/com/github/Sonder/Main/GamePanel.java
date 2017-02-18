@@ -59,19 +59,19 @@ class GamePanel extends JPanel {
 
         player = new Hull(
                 new Point2D.Double(),
-                200,
-                200);
+                100,
+                100);
         player.setFill(Color.GRAY);
-//        Part p1 = new Hull(
-//                player,
-//                3);
-//        Part p2 = new Hull(
-//                p1,
-//                0);
-//        Part p4 = new Hull(
-//                p2,
-//                0
-//        );
+        Part p1 = new Hull(
+                player,
+                3);
+        Part p2 = new Hull(
+                p1,
+                0);
+        Part p4 = new Hull(
+                p2,
+                0
+        );
 
         objects.addAll(player.getParts());
     }
