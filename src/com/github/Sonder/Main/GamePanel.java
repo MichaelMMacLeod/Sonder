@@ -30,6 +30,8 @@ class GamePanel extends JPanel {
 
     private Part player;
 
+    private Poly selected;
+
     /**
      * Creates a GamePanel object.
      *
@@ -74,7 +76,16 @@ class GamePanel extends JPanel {
                 p3,
                 0);
 
+        Part player2 = new Hull(
+                new Point2D.Double(),
+                0,
+                0);
+        player2.setFill(Color.GREEN);
+
         objects.addAll(player.getParts());
+        objects.addAll(player2.getParts());
+
+        selected = null;
     }
 
     /**
@@ -83,13 +94,24 @@ class GamePanel extends JPanel {
     void update() {
         double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
         double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
+
+        boolean updateSelected = input.pressed("mouse");
+
         for (Poly poly : objects) {
-            if (input.held("mouse")) {
-                if (poly instanceof Part && poly.contains(mousex, mousey)) {
-                    Part part = (Part) poly;
-                    part.setFill(Color.WHITE);
+            if (updateSelected) {
+                if (poly.contains(mousex, mousey)) {
+                    selected = poly;
+                    updateSelected = false;
                 }
             }
+        }
+
+        if (updateSelected) {
+            selected = null;
+        }
+
+        if (selected != null && input.held("mouse")) {
+            selected.translate(mousex - selected.getX(), mousey - selected.getY());
         }
     }
 
