@@ -47,6 +47,13 @@ public abstract class Poly {
     private double cx;
     private double cy;
 
+    public double getCenterX() {
+        return cx;
+    }
+    public double getCenterY() {
+        return cy;
+    }
+
     /**
      * The rotation of the Poly in radians. A polygon has 0 rotation when created.
      */

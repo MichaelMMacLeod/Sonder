@@ -28,7 +28,7 @@ class GamePanel extends JPanel {
 
     private ArrayList<Poly> objects;
 
-    private Part player;
+    private Capsule player;
 
     private Poly selected;
 
@@ -58,32 +58,7 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Hull(
-                new Point2D.Double(),
-                100,
-                100);
-        player.setFill(Color.GRAY);
-        Part p1 = new Hull(
-                player,
-                0);
-        Part p2 = new Hull(
-                p1,
-                0);
-        Part p3 = new Hull(
-                p2,
-                0);
-        Part p4 = new Hull(
-                p3,
-                0);
-
-        Part player2 = new Hull(
-                new Point2D.Double(),
-                0,
-                0);
-        player2.setFill(Color.GREEN);
-
-        objects.addAll(player.getParts());
-        objects.addAll(player2.getParts());
+        player = new Capsule(0, 0);
 
         selected = null;
     }
