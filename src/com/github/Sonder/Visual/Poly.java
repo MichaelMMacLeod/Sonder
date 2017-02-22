@@ -4,47 +4,59 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.util.Arrays;
 
-public class Poly {
-    private double cx;
-    private double cy;
+public abstract class Poly {
+    /**
+     * Nodes represent places which other Polys can connect to.
+     */
+    private double[] xnodes;
+    private double[] ynodes;
+    private int nodes;
 
-    private final double[] xverts, yverts;
-    private final int nverts;
-
-    private double rotation;
-
-    private Color outline;
-    private Color fill;
-    private double opacity;
-
-    public void setOutline(Color color) {
-        outline = color;
+    public double[] getXNodes() {
+        return Arrays.copyOf(xnodes, nodes);
     }
-    public void setFill(Color color) {
-        fill = color;
+    public double[] getYnodes() {
+        return Arrays.copyOf(ynodes, nodes);
     }
 
-    public double getX() {
-        return cx;
+    public int getNumberOfNodes() {
+        return nodes;
     }
-    public double getY() {
-        return cy;
-    }
+
+    /**
+     * The points defining the shape of the Poly
+     */
+    private double[] xverts;
+    private double[] yverts;
+    private int verts;
 
     public double[] getXVertices() {
-        return Arrays.copyOf(xverts, nverts);
+        return Arrays.copyOf(xverts, verts);
     }
     public double[] getYVertices() {
-        return Arrays.copyOf(yverts, nverts);
+        return Arrays.copyOf(yverts, verts);
     }
 
     public int getNumberOfVertices() {
-        return nverts;
+        return verts;
     }
 
-    public double getRotation() {
-        return rotation;
-    }
+    /**
+     * The center of the Poly. It is defined when the object is created.
+     */
+    private double cx;
+    private double cy;
+
+    /**
+     * The rotation of the Poly in radians. A polygon has 0 rotation when created.
+     */
+    private double rotation;
+
+    /**
+     * The color of the Poly.
+     */
+    private Color outline;
+    private Color fill;
 
     public Color getOutline() {
         return outline;
@@ -52,43 +64,65 @@ public class Poly {
     public Color getFill() {
         return fill;
     }
-    public double getOpacity() {
-        return opacity;
-    }
 
+    /**
+     * Creates a Polygon.
+     *
+     * @param xverts  are the x points defining the shape of the Poly.
+     * @param yverts  are the y points defining the shape of the Poly.
+     * @param verts   is the number of vertices.
+     * @param cx      is the x coordinate of the center of the Poly.
+     * @param cy      is the y coordinate of the center of the Poly.
+     * @param x       is the x coordinate of the location of the Poly.
+     * @param y       is the y coordinate of the location of the Poly.
+     * @param outline is the color of the outline of the Poly.
+     * @param fill    is the color of the inside of the Poly.
+     * @param xnodes  are the x points which other shapes can connect to.
+     * @param ynodes  are the y points which other shapes can connect to.
+     * @param nodes   is the number of nodes/
+     */
     Poly(
             double[] xverts,
             double[] yverts,
-            int nverts,
+            int verts,
             double cx,
             double cy,
             double x,
             double y,
             Color outline,
             Color fill,
-            double opacity) {
-        this.xverts = Arrays.copyOf(xverts, nverts);
-        this.yverts = Arrays.copyOf(yverts, nverts);
-        this.nverts = nverts;
+            double[] xnodes,
+            double[] ynodes,
+            int nodes) {
+        this.xverts = Arrays.copyOf(xverts, verts);
+        this.yverts = Arrays.copyOf(yverts, verts);
+        this.verts = verts;
         this.cx = cx;
         this.cy = cy;
         this.outline = outline;
         this.fill = fill;
-        this.opacity = opacity;
+        this.xnodes = Arrays.copyOf(xnodes, nodes);
+        this.ynodes = Arrays.copyOf(ynodes, nodes);
+        this.nodes = nodes;
 
-        setLocation(x, y);
+        moveTo(x, y);
     }
 
-    private void setLocation(double x, double y) {
-        double xdiff = x - cx;
-        double ydiff = y - cy;
+    private void moveTo(double x, double y) {
+        double dx = x - cx;
+        double dy = y - cy;
 
-        cx += xdiff;
-        cy += ydiff;
+        cx += dx;
+        cy += dy;
 
-        for (int i = 0; i < nverts; i++) {
-            xverts[i] += xdiff;
-            yverts[i] += ydiff;
+        for (int i = 0; i < verts; i++) {
+            xverts[i] += dx;
+            yverts[i] += dy;
+        }
+
+        for (int i = 0; i < nodes; i++) {
+            xnodes[i] += dx;
+            ynodes[i] += dy;
         }
     }
 
@@ -96,9 +130,14 @@ public class Poly {
         cx += dx;
         cy += dy;
 
-        for (int i = 0; i < nverts; i++) {
+        for (int i = 0; i < verts; i++) {
             xverts[i] += dx;
             yverts[i] += dy;
+        }
+
+        for (int i = 0; i < nodes; i++) {
+            xnodes[i] += dx;
+            ynodes[i] += dy;
         }
     }
 
@@ -108,68 +147,65 @@ public class Poly {
         double cos = Math.cos(theta);
         double sin = Math.sin(theta);
 
-        for (int i = 0; i < nverts; i++) {
-            xverts[i] -= x;
-            yverts[i] -= y;
-        }
         cx -= x;
         cy -= y;
 
-        double[] xprimes = new double[nverts];
-        double[] yprimes = new double[nverts];
-        double cxprime;
-        double cyprime;
-
-        for (int i = 0; i < nverts; i++) {
-            xprimes[i] = xverts[i] * cos - yverts[i] * sin;
-            yprimes[i] = xverts[i] * sin + yverts[i] * cos;
-        }
-        cxprime = cx * cos - cy * sin;
-        cyprime = cx * sin + cy * cos;
-
-        for (int i = 0; i < nverts; i++) {
-            xverts[i] = xprimes[i] + x;
-            yverts[i] = yprimes[i] + y;
-        }
-        cx = cxprime + x;
-        cy = cyprime + y;
-    }
-
-    public void rotate(double theta) {
-        rotation += theta;
-
-        double cos = Math.cos(theta);
-        double sin = Math.sin(theta);
-
-        for (int i = 0; i < nverts; i++) {
-            xverts[i] -= cx;
-            yverts[i] -= cy;
+        for (int i = 0; i < verts; i++) {
+            xverts[i] -= x;
+            yverts[i] -= y;
         }
 
-        double[] xprimes = new double[nverts];
-        double[] yprimes = new double[nverts];
-
-        for (int i = 0; i < nverts; i++) {
-            xprimes[i] = xverts[i] * cos - yverts[i] * sin;
-            yprimes[i] = xverts[i] * sin + yverts[i] * cos;
+        for (int i = 0; i < nodes; i++) {
+            xnodes[i] -= x;
+            ynodes[i] -= y;
         }
 
-        for (int i = 0; i < nverts; i++) {
-            xverts[i] = xprimes[i] + cx;
-            yverts[i] = yprimes[i] + cy;
+        double cxPrime;
+        double cyPrime;
+
+        double[] xvertsPrime = new double[verts];
+        double[] yvertsPrime = new double[verts];
+
+        double[] xnodesPrime = new double[nodes];
+        double[] ynodesPrime = new double[nodes];
+
+        cxPrime = cx * cos - cy * sin;
+        cyPrime = cx * sin + cy * cos;
+
+        for (int i = 0; i < verts; i++) {
+            xvertsPrime[i] = xverts[i] * cos - yverts[i] * sin;
+            yvertsPrime[i] = xverts[i] * sin + yverts[i] * cos;
+        }
+
+        for (int i = 0; i < nodes; i++) {
+            xnodesPrime[i] = xnodes[i] * cos - ynodes[i] * sin;
+            ynodesPrime[i] = xnodes[i] * sin + ynodes[i] * cos;
+        }
+
+        cx = cxPrime + x;
+        cy = cyPrime + y;
+
+        for (int i = 0; i < verts; i++) {
+            xverts[i] = xvertsPrime[i] + x;
+            yverts[i] = yvertsPrime[i] + y;
+        }
+
+        for (int i = 0; i < nodes; i++) {
+            xnodes[i] = xnodesPrime[i] + x;
+            ynodes[i] = ynodesPrime[i] + y;
         }
     }
 
     public boolean contains(double x, double y) {
-        int[] ixverts = new int[nverts];
-        int[] iyverts = new int[nverts];
+        int[] xvertsPrime = new int[verts];
+        int[] yvertsPrime = new int[verts];
 
-        for (int i = 0; i < nverts; i++) {
-            ixverts[i] = (int) xverts[i];
-            iyverts[i] = (int) yverts[i];
+        for (int i = 0; i < verts; i++) {
+            xvertsPrime[i] = (int) xverts[i];
+            yvertsPrime[i] = (int) yverts[i];
         }
 
-        Polygon p = new Polygon(ixverts, iyverts, nverts);
+        Polygon p = new Polygon(xvertsPrime, yvertsPrime, verts);
 
         return p.contains(x, y);
     }
@@ -188,15 +224,15 @@ public class Poly {
             iothery[i] = (int) othery[i];
         }
 
-        int[] ixverts = new int[nverts];
-        int[] iyverts = new int[nverts];
+        int[] ixverts = new int[verts];
+        int[] iyverts = new int[verts];
 
-        for (int i = 0; i < nverts; i++) {
+        for (int i = 0; i < verts; i++) {
             ixverts[i] = (int) xverts[i];
             iyverts[i] = (int) yverts[i];
         }
 
-        Area area = new Area(new Polygon(ixverts, iyverts, nverts));
+        Area area = new Area(new Polygon(ixverts, iyverts, verts));
         Area otherArea = new Area(new Polygon(iotherx, iothery, othernv));
 
         area.intersect(otherArea);
