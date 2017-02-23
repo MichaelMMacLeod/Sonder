@@ -4,9 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Capsule extends Poly {
-
-    private ArrayList<Poly> modules;
+public class Capsule extends Part {
 
     /**
      * Creates a Capsule at location (x, y)
@@ -22,25 +20,11 @@ public class Capsule extends Poly {
                 0,
                 x,
                 y,
-                Color.BLACK,
+                Color.GRAY,
                 Color.WHITE,
-                new double[] {-10,   0, 10,  0},
-                new double[] {  0, -10,  0, 10},
+                new double[] {    -10,           0, 10,            0},
+                new double[] {      0,         -10,  0,           10},
+                new double[] {Math.PI, Math.PI / 2,  0, -Math.PI / 2},
                 4);
-    }
-
-    public Point2D.Double getCenterOfShip() {
-        Point2D.Double center = new Point2D.Double(getCenterX(), getCenterY());
-
-        if (modules.size() > 0) {
-            for (Poly module : modules) {
-                center.x += module.getCenterX();
-                center.y += module.getCenterY();
-            }
-
-            center.x /= modules.size();
-        }
-
-        return center;
     }
 }

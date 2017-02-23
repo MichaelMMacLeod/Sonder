@@ -59,6 +59,7 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new Capsule(0, 0);
+        objects.add(player);
 
         selected = null;
     }
@@ -86,7 +87,7 @@ class GamePanel extends JPanel {
         }
 
         if (selected != null && input.held("mouse")) {
-            selected.translate(mousex - selected.getX(), mousey - selected.getY());
+            selected.translate(mousex - selected.getCenterX(), mousey - selected.getCenterY());
         }
     }
 

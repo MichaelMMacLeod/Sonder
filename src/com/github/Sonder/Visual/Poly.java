@@ -10,6 +10,7 @@ public abstract class Poly {
      */
     private double[] xnodes;
     private double[] ynodes;
+    private double[] nodeRotations;
     private int nodes;
 
     public double[] getXNodes() {
@@ -17,6 +18,10 @@ public abstract class Poly {
     }
     public double[] getYnodes() {
         return Arrays.copyOf(ynodes, nodes);
+    }
+
+    public double[] getNodeRotations() {
+        return Arrays.copyOf(nodeRotations, nodes);
     }
 
     public int getNumberOfNodes() {
@@ -75,18 +80,19 @@ public abstract class Poly {
     /**
      * Creates a Polygon.
      *
-     * @param xverts  are the x points defining the shape of the Poly.
-     * @param yverts  are the y points defining the shape of the Poly.
-     * @param verts   is the number of vertices.
-     * @param cx      is the x coordinate of the center of the Poly.
-     * @param cy      is the y coordinate of the center of the Poly.
-     * @param x       is the x coordinate of the location of the Poly.
-     * @param y       is the y coordinate of the location of the Poly.
-     * @param outline is the color of the outline of the Poly.
-     * @param fill    is the color of the inside of the Poly.
-     * @param xnodes  are the x points which other shapes can connect to.
-     * @param ynodes  are the y points which other shapes can connect to.
-     * @param nodes   is the number of nodes/
+     * @param xverts        are the x points defining the shape of the Poly.
+     * @param yverts        are the y points defining the shape of the Poly.
+     * @param verts         is the number of vertices.
+     * @param cx            is the x coordinate of the center of the Poly.
+     * @param cy            is the y coordinate of the center of the Poly.
+     * @param x             is the x coordinate of the location of the Poly.
+     * @param y             is the y coordinate of the location of the Poly.
+     * @param outline       is the color of the outline of the Poly.
+     * @param fill          is the color of the inside of the Poly.
+     * @param xnodes        are the x points which other shapes can connect to.
+     * @param ynodes        are the y points which other shapes can connect to.
+     * @param nodeRotations are the rotations that connected parts have.
+     * @param nodes         is the number of nodes/
      */
     Poly(
             double[] xverts,
@@ -100,6 +106,7 @@ public abstract class Poly {
             Color fill,
             double[] xnodes,
             double[] ynodes,
+            double[] nodeRotations,
             int nodes) {
         this.xverts = Arrays.copyOf(xverts, verts);
         this.yverts = Arrays.copyOf(yverts, verts);
@@ -110,6 +117,7 @@ public abstract class Poly {
         this.fill = fill;
         this.xnodes = Arrays.copyOf(xnodes, nodes);
         this.ynodes = Arrays.copyOf(ynodes, nodes);
+        this.nodeRotations = Arrays.copyOf(nodeRotations, nodes);
         this.nodes = nodes;
 
         moveTo(x, y);
@@ -148,7 +156,7 @@ public abstract class Poly {
         }
     }
 
-    public void rotate(double theta, double x, double y) {
+    void rotate(double theta, double x, double y) {
         rotation += theta;
 
         double cos = Math.cos(theta);
