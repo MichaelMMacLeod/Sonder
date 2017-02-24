@@ -59,7 +59,12 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new Capsule(0, 0);
+        Hull hull = new Hull(100, 100);
+        Hull test = new Hull(-500, -500);
+
         objects.add(player);
+        objects.add(hull);
+        objects.add(test);
 
         selected = null;
     }
@@ -88,6 +93,70 @@ class GamePanel extends JPanel {
 
         if (selected != null && input.held("mouse")) {
             selected.translate(mousex - selected.getCenterX(), mousey - selected.getCenterY());
+
+            // Find the closest part to the selected part
+
+            double x = selected.getCenterX();
+            double y = selected.getCenterY();
+
+            double smallestDist = 0;
+            Poly closestPoly = selected;
+
+            for (Poly poly : objects) {
+                if (selected != poly) {
+                    closestPoly = poly;
+                    smallestDist = Math.sqrt(
+                            (poly.getCenterX() - x) * (poly.getCenterX() - x)
+                                    + (poly.getCenterY() - y) * (poly.getCenterY() - y));
+                }
+            }
+
+            for (Poly poly : objects) {
+                if (selected != poly) {
+                    double px = poly.getCenterX();
+                    double py = poly.getCenterY();
+
+                    double dist = Math.sqrt(
+                            (poly.getCenterX() - x) * (poly.getCenterX() - x)
+                                    + (poly.getCenterY() - y) * (poly.getCenterY() - y));
+
+                    if (dist < smallestDist) {
+                        closestPoly = poly;
+                        smallestDist = dist;
+                    }
+                }
+            }
+
+            // Find the smallest distance between nodes of the selected poly and the closest poly
+
+            int closestNode = 0;
+            double[] xnodes = selected.getXNodes();
+            double[] ynodes = selected.getYNodes();
+            int nodes = selected.getNumberOfNodes();
+
+            int closestCNode = 0;
+            double[] cxnodes = closestPoly.getXNodes();
+            double[] cynodes = closestPoly.getYNodes();
+            int cnodes = closestPoly.getNumberOfNodes();
+
+            for (int i = 0; i < nodes; i++) {
+                for (int j = 0; j < cnodes; j++) {
+                    double dist = Math.sqrt(
+                            (cxnodes[i] - xnodes[i]) * (cxnodes[i] - xnodes[i]) +
+                                    (cynodes[i] - ynodes[i]) * (cynodes[i] - ynodes[i]));
+                    if (dist < smallestDist) {
+                        smallestDist = dist;
+                        closestNode = i;
+                        closestCNode = j;
+                    }
+                }
+            }
+
+            if (smallestDist < 10) {
+                selected.moveTo(cxnodes[closestCNode], cynodes[closestCNode]);
+            }
+
+            System.out.println(cnodes);
         }
     }
 

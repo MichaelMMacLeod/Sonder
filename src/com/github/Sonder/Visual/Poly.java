@@ -16,7 +16,7 @@ public abstract class Poly {
     public double[] getXNodes() {
         return Arrays.copyOf(xnodes, nodes);
     }
-    public double[] getYnodes() {
+    public double[] getYNodes() {
         return Arrays.copyOf(ynodes, nodes);
     }
 
@@ -123,7 +123,7 @@ public abstract class Poly {
         moveTo(x, y);
     }
 
-    private void moveTo(double x, double y) {
+    public void moveTo(double x, double y) {
         double dx = x - cx;
         double dy = y - cy;
 
