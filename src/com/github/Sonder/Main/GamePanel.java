@@ -61,12 +61,16 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new Capsule(0, 0);
-        Hull hull = new Hull(100, 100);
-        Hull test = new Hull(-500, -500);
+        Hull test1 = new Hull(100, 100);
+        Hull test2 = new Hull(-500, -500);
+        Hull test3 = new Hull(200, 200);
+        Hull test4 = new Hull(40, 80);
 
         objects.add(player);
-        objects.add(hull);
-        objects.add(test);
+        objects.add(test1);
+        objects.add(test2);
+        objects.add(test3);
+        objects.add(test4);
 
         selected = null;
     }
@@ -120,13 +124,47 @@ class GamePanel extends JPanel {
                 }
             }
 
-            if (smallestDist < 10) {
-                selected.translate(
+            if (smallestDist < 15) {
+                Poly overlapTest = new Poly(
+                        selected.getXVertices(),
+                        selected.getYVertices(),
+                        selected.getNumberOfVertices(),
+                        selected.getCenterX(),
+                        selected.getCenterY(),
+                        selected.getCenterX(),
+                        selected.getCenterY(),
+                        selected.getOutline(),
+                        selected.getFill(),
+                        selected.getXNodes(),
+                        selected.getYNodes(),
+                        selected.getNodeRotations(),
+                        selected.getNumberOfNodes(),
+                        selected.getXConnector(),
+                        selected.getYConnector());
+
+                overlapTest.translate(
                         closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
                         closestPoly.getYNodes()[closestNode] - selected.getYConnector());
-                selected.rotate(
+                overlapTest.rotate(
                         closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
                         selected.getCenterX(), selected.getCenterY());
+
+                boolean overlaps = false;
+
+                for (Poly poly : objects) {
+                    if (overlapTest.contains(poly.getCenterX(), poly.getCenterY())) {
+                        overlaps = true;
+                    }
+                }
+
+                if (!overlaps) {
+                    selected.translate(
+                            closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
+                            closestPoly.getYNodes()[closestNode] - selected.getYConnector());
+                    selected.rotate(
+                            closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
+                            selected.getCenterX(), selected.getCenterY());
+                }
             }
         }
     }

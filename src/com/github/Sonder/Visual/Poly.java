@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.util.Arrays;
 
-public abstract class Poly {
+public class Poly {
     /**
      * The connector is where this Poly connects to other Polys.
      */
@@ -111,9 +111,11 @@ public abstract class Poly {
      * @param xnodes        are the x points which other shapes can connect to.
      * @param ynodes        are the y points which other shapes can connect to.
      * @param nodeRotations are the rotations that connected parts have.
-     * @param nodes         is the number of nodes/
+     * @param nodes         is the number of nodes.
+     * @param xconnector    is the x coordinate of the point where this Poly connects to other Polys.
+     * @param yconnector    is the y coordinate of the point where this Poly connects to other Polys.
      */
-    Poly(
+    public Poly(
             double[] xverts,
             double[] yverts,
             int verts,
