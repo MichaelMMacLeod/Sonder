@@ -20,9 +20,11 @@ public class Hull extends Part {
                 y,
                 Color.GRAY,
                 Color.WHITE,
-                new double[] {    -10,           0, 10,            0},
-                new double[] {      0,         -10,  0,           10},
-                new double[] {Math.PI, Math.PI / 2,  0, -Math.PI / 2},
-                4);
+                new double[] {          0, 10,            0},
+                new double[] {        -10,  0,           10},
+                new double[] {Math.PI / 2,  0, -Math.PI / 2},
+                3,
+                -10,
+                0);
     }
 }

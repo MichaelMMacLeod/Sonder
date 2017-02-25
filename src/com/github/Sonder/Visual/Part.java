@@ -19,8 +19,10 @@ public abstract class Part extends Poly {
             double[] xnodes,
             double[] ynodes,
             double[] nodeRotations,
-            int nodes) {
-        super(xverts, yverts, verts, cx, cy, x, y, outline, fill, xnodes, ynodes, nodeRotations, nodes);
+            int nodes,
+            double xconnector,
+            double yconnector) {
+        super(xverts, yverts, verts, cx, cy, x, y, outline, fill, xnodes, ynodes, nodeRotations, nodes, xconnector, yconnector);
 
         this.parts = new Part[nodes];
     }

@@ -142,8 +142,8 @@ class GamePanel extends JPanel {
             for (int i = 0; i < nodes; i++) {
                 for (int j = 0; j < cnodes; j++) {
                     double dist = Math.sqrt(
-                            (cxnodes[i] - xnodes[i]) * (cxnodes[i] - xnodes[i]) +
-                                    (cynodes[i] - ynodes[i]) * (cynodes[i] - ynodes[i]));
+                            (cxnodes[j] - xnodes[i]) * (cxnodes[j] - xnodes[i]) +
+                                    (cynodes[j] - ynodes[i]) * (cynodes[j] - ynodes[i]));
                     if (dist < smallestDist) {
                         smallestDist = dist;
                         closestNode = i;
@@ -155,8 +155,6 @@ class GamePanel extends JPanel {
             if (smallestDist < 10) {
                 selected.moveTo(cxnodes[closestCNode], cynodes[closestCNode]);
             }
-
-            System.out.println(cnodes);
         }
     }
 

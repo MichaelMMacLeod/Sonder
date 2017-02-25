@@ -6,8 +6,16 @@ import java.util.Arrays;
 
 public abstract class Poly {
     /**
+     * The connector is where this Poly connects to other Polys.
+     */
+
+    private double xconnector;
+    private double yconnector;
+
+    /**
      * Nodes represent places which other Polys can connect to.
      */
+
     private double[] xnodes;
     private double[] ynodes;
     private double[] nodeRotations;
@@ -107,7 +115,9 @@ public abstract class Poly {
             double[] xnodes,
             double[] ynodes,
             double[] nodeRotations,
-            int nodes) {
+            int nodes,
+            double xconnector,
+            double yconnector) {
         this.xverts = Arrays.copyOf(xverts, verts);
         this.yverts = Arrays.copyOf(yverts, verts);
         this.verts = verts;
@@ -119,6 +129,8 @@ public abstract class Poly {
         this.ynodes = Arrays.copyOf(ynodes, nodes);
         this.nodeRotations = Arrays.copyOf(nodeRotations, nodes);
         this.nodes = nodes;
+        this.xconnector = xconnector;
+        this.yconnector = yconnector;
 
         moveTo(x, y);
     }
@@ -129,6 +141,9 @@ public abstract class Poly {
 
         cx += dx;
         cy += dy;
+
+        xconnector += dx;
+        yconnector += dy;
 
         for (int i = 0; i < verts; i++) {
             xverts[i] += dx;
@@ -144,6 +159,9 @@ public abstract class Poly {
     public void translate(double dx, double dy) {
         cx += dx;
         cy += dy;
+
+        xconnector += dx;
+        yconnector += dy;
 
         for (int i = 0; i < verts; i++) {
             xverts[i] += dx;
@@ -165,6 +183,9 @@ public abstract class Poly {
         cx -= x;
         cy -= y;
 
+        xconnector -= x;
+        yconnector -= y;
+
         for (int i = 0; i < verts; i++) {
             xverts[i] -= x;
             yverts[i] -= y;
@@ -178,6 +199,9 @@ public abstract class Poly {
         double cxPrime;
         double cyPrime;
 
+        double xconnectorPrime;
+        double yconnectorPrime;
+
         double[] xvertsPrime = new double[verts];
         double[] yvertsPrime = new double[verts];
 
@@ -186,6 +210,9 @@ public abstract class Poly {
 
         cxPrime = cx * cos - cy * sin;
         cyPrime = cx * sin + cy * cos;
+
+        xconnectorPrime = xconnector * cos - yconnector * sin;
+        yconnectorPrime = xconnector * sin + yconnector * cos;
 
         for (int i = 0; i < verts; i++) {
             xvertsPrime[i] = xverts[i] * cos - yverts[i] * sin;
@@ -199,6 +226,9 @@ public abstract class Poly {
 
         cx = cxPrime + x;
         cy = cyPrime + y;
+
+        xconnector = xconnectorPrime + x;
+        yconnector = yconnectorPrime + y;
 
         for (int i = 0; i < verts; i++) {
             xverts[i] = xvertsPrime[i] + x;
