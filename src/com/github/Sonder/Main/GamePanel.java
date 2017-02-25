@@ -100,7 +100,7 @@ class GamePanel extends JPanel {
         if (selected != null && input.held("mouse")) {
             Camera.shouldDrawNodes = true;
 
-            selected.translate(mousex - selected.getCenterX(), mousey - selected.getCenterY());
+            selected.translate(mousex - selected.getXConnector(), mousey - selected.getYConnector());
 
             double smallestDist = Integer.MAX_VALUE;
             Poly closestPoly = selected;
@@ -114,8 +114,8 @@ class GamePanel extends JPanel {
                     for (int i = 0; i < poly.getNumberOfNodes(); i++) {
                         double distance =
                                 Math.sqrt(
-                                        (xnodes[i] - selected.getCenterX()) * (xnodes[i] - selected.getCenterX())
-                                        + (ynodes[i] - selected.getCenterY()) * (ynodes[i] - selected.getCenterY())
+                                        (xnodes[i] - selected.getXConnector()) * (xnodes[i] - selected.getXConnector())
+                                        + (ynodes[i] - selected.getYConnector()) * (ynodes[i] - selected.getYConnector())
                                 );
                         if (distance < smallestDist) {
                             closestPoly = poly;
@@ -127,46 +127,12 @@ class GamePanel extends JPanel {
             }
 
             if (smallestDist < 15) {
-                Poly overlapTest = new Poly(
-                        selected.getXVertices(),
-                        selected.getYVertices(),
-                        selected.getNumberOfVertices(),
-                        selected.getCenterX(),
-                        selected.getCenterY(),
-                        selected.getCenterX(),
-                        selected.getCenterY(),
-                        selected.getOutline(),
-                        selected.getFill(),
-                        selected.getXNodes(),
-                        selected.getYNodes(),
-                        selected.getNodeRotations(),
-                        selected.getNumberOfNodes(),
-                        selected.getXConnector(),
-                        selected.getYConnector());
-
-                overlapTest.translate(
+                selected.translate(
                         closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
                         closestPoly.getYNodes()[closestNode] - selected.getYConnector());
-                overlapTest.rotate(
+                selected.rotate(
                         closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
-                        selected.getCenterX(), selected.getCenterY());
-
-                boolean overlaps = false;
-
-                for (Poly poly : objects) {
-                    if (overlapTest.contains(poly.getCenterX(), poly.getCenterY())) {
-                        overlaps = true;
-                    }
-                }
-
-                if (!overlaps) {
-                    selected.translate(
-                            closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
-                            closestPoly.getYNodes()[closestNode] - selected.getYConnector());
-                    selected.rotate(
-                            closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
-                            selected.getCenterX(), selected.getCenterY());
-                }
+                        selected.getXConnector(), selected.getYConnector());
             }
         } else {
             Camera.shouldDrawNodes = false;
