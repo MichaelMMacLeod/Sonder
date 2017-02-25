@@ -12,6 +12,13 @@ public abstract class Poly {
     private double xconnector;
     private double yconnector;
 
+    public double getXConnector() {
+        return xconnector;
+    }
+    public double getYConnector() {
+        return yconnector;
+    }
+
     /**
      * Nodes represent places which other Polys can connect to.
      */
@@ -71,6 +78,10 @@ public abstract class Poly {
      * The rotation of the Poly in radians. A polygon has 0 rotation when created.
      */
     private double rotation;
+
+    public double getRotation() {
+        return rotation;
+    }
 
     /**
      * The color of the Poly.
@@ -174,8 +185,12 @@ public abstract class Poly {
         }
     }
 
-    void rotate(double theta, double x, double y) {
+    public void rotate(double theta, double x, double y) {
         rotation += theta;
+
+        for (int i = 0; i < nodes; i++) {
+            nodeRotations[i] += theta;
+        }
 
         double cos = Math.cos(theta);
         double sin = Math.sin(theta);

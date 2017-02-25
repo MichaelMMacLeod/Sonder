@@ -43,7 +43,7 @@ public abstract class Part extends Poly {
     }
 
     @Override
-    void rotate(double theta, double x, double y) {
+    public void rotate(double theta, double x, double y) {
         super.rotate(theta, x, y);
 
         for (Part part : parts) {

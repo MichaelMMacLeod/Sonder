@@ -11,8 +11,8 @@ public class Hull extends Part {
      */
     public Hull(double x, double y) {
         super(
-                new double[] {-10,  10, 10, -10},
-                new double[] {-10, -10, 10,  10},
+                new double[] {-30,  30, 30, -30},
+                new double[] {-20, -30, 30,  20},
                 4,
                 0,
                 0,
@@ -20,11 +20,11 @@ public class Hull extends Part {
                 y,
                 Color.GRAY,
                 Color.WHITE,
-                new double[] {          0, 10,            0},
-                new double[] {        -10,  0,           10},
-                new double[] {Math.PI / 2,  0, -Math.PI / 2},
+                new double[] {          0, 30,            0},
+                new double[] {        -30,  0,           30},
+                new double[] {-Math.PI / 2,  0, Math.PI / 2},
                 3,
-                -10,
+                -30,
                 0);
     }
 }

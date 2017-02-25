@@ -8,7 +8,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.awt.geom.Point2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -94,66 +96,37 @@ class GamePanel extends JPanel {
         if (selected != null && input.held("mouse")) {
             selected.translate(mousex - selected.getCenterX(), mousey - selected.getCenterY());
 
-            // Find the closest part to the selected part
-
-            double x = selected.getCenterX();
-            double y = selected.getCenterY();
-
-            double smallestDist = 0;
+            double smallestDist = Integer.MAX_VALUE;
             Poly closestPoly = selected;
+            int closestNode = -1;
 
             for (Poly poly : objects) {
-                if (selected != poly) {
-                    closestPoly = poly;
-                    smallestDist = Math.sqrt(
-                            (poly.getCenterX() - x) * (poly.getCenterX() - x)
-                                    + (poly.getCenterY() - y) * (poly.getCenterY() - y));
-                }
-            }
+                if (poly != selected) {
+                    double[] xnodes = poly.getXNodes();
+                    double[] ynodes = poly.getYNodes();
 
-            for (Poly poly : objects) {
-                if (selected != poly) {
-                    double px = poly.getCenterX();
-                    double py = poly.getCenterY();
-
-                    double dist = Math.sqrt(
-                            (poly.getCenterX() - x) * (poly.getCenterX() - x)
-                                    + (poly.getCenterY() - y) * (poly.getCenterY() - y));
-
-                    if (dist < smallestDist) {
-                        closestPoly = poly;
-                        smallestDist = dist;
-                    }
-                }
-            }
-
-            // Find the smallest distance between nodes of the selected poly and the closest poly
-
-            int closestNode = 0;
-            double[] xnodes = selected.getXNodes();
-            double[] ynodes = selected.getYNodes();
-            int nodes = selected.getNumberOfNodes();
-
-            int closestCNode = 0;
-            double[] cxnodes = closestPoly.getXNodes();
-            double[] cynodes = closestPoly.getYNodes();
-            int cnodes = closestPoly.getNumberOfNodes();
-
-            for (int i = 0; i < nodes; i++) {
-                for (int j = 0; j < cnodes; j++) {
-                    double dist = Math.sqrt(
-                            (cxnodes[j] - xnodes[i]) * (cxnodes[j] - xnodes[i]) +
-                                    (cynodes[j] - ynodes[i]) * (cynodes[j] - ynodes[i]));
-                    if (dist < smallestDist) {
-                        smallestDist = dist;
-                        closestNode = i;
-                        closestCNode = j;
+                    for (int i = 0; i < poly.getNumberOfNodes(); i++) {
+                        double distance =
+                                Math.sqrt(
+                                        (xnodes[i] - selected.getCenterX()) * (xnodes[i] - selected.getCenterX())
+                                        + (ynodes[i] - selected.getCenterY()) * (ynodes[i] - selected.getCenterY())
+                                );
+                        if (distance < smallestDist) {
+                            closestPoly = poly;
+                            closestNode = i;
+                            smallestDist = distance;
+                        }
                     }
                 }
             }
 
             if (smallestDist < 10) {
-                selected.moveTo(cxnodes[closestCNode], cynodes[closestCNode]);
+                selected.translate(
+                        closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
+                        closestPoly.getYNodes()[closestNode] - selected.getYConnector());
+                selected.rotate(
+                        closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
+                        selected.getCenterX(), selected.getCenterY());
             }
         }
     }

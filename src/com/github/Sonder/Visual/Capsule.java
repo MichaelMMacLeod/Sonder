@@ -13,8 +13,8 @@ public class Capsule extends Part {
      */
     public Capsule(double x, double y) {
         super(
-                new double[] {-10,  10, 10, -10},
-                new double[] {-10, -10, 10,  10},
+                new double[] {-30,  30, 30, -30},
+                new double[] {-30, -30, 30,  30},
                 4,
                 0,
                 0,
@@ -22,9 +22,9 @@ public class Capsule extends Part {
                 y,
                 Color.GRAY,
                 Color.BLUE,
-                new double[] {    -10,           0, 10,            0},
-                new double[] {      0,         -10,  0,           10},
-                new double[] {Math.PI, Math.PI / 2,  0, -Math.PI / 2},
+                new double[] {    -30,           0, 30,            0},
+                new double[] {      0,         -30,  0,           30},
+                new double[] {Math.PI, -Math.PI / 2,  0, Math.PI / 2},
                 4,
                 0,
                 0);
