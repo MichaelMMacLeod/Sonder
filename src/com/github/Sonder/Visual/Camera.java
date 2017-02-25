@@ -52,6 +52,12 @@ public class Camera {
                 ynodes[i] = (ynodes[i] - fy) * zoom + height / 2;
             }
 
+            double xconnector = shape.getXConnector();
+            double yconnector = shape.getYConnector();
+
+            xconnector = (xconnector - fx) * zoom + width / 2;
+            yconnector = (yconnector - fy) * zoom + height / 2;
+
             int[] integerXVertices = new int[vertices];
             int[] integerYVertices = new int[vertices];
 
@@ -67,9 +73,11 @@ public class Camera {
             g.drawPolygon(integerXVertices, integerYVertices, vertices);
 
             if (shouldDrawNodes) {
+                g.setColor(Color.LIGHT_GRAY);
                 for (int i = 0; i < nodes; i++) {
                     g.drawOval((int) xnodes[i] - 5, (int) ynodes[i] - 5, 10, 10);
                 }
+                g.fillOval((int) xconnector - 5, (int) yconnector - 5, 10, 10);
             }
         }
     }
