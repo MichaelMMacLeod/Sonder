@@ -98,6 +98,8 @@ class GamePanel extends JPanel {
         }
 
         if (selected != null && input.held("mouse")) {
+            Camera.shouldDrawNodes = true;
+
             selected.translate(mousex - selected.getCenterX(), mousey - selected.getCenterY());
 
             double smallestDist = Integer.MAX_VALUE;
@@ -166,6 +168,8 @@ class GamePanel extends JPanel {
                             selected.getCenterX(), selected.getCenterY());
                 }
             }
+        } else {
+            Camera.shouldDrawNodes = false;
         }
     }
 

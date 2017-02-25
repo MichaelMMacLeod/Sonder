@@ -10,6 +10,8 @@ public class Camera {
 
     private static int gridSize = 400;
 
+    public static boolean shouldDrawNodes = false;
+
     public static void draw(
             Graphics g,
             double width,
@@ -40,6 +42,16 @@ public class Camera {
                 yVertices[i] = (yVertices[i] - fy) * zoom + height / 2;
             }
 
+            double[] xnodes = shape.getXNodes();
+            double[] ynodes = shape.getYNodes();
+
+            int nodes = shape.getNumberOfNodes();
+
+            for (int i = 0; i < nodes; i++) {
+                xnodes[i] = (xnodes[i] - fx) * zoom + width / 2;
+                ynodes[i] = (ynodes[i] - fy) * zoom + height / 2;
+            }
+
             int[] integerXVertices = new int[vertices];
             int[] integerYVertices = new int[vertices];
 
@@ -53,6 +65,12 @@ public class Camera {
 
             g.setColor(shape.getOutline());
             g.drawPolygon(integerXVertices, integerYVertices, vertices);
+
+            if (shouldDrawNodes) {
+                for (int i = 0; i < nodes; i++) {
+                    g.drawOval((int) xnodes[i] - 5, (int) ynodes[i] - 5, 10, 10);
+                }
+            }
         }
     }
 }
