@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Capsule extends Part {
+public class Capsule extends Poly {
 
     /**
      * Creates a Capsule at location (x, y)

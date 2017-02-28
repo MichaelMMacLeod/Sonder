@@ -6,6 +6,21 @@ import java.util.Arrays;
 
 public class Poly {
     /**
+     * Relationships with other Polys
+     */
+
+    private Poly parent;
+
+    // Current node that this Poly is in
+    private int parentNode;
+
+    private Poly[] children;
+    private int nchildren;
+
+    // The number of non-null elements of children plus one for this Poly.
+    private int npolys;
+
+    /**
      * The connector is where this Poly connects to other Polys.
      */
 
@@ -15,6 +30,7 @@ public class Poly {
     public double getXConnector() {
         return xconnector;
     }
+
     public double getYConnector() {
         return yconnector;
     }
@@ -31,6 +47,7 @@ public class Poly {
     public double[] getXNodes() {
         return Arrays.copyOf(xnodes, nodes);
     }
+
     public double[] getYNodes() {
         return Arrays.copyOf(ynodes, nodes);
     }
@@ -53,6 +70,7 @@ public class Poly {
     public double[] getXVertices() {
         return Arrays.copyOf(xverts, verts);
     }
+
     public double[] getYVertices() {
         return Arrays.copyOf(yverts, verts);
     }
@@ -70,6 +88,7 @@ public class Poly {
     public double getCenterX() {
         return cx;
     }
+
     public double getCenterY() {
         return cy;
     }
@@ -92,6 +111,7 @@ public class Poly {
     public Color getOutline() {
         return outline;
     }
+
     public Color getFill() {
         return fill;
     }
@@ -144,8 +164,32 @@ public class Poly {
         this.nodes = nodes;
         this.xconnector = xconnector;
         this.yconnector = yconnector;
+        parent = null;
+        children = new Poly[nodes];
+        nchildren = nodes;
+        npolys = 1;
 
         moveTo(x, y);
+    }
+
+    public int getNode(Poly child) {
+        for (int i = 0; i < children.length; i++) {
+            if (children[i] == child) {
+                return i;
+            }
+        }
+
+        return -1; // child is not actually a child
+    }
+
+    public void setChild(Poly child, int node) {
+        if (node >= 0 && node <= nchildren && children[node] == null) {
+            children[node] = child;
+        }
+    }
+
+    public void setParent(Poly parent) {
+        this.parent = parent;
     }
 
     public void moveTo(double x, double y) {

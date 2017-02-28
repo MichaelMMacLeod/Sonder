@@ -2,7 +2,7 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 
-public class Hull extends Part {
+public class Hull extends Poly {
 
     /**
      * Creates a Hull at location (x, y)
