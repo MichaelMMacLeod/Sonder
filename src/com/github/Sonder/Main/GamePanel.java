@@ -57,16 +57,13 @@ class GamePanel extends JPanel {
         objects = new ArrayList<>();
 
         player = new Capsule(0, 0);
-        Hull test1 = new Hull(100, 100);
-        Hull test2 = new Hull(-500, -500);
-        Hull test3 = new Hull(200, 200);
-        Hull test4 = new Hull(40, 80);
-
         objects.add(player);
-        objects.add(test1);
-        objects.add(test2);
-        objects.add(test3);
-        objects.add(test4);
+
+        for (int i = -500; i < 500; i += 100) {
+            for (int j = -500; j < 500; j += 100) {
+                objects.add(new Hull(i, j));
+            }
+        }
 
         selected = null;
     }
