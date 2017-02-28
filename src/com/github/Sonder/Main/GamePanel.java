@@ -3,14 +3,10 @@ package com.github.Sonder.Main;
 import com.github.Sonder.Input.InputManager;
 import com.github.Sonder.Visual.*;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JPanel;
 

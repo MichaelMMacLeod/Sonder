@@ -183,7 +183,7 @@ public class Poly {
     }
 
     public void setChild(Poly child, int node) {
-        if (node >= 0 && node <= nchildren && children[node] == null) {
+        if (node >= 0 && node <= nchildren) {
             children[node] = child;
         }
     }
@@ -228,6 +228,12 @@ public class Poly {
         for (int i = 0; i < nodes; i++) {
             xnodes[i] += dx;
             ynodes[i] += dy;
+        }
+
+        for (Poly child : children) {
+            if (child != null) {
+                child.translate(dx, dy);
+            }
         }
     }
 
@@ -299,6 +305,12 @@ public class Poly {
         for (int i = 0; i < nodes; i++) {
             xnodes[i] = xnodesPrime[i] + x;
             ynodes[i] = ynodesPrime[i] + y;
+        }
+
+        for (Poly child : children) {
+            if (child != null) {
+                child.rotate(theta, x, y);
+            }
         }
     }
 
