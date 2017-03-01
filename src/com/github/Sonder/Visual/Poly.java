@@ -172,7 +172,38 @@ public class Poly {
         moveTo(x, y);
     }
 
-    public int getNode(Poly child) {
+    private Poly getParent() {
+        return parent;
+    }
+
+    public static void createRelationship(Poly parent, int node, Poly child) {
+        parent.setChild(child, node);
+        child.setParent(parent);
+    }
+
+    public static void removeRelationship(Poly parent, Poly child) {
+        if (child.getParent() == parent) {
+            parent.setChild(null, parent.getNode(child));
+            child.setParent(null);
+        }
+    }
+
+    private boolean hasChild(Poly child) {
+        if (this == child)
+            return true;
+
+        boolean hasChild = false;
+        for (Poly p : children) {
+            if (p != null && p.hasChild(child)) {
+                hasChild = true;
+                break;
+            }
+        }
+
+        return hasChild;
+    }
+
+    private int getNode(Poly child) {
         for (int i = 0; i < children.length; i++) {
             if (children[i] == child) {
                 return i;
@@ -182,13 +213,32 @@ public class Poly {
         return -1; // child is not actually a child
     }
 
-    public void setChild(Poly child, int node) {
-        if (node >= 0 && node <= nchildren) {
-            children[node] = child;
+    public void orphan() {
+        if (parent != null) {
+            parent.setChild(null, parent.getNode(this));
         }
     }
 
-    public void setParent(Poly parent) {
+    public static void relate(Poly parent, int node, Poly child) {
+        if (!parent.hasChild(child)) {
+            parent.setChild(child, node);
+            child.setParent(parent);
+        }
+    }
+
+    private void setChild(Poly child, int node) {
+        if (node >= 0 && node <= nchildren && !hasChild(child)) {
+            if (children[node] != null) {
+                if (child != null) {
+                    npolys++;
+                } else {
+                    npolys--;
+                }
+            }
+            children[node] = child;
+        }
+    }
+    private void setParent(Poly parent) {
         this.parent = parent;
     }
 

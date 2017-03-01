@@ -59,8 +59,8 @@ class GamePanel extends JPanel {
         player = new Capsule(0, 0);
         objects.add(player);
 
-        for (int i = -500; i < 500; i += 100) {
-            for (int j = -500; j < 500; j += 100) {
+        for (int i = -500; i < 500; i += 200) {
+            for (int j = -500; j < 500; j += 200) {
                 objects.add(new Hull(i, j));
             }
         }
@@ -126,11 +126,9 @@ class GamePanel extends JPanel {
                 selected.rotate(
                         closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
                         selected.getXConnector(), selected.getYConnector());
-                selected.setParent(closestPoly);
-                closestPoly.setChild(selected, closestNode);
+                Poly.createRelationship(closestPoly, closestNode, selected);
             } else {
-                selected.setParent(null);
-                closestPoly.setChild(null, closestPoly.getNode(selected));
+                Poly.removeRelationship(closestPoly, selected);
             }
         } else {
             Camera.shouldDrawNodes = false;
