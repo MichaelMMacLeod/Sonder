@@ -11,9 +11,6 @@ public class Poly {
 
     private Poly parent;
 
-    // Current node that this Poly is in
-    private int parentNode;
-
     private Poly[] children;
     private int nchildren;
 
