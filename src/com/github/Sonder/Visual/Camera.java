@@ -1,6 +1,7 @@
 package com.github.Sonder.Visual;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class Camera {
 
@@ -32,52 +33,45 @@ public class Camera {
         }
 
         for (Poly shape : shapes) {
-            double[] xVertices = shape.getXVertices();
-            double[] yVertices = shape.getYVertices();
+            Point2D.Double[] points = shape.getPoints();
 
-            int vertices = shape.getNumberOfVertices();
-
-            for (int i = 0; i < vertices; i++) {
-                xVertices[i] = (xVertices[i] - fx) * zoom + width / 2;
-                yVertices[i] = (yVertices[i] - fy) * zoom + height / 2;
+            for (int i = 0; i < points.length; i++) {
+                points[i].x = (points[i].x - fx) * zoom + width / 2;
+                points[i].y = (points[i].y - fy) * zoom + height / 2;
             }
 
-            double[] xnodes = shape.getXNodes();
-            double[] ynodes = shape.getYNodes();
+            Point2D.Double[] nodes = shape.getNodes();
 
-            int nodes = shape.getNumberOfNodes();
-
-            for (int i = 0; i < nodes; i++) {
-                xnodes[i] = (xnodes[i] - fx) * zoom + width / 2;
-                ynodes[i] = (ynodes[i] - fy) * zoom + height / 2;
+            for (int i = 0; i < nodes.length; i++) {
+                nodes[i].x = (nodes[i].x - fx) * zoom + width / 2;
+                nodes[i].y = (nodes[i].y - fy) * zoom + height / 2;
             }
 
-            double xconnector = shape.getXConnector();
-            double yconnector = shape.getYConnector();
+            Point2D.Double connector = shape.getConnector();
 
-            xconnector = (xconnector - fx) * zoom + width / 2;
-            yconnector = (yconnector - fy) * zoom + height / 2;
+            connector.x = (connector.x - fx) * zoom + width / 2;
+            connector.y = (connector.y - fy) * zoom + height / 2;
 
-            int[] integerXVertices = new int[vertices];
-            int[] integerYVertices = new int[vertices];
+            int[] intXPoints = new int[points.length];
+            int[] intYPoints = new int[points.length];
 
-            for (int i = 0; i < vertices; i++) {
-                integerXVertices[i] = (int) xVertices[i];
-                integerYVertices[i] = (int) yVertices[i];
+            for (int i = 0; i < points.length; i++) {
+                intXPoints[i] = (int) points[i].x;
+                intYPoints[i] = (int) points[i].y;
             }
 
             g.setColor(shape.getFill());
-            g.fillPolygon(integerXVertices, integerYVertices, vertices);
+            g.fillPolygon(intXPoints, intYPoints, points.length);
 
             g.setColor(shape.getOutline());
-            g.drawPolygon(integerXVertices, integerYVertices, vertices);
+            g.drawPolygon(intXPoints, intYPoints, points.length);
 
             if (shouldDrawNodes) {
                 g.setColor(Color.LIGHT_GRAY);
-                for (int i = 0; i < nodes; i++) {
-                    g.drawOval((int) xnodes[i] - 5, (int) ynodes[i] - 5, 10, 10);
+                for (int i = 0; i < nodes.length; i++) {
+                    g.drawOval((int) nodes[i].x - 5, (int) nodes[i].y - 5, 10, 10);
                 }
-                g.fillOval((int) xconnector - 5, (int) yconnector - 5, 10, 10);
+                g.fillOval((int) connector.x - 5, (int) connector.y - 5, 10, 10);
             }
         }
     }

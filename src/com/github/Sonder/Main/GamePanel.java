@@ -57,12 +57,12 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Capsule(0, 0);
+        player = new Capsule(new Point2D.Double(0, 0));
         objects.add(player);
 
         for (int i = -500; i < 500; i += 200) {
             for (int j = -500; j < 500; j += 200) {
-                objects.add(new Hull(i, j));
+                objects.add(new Hull(new Point2D.Double(i, j)));
             }
         }
 
