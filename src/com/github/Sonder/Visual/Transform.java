@@ -5,22 +5,20 @@ import java.awt.geom.Point2D;
 public final class Transform {
     private Transform() {}
 
-    public static Transformation xtranslation = (point, dx) -> point.x += dx;
-    public static Transformation ytranslation = (point, dy) -> point.y += dy;
-    public static Transformation rotation = (point, theta) -> {
-        double cos = Math.cos(theta), sin = Math.sin(theta);
-        point = new Point2D.Double(
-                point.x * cos - point.y * sin,
-                point.x * sin + point.y * cos);
-    };
-
-    public static void apply(Transformation t, double value, Point2D.Double... points) {
-        for (Point2D.Double point : points)
-            t.calculate(point, value);
+    public static void translate(double dx, double dy, Point2D.Double... points) {
+        for (Point2D.Double point : points) {
+            point.x += dx;
+            point.y += dy;
+        }
     }
 
-    @FunctionalInterface
-    interface Transformation {
-        void calculate(Point2D.Double point, double value);
+    public static void rotate(double theta, Point2D.Double... points) {
+        double cos = Math.cos(theta), sin = Math.sin(theta);
+        for (Point2D.Double point : points) {
+            Point2D.Double prime = new Point2D.Double(
+                    point.x * cos - point.y * sin,
+                    point.x * sin + point.y * cos);
+            point.setLocation(prime.x, prime.y);
+        }
     }
 }
