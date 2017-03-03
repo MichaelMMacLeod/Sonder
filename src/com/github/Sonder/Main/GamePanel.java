@@ -6,6 +6,7 @@ import com.github.Sonder.Visual.*;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -72,8 +73,8 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     void update() {
-        double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
-        double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
+        double mousex = input.getMouseX() - getWidth() / 2 + player.getCenter().x;
+        double mousey = input.getMouseY() - getHeight() / 2 + player.getCenter().y;
 
         boolean updateSelected = input.pressed("mouse");
 
@@ -93,7 +94,7 @@ class GamePanel extends JPanel {
         if (selected != null && input.held("mouse")) {
             Camera.shouldDrawNodes = true;
 
-            selected.translate(mousex - selected.getXConnector(), mousey - selected.getYConnector());
+            selected.translate(mousex - selected.getConnector().x, mousey - selected.getConnector().y);
 
             double smallestDist = Integer.MAX_VALUE;
             Poly closestPoly = selected;
@@ -101,14 +102,13 @@ class GamePanel extends JPanel {
 
             for (Poly poly : objects) {
                 if (poly != selected) {
-                    double[] xnodes = poly.getXNodes();
-                    double[] ynodes = poly.getYNodes();
+                    Point2D.Double[] nodes = poly.getNodes();
 
-                    for (int i = 0; i < poly.getNumberOfNodes(); i++) {
+                    for (int i = 0; i < nodes.length; i++) {
                         double distance =
                                 Math.sqrt(
-                                        (xnodes[i] - selected.getXConnector()) * (xnodes[i] - selected.getXConnector())
-                                        + (ynodes[i] - selected.getYConnector()) * (ynodes[i] - selected.getYConnector())
+                                        (nodes[i].x - selected.getConnector().x) * (nodes[i].x - selected.getConnector().x)
+                                        + (nodes[i].y - selected.getConnector().y) * (nodes[i].y - selected.getConnector().y)
                                 );
                         if (distance < smallestDist) {
                             closestPoly = poly;
@@ -121,11 +121,11 @@ class GamePanel extends JPanel {
 
             if (smallestDist < 15) {
                 selected.translate(
-                        closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
-                        closestPoly.getYNodes()[closestNode] - selected.getYConnector());
+                        closestPoly.getNodes()[closestNode].x - selected.getConnector().x,
+                        closestPoly.getNodes()[closestNode].y - selected.getConnector().y);
                 selected.rotate(
                         closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
-                        selected.getXConnector(), selected.getYConnector());
+                        selected.getConnector().x, selected.getConnector().y);
                 Poly.createRelationship(closestPoly, closestNode, selected);
             } else {
                 Poly.removeRelationship(closestPoly, selected);
@@ -141,7 +141,7 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenterX(), player.getCenterY());
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenter().x, player.getCenter().y);
     }
 
     /**

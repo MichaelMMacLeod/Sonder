@@ -2,171 +2,75 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
-    /**
-     * Relationships with other Polys
-     */
-
     private Poly parent;
-
     private Poly[] children;
     private int nchildren;
-
-    // The number of non-null elements of children plus one for this Poly.
     private int npolys;
 
-    /**
-     * The connector is where this Poly connects to other Polys.
-     */
-
-    private double xconnector;
-    private double yconnector;
-
-    public double getXConnector() {
-        return xconnector;
+    private Point2D.Double connector;
+    public Point2D.Double getConnector() {
+        return new Point2D.Double(connector.x, connector.y);
     }
 
-    public double getYConnector() {
-        return yconnector;
-    }
-
-    /**
-     * Nodes represent places which other Polys can connect to.
-     */
-
-    private double[] xnodes;
-    private double[] ynodes;
+    private Point2D.Double[] nodes;
     private double[] nodeRotations;
-    private int nodes;
-
-    public double[] getXNodes() {
-        return Arrays.copyOf(xnodes, nodes);
+    public Point2D.Double[] getNodes() {
+        return Arrays.copyOf(nodes, nodes.length);
     }
-
-    public double[] getYNodes() {
-        return Arrays.copyOf(ynodes, nodes);
-    }
-
     public double[] getNodeRotations() {
-        return Arrays.copyOf(nodeRotations, nodes);
+        return Arrays.copyOf(nodeRotations, nodeRotations.length);
     }
 
-    public int getNumberOfNodes() {
-        return nodes;
+    private Point2D.Double[] points;
+    public Point2D.Double[] getPoints() {
+        return Arrays.copyOf(points, points.length);
     }
 
-    /**
-     * The points defining the shape of the Poly
-     */
-    private double[] xverts;
-    private double[] yverts;
-    private int verts;
-
-    public double[] getXVertices() {
-        return Arrays.copyOf(xverts, verts);
+    private Point2D.Double center;
+    public Point2D.Double getCenter() {
+        return new Point2D.Double(center.x, center.y);
     }
 
-    public double[] getYVertices() {
-        return Arrays.copyOf(yverts, verts);
-    }
-
-    public int getNumberOfVertices() {
-        return verts;
-    }
-
-    /**
-     * The center of the Poly. It is defined when the object is created.
-     */
-    private double cx;
-    private double cy;
-
-    public double getCenterX() {
-        return cx;
-    }
-
-    public double getCenterY() {
-        return cy;
-    }
-
-    /**
-     * The rotation of the Poly in radians. A polygon has 0 rotation when created.
-     */
     private double rotation;
-
     public double getRotation() {
         return rotation;
     }
 
-    /**
-     * The color of the Poly.
-     */
     private Color outline;
     private Color fill;
-
     public Color getOutline() {
         return outline;
     }
-
     public Color getFill() {
         return fill;
     }
 
-    /**
-     * Creates a Polygon.
-     *
-     * @param xverts        are the x points defining the shape of the Poly.
-     * @param yverts        are the y points defining the shape of the Poly.
-     * @param verts         is the number of vertices.
-     * @param cx            is the x coordinate of the center of the Poly.
-     * @param cy            is the y coordinate of the center of the Poly.
-     * @param x             is the x coordinate of the location of the Poly.
-     * @param y             is the y coordinate of the location of the Poly.
-     * @param outline       is the color of the outline of the Poly.
-     * @param fill          is the color of the inside of the Poly.
-     * @param xnodes        are the x points which other shapes can connect to.
-     * @param ynodes        are the y points which other shapes can connect to.
-     * @param nodeRotations are the rotations that connected parts have.
-     * @param nodes         is the number of nodes.
-     * @param xconnector    is the x coordinate of the point where this Poly connects to other Polys.
-     * @param yconnector    is the y coordinate of the point where this Poly connects to other Polys.
-     */
     public Poly(
-            double[] xverts,
-            double[] yverts,
-            int verts,
-            double cx,
-            double cy,
-            double x,
-            double y,
+            Point2D.Double[] points,
+            Point2D.Double center,
+            Point2D.Double location,
             Color outline,
             Color fill,
-            double[] xnodes,
-            double[] ynodes,
+            Point2D.Double[] nodes,
             double[] nodeRotations,
-            int nodes,
-            double xconnector,
-            double yconnector) {
-        this.xverts = Arrays.copyOf(xverts, verts);
-        this.yverts = Arrays.copyOf(yverts, verts);
-        this.verts = verts;
-        this.cx = cx;
-        this.cy = cy;
+            Point2D.Double connector) {
+        this.points = Arrays.copyOf(points, points.length);
+        this.center = new Point2D.Double(center.x, center.y);
         this.outline = outline;
         this.fill = fill;
-        this.xnodes = Arrays.copyOf(xnodes, nodes);
-        this.ynodes = Arrays.copyOf(ynodes, nodes);
-        this.nodeRotations = Arrays.copyOf(nodeRotations, nodes);
-        this.nodes = nodes;
-        this.xconnector = xconnector;
-        this.yconnector = yconnector;
+        this.nodes = Arrays.copyOf(nodes, nodes.length);
+        this.nodeRotations = Arrays.copyOf(nodeRotations, nodeRotations.length);
+        this.connector = new Point2D.Double(connector.x, connector.y);
+
         parent = null;
-        children = new Poly[nodes];
-        nchildren = nodes;
+        children = new Poly[nodes.length];
         npolys = 1;
 
-        moveTo(x, y);
+        reCenter();
     }
 
     private Poly getParent() {
@@ -239,43 +143,25 @@ public class Poly {
         this.parent = parent;
     }
 
-    public void moveTo(double x, double y) {
-        double dx = x - cx;
-        double dy = y - cy;
+    public void reCenter() {
+        moveTo(center);
+    }
 
-        cx += dx;
-        cy += dy;
+    public void moveTo(Point2D.Double point) {
+        double dx = point.x - center.x;
+        double dy = point.y - center.y;
 
-        xconnector += dx;
-        yconnector += dy;
-
-        for (int i = 0; i < verts; i++) {
-            xverts[i] += dx;
-            yverts[i] += dy;
-        }
-
-        for (int i = 0; i < nodes; i++) {
-            xnodes[i] += dx;
-            ynodes[i] += dy;
-        }
+        Transform.translate(dx, dy, center);
+        Transform.translate(dx, dy, connector);
+        Transform.translate(dx, dy, points);
+        Transform.translate(dx, dy, nodes);
     }
 
     public void translate(double dx, double dy) {
-        cx += dx;
-        cy += dy;
-
-        xconnector += dx;
-        yconnector += dy;
-
-        for (int i = 0; i < verts; i++) {
-            xverts[i] += dx;
-            yverts[i] += dy;
-        }
-
-        for (int i = 0; i < nodes; i++) {
-            xnodes[i] += dx;
-            ynodes[i] += dy;
-        }
+        Transform.translate(dx, dy, center);
+        Transform.translate(dx, dy, connector);
+        Transform.translate(dx, dy, points);
+        Transform.translate(dx, dy, nodes);
 
         for (Poly child : children) {
             if (child != null) {
@@ -285,74 +171,20 @@ public class Poly {
     }
 
     public void rotate(double theta, double x, double y) {
-        rotation += theta;
+        Transform.translate(-x, -y, center);
+        Transform.translate(-x, -y, connector);
+        Transform.translate(-x, -y, points);
+        Transform.translate(-x, -y, nodes);
 
-        for (int i = 0; i < nodes; i++) {
-            nodeRotations[i] += theta;
-        }
+        Transform.rotate(theta, center);
+        Transform.rotate(theta, connector);
+        Transform.rotate(theta, points);
+        Transform.rotate(theta, nodes);
 
-        double cos = Math.cos(theta);
-        double sin = Math.sin(theta);
-
-        cx -= x;
-        cy -= y;
-
-        xconnector -= x;
-        yconnector -= y;
-
-        for (int i = 0; i < verts; i++) {
-            xverts[i] -= x;
-            yverts[i] -= y;
-        }
-
-        for (int i = 0; i < nodes; i++) {
-            xnodes[i] -= x;
-            ynodes[i] -= y;
-        }
-
-        double cxPrime;
-        double cyPrime;
-
-        double xconnectorPrime;
-        double yconnectorPrime;
-
-        double[] xvertsPrime = new double[verts];
-        double[] yvertsPrime = new double[verts];
-
-        double[] xnodesPrime = new double[nodes];
-        double[] ynodesPrime = new double[nodes];
-
-        cxPrime = cx * cos - cy * sin;
-        cyPrime = cx * sin + cy * cos;
-
-        xconnectorPrime = xconnector * cos - yconnector * sin;
-        yconnectorPrime = xconnector * sin + yconnector * cos;
-
-        for (int i = 0; i < verts; i++) {
-            xvertsPrime[i] = xverts[i] * cos - yverts[i] * sin;
-            yvertsPrime[i] = xverts[i] * sin + yverts[i] * cos;
-        }
-
-        for (int i = 0; i < nodes; i++) {
-            xnodesPrime[i] = xnodes[i] * cos - ynodes[i] * sin;
-            ynodesPrime[i] = xnodes[i] * sin + ynodes[i] * cos;
-        }
-
-        cx = cxPrime + x;
-        cy = cyPrime + y;
-
-        xconnector = xconnectorPrime + x;
-        yconnector = yconnectorPrime + y;
-
-        for (int i = 0; i < verts; i++) {
-            xverts[i] = xvertsPrime[i] + x;
-            yverts[i] = yvertsPrime[i] + y;
-        }
-
-        for (int i = 0; i < nodes; i++) {
-            xnodes[i] = xnodesPrime[i] + x;
-            ynodes[i] = ynodesPrime[i] + y;
-        }
+        Transform.translate(x, y, center);
+        Transform.translate(x, y, connector);
+        Transform.translate(x, y, points);
+        Transform.translate(x, y, nodes);
 
         for (Poly child : children) {
             if (child != null) {
@@ -362,43 +194,40 @@ public class Poly {
     }
 
     public boolean contains(double x, double y) {
-        int[] xvertsPrime = new int[verts];
-        int[] yvertsPrime = new int[verts];
+        int[] xPointsPrime = new int[points.length];
+        int[] yPointsPrime = new int[points.length];
 
-        for (int i = 0; i < verts; i++) {
-            xvertsPrime[i] = (int) xverts[i];
-            yvertsPrime[i] = (int) yverts[i];
+        for (int i = 0; i < points.length; i++) {
+            xPointsPrime[i] = (int) points[i].x;
+            yPointsPrime[i] = (int) points[i].y;
         }
 
-        Polygon p = new Polygon(xvertsPrime, yvertsPrime, verts);
+        Polygon p = new Polygon(xPointsPrime, yPointsPrime, points.length);
 
         return p.contains(x, y);
     }
 
     public boolean contains(Poly other) {
-        double[] otherx = other.getXVertices();
-        double[] othery = other.getYVertices();
+        Point2D.Double[] otherPoints = other.getPoints();
 
-        int othernv = other.getNumberOfVertices();
+        int[] otherXPointsPrime = new int[otherPoints.length];
+        int[] otherYPointsPrime = new int[otherPoints.length];
 
-        int[] iotherx = new int[othernv];
-        int[] iothery = new int[othernv];
-
-        for (int i = 0; i < othernv; i++) {
-            iotherx[i] = (int) otherx[i];
-            iothery[i] = (int) othery[i];
+        for (int i = 0; i < otherPoints.length; i++) {
+            otherXPointsPrime[i] = (int) otherPoints[i].x;
+            otherYPointsPrime[i] = (int) otherPoints[i].y;
         }
 
-        int[] ixverts = new int[verts];
-        int[] iyverts = new int[verts];
+        int[] xPointsPrime = new int[points.length];
+        int[] yPointsPrime = new int[points.length];
 
-        for (int i = 0; i < verts; i++) {
-            ixverts[i] = (int) xverts[i];
-            iyverts[i] = (int) yverts[i];
+        for (int i = 0; i < points.length; i++) {
+            xPointsPrime[i] = (int) points[i].x;
+            yPointsPrime[i] = (int) points[i].y;
         }
 
-        Area area = new Area(new Polygon(ixverts, iyverts, verts));
-        Area otherArea = new Area(new Polygon(iotherx, iothery, othernv));
+        Area area = new Area(new Polygon(xPointsPrime, yPointsPrime, points.length));
+        Area otherArea = new Area(new Polygon(otherXPointsPrime, otherYPointsPrime, otherPoints.length));
 
         area.intersect(otherArea);
 
