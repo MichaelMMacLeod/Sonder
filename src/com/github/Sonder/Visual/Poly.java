@@ -11,26 +11,26 @@ public class Poly {
     private int nchildren;
     private int npolys;
 
-    private Point2D.Double connector;
+    private final Point2D.Double connector;
     public Point2D.Double getConnector() {
         return new Point2D.Double(connector.x, connector.y);
     }
 
-    private Point2D.Double[] nodes;
-    private double[] nodeRotations;
+    private final Point2D.Double[] nodes;
+    private final double[] nodeRotations;
     public Point2D.Double[] getNodes() {
-        return Arrays.copyOf(nodes, nodes.length);
+        return Transform.copy(nodes);
     }
     public double[] getNodeRotations() {
         return Arrays.copyOf(nodeRotations, nodeRotations.length);
     }
 
-    private Point2D.Double[] points;
+    private final Point2D.Double[] points;
     public Point2D.Double[] getPoints() {
-        return Arrays.copyOf(points, points.length);
+        return Transform.copy(points);
     }
 
-    private Point2D.Double center;
+    private final Point2D.Double center;
     public Point2D.Double getCenter() {
         return new Point2D.Double(center.x, center.y);
     }
@@ -58,11 +58,11 @@ public class Poly {
             Point2D.Double[] nodes,
             double[] nodeRotations,
             Point2D.Double connector) {
-        this.points = Arrays.copyOf(points, points.length);
+        this.points = Transform.copy(points);
         this.center = new Point2D.Double(center.x, center.y);
         this.outline = outline;
         this.fill = fill;
-        this.nodes = Arrays.copyOf(nodes, nodes.length);
+        this.nodes = Transform.copy(nodes);
         this.nodeRotations = Arrays.copyOf(nodeRotations, nodeRotations.length);
         this.connector = new Point2D.Double(connector.x, connector.y);
 
@@ -70,7 +70,7 @@ public class Poly {
         children = new Poly[nodes.length];
         npolys = 1;
 
-        reCenter();
+        moveTo(location);
     }
 
     private Poly getParent() {
@@ -139,12 +139,9 @@ public class Poly {
             children[node] = child;
         }
     }
+
     private void setParent(Poly parent) {
         this.parent = parent;
-    }
-
-    public void reCenter() {
-        moveTo(center);
     }
 
     public void moveTo(Point2D.Double point) {

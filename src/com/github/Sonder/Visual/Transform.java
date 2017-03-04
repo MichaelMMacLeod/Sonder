@@ -21,4 +21,12 @@ public final class Transform {
             point.setLocation(prime.x, prime.y);
         }
     }
+
+    public static Point2D.Double[] copy(Point2D.Double[] source) {
+        Point2D.Double[] copy = new Point2D.Double[source.length];
+        for (int i = 0; i < source.length; i++) {
+            copy[i] = new Point2D.Double(source[i].x, source[i].y);
+        }
+        return copy;
+    }
 }
