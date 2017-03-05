@@ -2,7 +2,7 @@ package com.github.Sonder.Visual;
 
 import java.awt.geom.Point2D;
 
-public final class Transform {
+final class Transform {
     private Transform() {}
 
     public static void translate(double dx, double dy, Point2D.Double... points) {

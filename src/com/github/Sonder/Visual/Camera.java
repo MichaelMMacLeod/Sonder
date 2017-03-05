@@ -35,16 +35,16 @@ public class Camera {
         for (Poly shape : shapes) {
             Point2D.Double[] points = shape.getPoints();
 
-            for (int i = 0; i < points.length; i++) {
-                points[i].x = (points[i].x - fx) * zoom + width / 2;
-                points[i].y = (points[i].y - fy) * zoom + height / 2;
+            for (Point2D.Double point : points) {
+                point.x = (point.x - fx) * zoom + width / 2;
+                point.y = (point.y - fy) * zoom + height / 2;
             }
 
             Point2D.Double[] nodes = shape.getNodes();
 
-            for (int i = 0; i < nodes.length; i++) {
-                nodes[i].x = (nodes[i].x - fx) * zoom + width / 2;
-                nodes[i].y = (nodes[i].y - fy) * zoom + height / 2;
+            for (Point2D.Double node : nodes) {
+                node.x = (node.x - fx) * zoom + width / 2;
+                node.y = (node.y - fy) * zoom + height / 2;
             }
 
             Point2D.Double connector = shape.getConnector();
@@ -68,8 +68,8 @@ public class Camera {
 
             if (shouldDrawNodes) {
                 g.setColor(Color.LIGHT_GRAY);
-                for (int i = 0; i < nodes.length; i++) {
-                    g.drawOval((int) nodes[i].x - 5, (int) nodes[i].y - 5, 10, 10);
+                for (Point2D.Double node : nodes) {
+                    g.drawOval((int) node.x - 5, (int) node.y - 5, 10, 10);
                 }
                 g.fillOval((int) connector.x - 5, (int) connector.y - 5, 10, 10);
             }

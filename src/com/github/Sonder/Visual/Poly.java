@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Poly {
     private Poly parent;
-    private Poly[] children;
+    private final Poly[] children;
     private int nchildren;
     private int npolys;
 
@@ -66,9 +66,12 @@ public class Poly {
         this.nodeRotations = Arrays.copyOf(nodeRotations, nodeRotations.length);
         this.connector = new Point2D.Double(connector.x, connector.y);
 
+        rotation = 0;
+
         parent = null;
         children = new Poly[nodes.length];
         npolys = 1;
+        nchildren = 0;
 
         moveTo(location);
     }
@@ -112,19 +115,6 @@ public class Poly {
         }
 
         return -1; // child is not actually a child
-    }
-
-    public void orphan() {
-        if (parent != null) {
-            parent.setChild(null, parent.getNode(this));
-        }
-    }
-
-    public static void relate(Poly parent, int node, Poly child) {
-        if (!parent.hasChild(child)) {
-            parent.setChild(child, node);
-            child.setParent(parent);
-        }
     }
 
     private void setChild(Poly child, int node) {
