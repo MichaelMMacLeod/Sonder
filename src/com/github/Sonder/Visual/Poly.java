@@ -6,7 +6,18 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
+    private final Color defaultColor = new Color((int) (Math.random() * 0x1000000));
+
     private Node[] nodes;
+    private Node origin;
+
+    public void setOrigin(Node origin) {
+        this.origin = origin;
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor;
+    }
 
     /**
      * The connector is where this Poly connects to other Polys.
@@ -107,6 +118,15 @@ public class Poly {
         return fill;
     }
 
+    public void setFill(Color color) {
+        this.fill = color;
+        for (int i = 0; i < nodes.length; i++) {
+            if (nodes[i].poly != null) {
+                nodes[i].poly.setFill(color);
+            }
+        }
+    }
+
     /**
      * Creates a Polygon.
      *
@@ -148,7 +168,9 @@ public class Poly {
         this.cx = cx;
         this.cy = cy;
         this.outline = outline;
-        this.fill = fill;
+
+        this.fill = defaultColor;
+
         this.xconnector = xconnector;
         this.yconnector = yconnector;
 
@@ -157,6 +179,8 @@ public class Poly {
             this.nodes[i] = new Node(this, new Point2D.Double(xNodes[i], yNodes[i]), nodeRotations[i]);
         }
 
+        origin = null;
+
         moveTo(x, y);
     }
 
@@ -164,12 +188,9 @@ public class Poly {
         nodes[node].attatch(poly);
     }
 
-    public void detatch(Poly poly) {
-        for (Node n : nodes) {
-            if (n.poly == poly) {
-                n.detatch();
-                break;
-            }
+    public void detatch() {
+        if (origin != null) {
+            origin.detatch();
         }
     }
 

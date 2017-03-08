@@ -15,12 +15,18 @@ public class Node {
     }
 
     public void detatch() {
-        poly = null;
+        if (poly != null) {
+            poly.setFill(poly.getDefaultColor());
+            poly.setOrigin(null);
+            poly = null;
+        }
     }
 
     public void attatch(Poly poly) {
         poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
         poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
+        poly.setOrigin(this);
+        poly.setFill(source.getFill());
         this.poly = poly;
     }
 

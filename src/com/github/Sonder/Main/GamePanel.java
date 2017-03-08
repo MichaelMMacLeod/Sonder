@@ -128,7 +128,7 @@ class GamePanel extends JPanel {
                         selected.getXConnector(), selected.getYConnector());
                 closestPoly.attatch(selected, closestNode);
             } else {
-                closestPoly.detatch(selected);
+                selected.detatch();
             }
         } else {
             Camera.shouldDrawNodes = false;
