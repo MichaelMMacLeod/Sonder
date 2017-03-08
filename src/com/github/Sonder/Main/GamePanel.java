@@ -126,9 +126,9 @@ class GamePanel extends JPanel {
                 selected.rotate(
                         closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
                         selected.getXConnector(), selected.getYConnector());
-                Poly.createRelationship(closestPoly, closestNode, selected);
+                closestPoly.attatch(selected, closestNode);
             } else {
-                Poly.removeRelationship(closestPoly, selected);
+                closestPoly.detatch(selected);
             }
         } else {
             Camera.shouldDrawNodes = false;
