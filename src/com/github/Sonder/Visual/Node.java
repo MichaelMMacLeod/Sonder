@@ -3,10 +3,10 @@ package com.github.Sonder.Visual;
 import java.awt.geom.Point2D;
 
 public class Node {
-    private final Poly source;
-    private Poly poly;
-    private Point2D.Double point;
-    private double rotation;
+    public final Poly source;
+    public Poly poly;
+    public Point2D.Double point;
+    public double rotation;
 
     public Node(Poly source, Point2D.Double point, double rotation) {
         this.source = source;

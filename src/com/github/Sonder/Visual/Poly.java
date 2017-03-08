@@ -2,9 +2,19 @@ package com.github.Sonder.Visual;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class Poly {
+
+
+
+    private Node[] _nodes;
+
+
+
+
+
     /**
      * Relationships with other Polys
      */
@@ -166,6 +176,11 @@ public class Poly {
         nchildren = nodes;
         npolys = 1;
 
+        _nodes = new Node[nodes];
+        for (int i = 0; i < _nodes.length; i++) {
+            _nodes[i] = new Node(this, new Point2D.Double(xnodes[i], ynodes[i]), nodeRotations[i]);
+        }
+
         moveTo(x, y);
     }
 
@@ -258,6 +273,12 @@ public class Poly {
             xnodes[i] += dx;
             ynodes[i] += dy;
         }
+
+        for (Node n : _nodes) {
+            n.point.x += dx;
+            n.point.y += dy;
+            n.poly.moveTo(x, y);
+        }
     }
 
     public void translate(double dx, double dy) {
@@ -281,6 +302,12 @@ public class Poly {
             if (child != null) {
                 child.translate(dx, dy);
             }
+        }
+
+        for (Node n : _nodes) {
+            n.point.x += dx;
+            n.point.y += dy;
+            n.poly.translate(dx, dy);
         }
     }
 
@@ -358,6 +385,17 @@ public class Poly {
             if (child != null) {
                 child.rotate(theta, x, y);
             }
+        }
+
+        for (Node n : _nodes) {
+            Point2D.Double p = new Point2D.Double(n.point.x, n.point.y);
+            n.point.x -= x;
+            n.point.y -= y;
+            p.x = n.point.x * cos - n.point.y * sin;
+            p.y = n.point.x * sin + n.point.y * cos;
+            n.point.x = p.x + x;
+            n.point.y = p.y + y;
+            n.poly.rotate(theta, x, y);
         }
     }
 
