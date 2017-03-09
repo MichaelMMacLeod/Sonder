@@ -81,6 +81,19 @@ class GamePanel extends JPanel {
 
         boolean updateSelected = input.pressed("mouse");
 
+        for (Poly poly : objects) {
+            if (updateSelected) {
+                if (poly.contains(mousex, mousey)) {
+                    selected = poly;
+                    updateSelected = false;
+                }
+            }
+        }
+
+        if (updateSelected) {
+            selected = null;
+        }
+
         if (!input.held("mouse")
                 && selected != null
                 && connectTo != null) {
@@ -90,15 +103,6 @@ class GamePanel extends JPanel {
         } else if (selected != null
                 && connectTo == null) {
             selected.detatch();
-        }
-
-        for (Poly poly : objects) {
-            if (updateSelected) {
-                if (poly.contains(mousex, mousey)) {
-                    selected = poly;
-                    updateSelected = false;
-                }
-            }
         }
 
         if (selected != null && input.held("mouse")) {
