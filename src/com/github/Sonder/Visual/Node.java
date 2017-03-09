@@ -23,11 +23,13 @@ public class Node {
     }
 
     public void attatch(Poly poly) {
-        poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
-        poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
-        poly.setOrigin(this);
-        poly.setFill(source.getFill());
-        this.poly = poly;
+        if (this.poly == null) {
+            poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
+            poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
+            poly.setOrigin(this);
+            poly.setFill(source.getFill());
+            this.poly = poly;
+        }
     }
 
     public void translate(double dx, double dy) {

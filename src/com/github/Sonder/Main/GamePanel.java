@@ -29,6 +29,8 @@ class GamePanel extends JPanel {
     private Capsule player;
 
     private Poly selected;
+    private Poly connectTo;
+    private int closestNode;
 
     /**
      * Creates a GamePanel object.
@@ -66,6 +68,8 @@ class GamePanel extends JPanel {
         }
 
         selected = null;
+        connectTo = null;
+        closestNode = -1;
     }
 
     /**
@@ -77,6 +81,17 @@ class GamePanel extends JPanel {
 
         boolean updateSelected = input.pressed("mouse");
 
+        if (!input.held("mouse")
+                && selected != null
+                && connectTo != null) {
+            connectTo.attatch(selected, closestNode);
+            selected = null;
+            connectTo = null;
+        } else if (selected != null
+                && connectTo == null) {
+            selected.detatch();
+        }
+
         for (Poly poly : objects) {
             if (updateSelected) {
                 if (poly.contains(mousex, mousey)) {
@@ -86,10 +101,6 @@ class GamePanel extends JPanel {
             }
         }
 
-        if (updateSelected) {
-            selected = null;
-        }
-
         if (selected != null && input.held("mouse")) {
             Camera.shouldDrawNodes = true;
 
@@ -97,7 +108,7 @@ class GamePanel extends JPanel {
 
             double smallestDist = Integer.MAX_VALUE;
             Poly closestPoly = selected;
-            int closestNode = -1;
+            closestNode = -1;
 
             for (Poly poly : objects) {
                 if (poly != selected) {
@@ -120,15 +131,9 @@ class GamePanel extends JPanel {
             }
 
             if (smallestDist < 15) {
-                selected.translate(
-                        closestPoly.getXNodes()[closestNode] - selected.getXConnector(),
-                        closestPoly.getYNodes()[closestNode] - selected.getYConnector());
-                selected.rotate(
-                        closestPoly.getNodeRotations()[closestNode] - selected.getRotation(),
-                        selected.getXConnector(), selected.getYConnector());
-                closestPoly.attatch(selected, closestNode);
+                connectTo = closestPoly;
             } else {
-                selected.detatch();
+                connectTo = null;
             }
         } else {
             Camera.shouldDrawNodes = false;
