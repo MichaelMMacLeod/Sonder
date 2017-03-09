@@ -49,6 +49,7 @@ class GamePanel extends JPanel {
         input.addKey("a");
         input.addKey("w");
         input.addKey("d");
+        input.addKey("e");
         input.addKey("s");
         input.addKey("h");
         input.addKey("l");
@@ -78,6 +79,8 @@ class GamePanel extends JPanel {
         double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
         double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
 
+        if (input.pressed("e"))
+            objects.add(new Engine(mousex, mousey));
         if (input.pressed("h"))
             objects.add(new Hull(mousex, mousey));
         if (input.pressed("l"))

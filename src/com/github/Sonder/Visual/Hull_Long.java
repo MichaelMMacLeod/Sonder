@@ -3,12 +3,6 @@ package com.github.Sonder.Visual;
 import java.awt.*;
 
 public class Hull_Long extends Poly {
-
-    /**
-     * Creates a Hull at location (x, y)
-     * @param x is the x coordinate of the Capsule.
-     * @param y is the y coordinate of the Capsule.
-     */
     public Hull_Long(double x, double y) {
         super(
                 new double[] {-40, -30, -30,  100, 100, -30, -30, -40},
