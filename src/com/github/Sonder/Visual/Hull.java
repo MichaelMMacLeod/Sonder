@@ -11,9 +11,9 @@ public class Hull extends Poly {
      */
     public Hull(double x, double y) {
         super(
-                new double[] {-30,  30, 30, -30},
-                new double[] {-20, -30, 30,  20},
-                4,
+                new double[] {-40, -30, -30,  30, 30, -30, -30, -40},
+                new double[] {-20, -20, -30, -30, 30,  30,  20,  20},
+                8,
                 0,
                 0,
                 x,
@@ -24,7 +24,7 @@ public class Hull extends Poly {
                 new double[] {        -30,  0,           30},
                 new double[] {-Math.PI / 2,  0, Math.PI / 2},
                 3,
-                -30,
+                -40,
                 0);
     }
 }
