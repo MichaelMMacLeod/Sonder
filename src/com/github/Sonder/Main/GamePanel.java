@@ -50,6 +50,8 @@ class GamePanel extends JPanel {
         input.addKey("w");
         input.addKey("d");
         input.addKey("s");
+        input.addKey("h");
+        input.addKey("l");
     }
 
     /**
@@ -60,12 +62,6 @@ class GamePanel extends JPanel {
 
         player = new Capsule(0, 0);
         objects.add(player);
-
-        for (int i = -500; i < 500; i += 200) {
-            for (int j = -500; j < 500; j += 200) {
-                objects.add(new Hull_Long(i, j));
-            }
-        }
 
         selected = null;
         connectTo = null;
@@ -78,6 +74,11 @@ class GamePanel extends JPanel {
     void update() {
         double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
         double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
+
+        if (input.pressed("h"))
+            objects.add(new Hull(mousex, mousey));
+        if (input.pressed("l"))
+            objects.add(new Hull_Long(mousex, mousey));
 
         boolean updateSelected = input.pressed("mouse");
 
