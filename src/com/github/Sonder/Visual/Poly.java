@@ -5,8 +5,36 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 public class Poly {
+    public void thrust(double force) {
+        vector.x += force * Math.cos(rotation);
+        vector.y += force * Math.sin(rotation);
+    }
+
+    public void rotate(double theta) {
+        rotate(theta, getCenterX(), getCenterY());
+    }
+
+    public void update() {
+        translate(vector.x, vector.y);
+    }
+
     private final Node[] nodes;
     private Node origin;
+
+    private Point2D.Double vector;
+
+    private void setVector(Point2D.Double vector) {
+        this.vector = vector;
+
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                n.poly.setVector(vector);
+            }
+        }
+    }
+    private Point2D.Double getVector() {
+        return vector;
+    }
 
     private void setOrigin(Node origin) {
         this.origin = origin;
@@ -169,6 +197,8 @@ public class Poly {
 
         origin = null;
 
+        vector = new Point2D.Double(0, 0);
+
         moveTo(x, y);
     }
 
@@ -205,9 +235,6 @@ public class Poly {
 
         for (Node n : nodes) {
             Transform.translate(dx, dy, n.point);
-            if (n.poly != null) {
-                n.poly.translate(dx, dy);
-            }
         }
     }
 
@@ -327,6 +354,7 @@ public class Poly {
         void detatch() {
             if (poly != null) {
                 poly.setOrigin(null);
+                poly.setVector(new Point2D.Double(poly.getVector().x, poly.getVector().y));
                 poly = null;
             }
         }
@@ -336,6 +364,7 @@ public class Poly {
                 poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
                 poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
                 poly.setOrigin(this);
+                poly.setVector(source.getVector());
                 this.poly = poly;
             }
         }

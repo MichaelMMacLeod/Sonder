@@ -72,6 +72,9 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     void update() {
+        for (Poly p : objects)
+            p.update();
+
         double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
         double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
 
@@ -79,6 +82,13 @@ class GamePanel extends JPanel {
             objects.add(new Hull(mousex, mousey));
         if (input.pressed("l"))
             objects.add(new Hull_Long(mousex, mousey));
+
+        if (input.held("a"))
+            player.rotate(-Math.PI / 128);
+        if (input.held("d"))
+            player.rotate(Math.PI / 128);
+        if (input.held("w"))
+            player.thrust(0.01);
 
         boolean updateSelected = input.pressed("mouse");
 
