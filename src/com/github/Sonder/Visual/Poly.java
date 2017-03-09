@@ -8,14 +8,14 @@ import java.util.Arrays;
 public class Poly {
     private final Color defaultColor = new Color((int) (Math.random() * 0x1000000));
 
-    private Node[] nodes;
+    private final Node[] nodes;
     private Node origin;
 
-    public void setOrigin(Node origin) {
+    private void setOrigin(Node origin) {
         this.origin = origin;
     }
 
-    public Color getDefaultColor() {
+    private Color getDefaultColor() {
         return defaultColor;
     }
 
@@ -50,14 +50,6 @@ public class Poly {
         return yNodes;
     }
 
-    public double[] getNodeRotations() {
-        double[] nodeRotations = new double[nodes.length];
-        for (int i = 0; i < nodeRotations.length; i++) {
-            nodeRotations[i] = nodes[i].rotation;
-        }
-        return nodeRotations;
-    }
-
     public int getNumberOfNodes() {
         return nodes.length;
     }
@@ -65,9 +57,9 @@ public class Poly {
     /**
      * The points defining the shape of the Poly
      */
-    private double[] xVerts;
-    private double[] yVerts;
-    private int verts;
+    private final double[] xVerts;
+    private final double[] yVerts;
+    private final int verts;
 
     public double[] getXVertices() {
         return Arrays.copyOf(xVerts, verts);
@@ -100,7 +92,7 @@ public class Poly {
      */
     private double rotation;
 
-    public double getRotation() {
+    private double getRotation() {
         return rotation;
     }
 
@@ -118,11 +110,11 @@ public class Poly {
         return fill;
     }
 
-    public void setFill(Color color) {
+    private void setFill(Color color) {
         this.fill = color;
-        for (int i = 0; i < nodes.length; i++) {
-            if (nodes[i].poly != null) {
-                nodes[i].poly.setFill(color);
+        for (Node node : nodes) {
+            if (node.poly != null) {
+                node.poly.setFill(color);
             }
         }
     }
@@ -146,7 +138,7 @@ public class Poly {
      * @param xconnector    is the x coordinate of the point where this Poly connects to other Polys.
      * @param yconnector    is the y coordinate of the point where this Poly connects to other Polys.
      */
-    public Poly(
+    Poly(
             double[] xVerts,
             double[] yVerts,
             int verts,
@@ -194,7 +186,7 @@ public class Poly {
         }
     }
 
-    public void moveTo(double x, double y) {
+    private void moveTo(double x, double y) {
         double dx = x - cx;
         double dy = y - cy;
 
@@ -231,7 +223,7 @@ public class Poly {
         }
     }
 
-    public void rotate(double theta, double x, double y) {
+    private void rotate(double theta, double x, double y) {
         rotation += theta;
 
         double cos = Math.cos(theta);
@@ -326,5 +318,66 @@ public class Poly {
         area.intersect(otherArea);
 
         return !area.isEmpty();
+    }
+
+    private class Node {
+        private final Poly source;
+        private Poly poly;
+        private final Point2D.Double point;
+        private double rotation;
+
+        Node(Poly source, Point2D.Double point, double rotation) {
+            this.source = source;
+            this.point = point;
+            this.rotation = rotation;
+        }
+
+        void detatch() {
+            if (poly != null) {
+                poly.setFill(poly.getDefaultColor());
+                poly.setOrigin(null);
+                poly = null;
+            }
+        }
+
+        void attatch(Poly poly) {
+            if (this.poly == null) {
+                poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
+                poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
+                poly.setOrigin(this);
+                poly.setFill(source.getFill());
+                this.poly = poly;
+            }
+        }
+
+        void translate(double dx, double dy) {
+            point.x += dx;
+            point.y += dy;
+
+            if (poly != null) {
+                poly.translate(dx, dy);
+            }
+        }
+
+        void rotate(double theta, double x, double y) {
+            rotation += theta;
+
+            double cos = Math.cos(theta), sin = Math.sin(theta);
+
+            Point2D.Double p = new Point2D.Double(point.x, point.y);
+
+            point.x -= x;
+            point.y -= y;
+
+            p.x = point.x * cos - point.y * sin;
+            p.y = point.x * sin + point.y * cos;
+
+            point.x = p.x + x;
+            point.y = p.y + y;
+
+            if (poly != null) {
+                poly.rotate(theta, x, y);
+            }
+        }
     }
 }
