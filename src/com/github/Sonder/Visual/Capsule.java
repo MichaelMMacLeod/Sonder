@@ -11,18 +11,18 @@ public class Capsule extends Poly {
      */
     public Capsule(double x, double y) {
         super(
-                new double[] {-30,  30, 30, -30},
-                new double[] {-30, -30, 30,  30},
-                4,
+                new double[] {-30,  20,  30, 30, 20, -30},
+                new double[] {-30, -30, -20, 20, 30,  30},
+                6,
                 0,
                 0,
                 x,
                 y,
                 Color.GRAY,
-                Color.BLUE,
-                new double[] {    -30,           0, 30,            0},
-                new double[] {      0,         -30,  0,           30},
-                new double[] {Math.PI, -Math.PI / 2,  0, Math.PI / 2},
+                Color.WHITE,
+                new double[] {    -30,            0, 30,            0},
+                new double[] {      0,          -30,  0,           30},
+                new double[] {Math.PI, -Math.PI / 2,  0,  Math.PI / 2},
                 4,
                 0,
                 0);
