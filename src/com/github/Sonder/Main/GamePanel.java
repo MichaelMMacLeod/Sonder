@@ -96,7 +96,8 @@ class GamePanel extends JPanel {
 
         if (!input.held("mouse")
                 && selected != null
-                && connectTo != null) {
+                && connectTo != null
+                && !selected.hasPoly(connectTo)) {
             connectTo.attatch(selected, closestNode);
             selected = null;
             connectTo = null;

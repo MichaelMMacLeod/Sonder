@@ -277,6 +277,23 @@ public class Poly {
         return !area.isEmpty();
     }
 
+    public boolean hasPoly(Poly poly) {
+        if (this == poly)
+            return true;
+
+        boolean polyInNodes = false;
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                if (n.poly.hasPoly(poly)) {
+                    polyInNodes = true;
+                    break;
+                }
+            }
+        }
+
+        return polyInNodes;
+    }
+
     private static class Transform {
         static void translate(double dx, double dy, Point2D.Double... points) {
             for (Point2D.Double point : points) {
