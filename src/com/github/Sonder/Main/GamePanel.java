@@ -88,7 +88,7 @@ class GamePanel extends JPanel {
         if (input.held("d"))
             player.rotate(Math.PI / 128);
         if (input.held("w"))
-            player.thrust(0.01);
+            player.thrust(0.05);
 
         boolean updateSelected = input.pressed("mouse");
 

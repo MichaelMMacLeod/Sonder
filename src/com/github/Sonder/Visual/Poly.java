@@ -203,12 +203,12 @@ public class Poly {
     }
 
     public void attatch(Poly poly, int node) {
-        nodes[node].attatch(poly);
+        nodes[node].attach(poly);
     }
 
     public void detatch() {
         if (origin != null) {
-            origin.detatch();
+            origin.detach();
         }
     }
 
@@ -351,7 +351,7 @@ public class Poly {
             this.rotation = rotation;
         }
 
-        void detatch() {
+        void detach() {
             if (poly != null) {
                 poly.setOrigin(null);
                 poly.setVector(new Point2D.Double(poly.getVector().x, poly.getVector().y));
@@ -359,7 +359,7 @@ public class Poly {
             }
         }
 
-        void attatch(Poly poly) {
+        void attach(Poly poly) {
             if (this.poly == null) {
                 poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
                 poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
