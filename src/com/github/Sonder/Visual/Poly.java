@@ -320,6 +320,30 @@ public class Poly {
         return !area.isEmpty();
     }
 
+    private static class Transform {
+        static void translate(double dx, double dy, Point2D.Double... points) {
+            for (Point2D.Double point : points) {
+                point.x += dx;
+                point.y += dy;
+            }
+        }
+
+        static void rotate(double theta, double x, double y, Point2D.Double... points) {
+            double cos = Math.cos(theta), sin = Math.sin(theta);
+
+            for (Point2D.Double point : points) {
+                point.x -= x;
+                point.y -= y;
+
+                double xPrime = point.x * cos - point.y * sin;
+                double yPrime = point.x * sin + point.y * cos;
+
+                point.x = xPrime;
+                point.y = yPrime;
+            }
+        }
+    }
+
     private class Node {
         private final Poly source;
         private Poly poly;
