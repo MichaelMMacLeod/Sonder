@@ -5,17 +5,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 public class Poly {
-    private final Color defaultColor = new Color((int) (Math.random() * 0x1000000));
-
     private final Node[] nodes;
     private Node origin;
 
     private void setOrigin(Node origin) {
         this.origin = origin;
-    }
-
-    private Color getDefaultColor() {
-        return defaultColor;
     }
 
     /**
@@ -164,7 +158,7 @@ public class Poly {
         center = new Point2D.Double(cx, cy);
         this.outline = outline;
 
-        this.fill = defaultColor;
+        this.fill = fill;
 
         connector = new Point2D.Double(xconnector, yconnector);
 
@@ -332,7 +326,6 @@ public class Poly {
 
         void detatch() {
             if (poly != null) {
-                poly.setFill(poly.getDefaultColor());
                 poly.setOrigin(null);
                 poly = null;
             }
@@ -343,7 +336,6 @@ public class Poly {
                 poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
                 poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
                 poly.setOrigin(this);
-                poly.setFill(source.getFill());
                 this.poly = poly;
             }
         }
