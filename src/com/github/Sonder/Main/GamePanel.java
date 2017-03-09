@@ -63,7 +63,7 @@ class GamePanel extends JPanel {
 
         for (int i = -500; i < 500; i += 200) {
             for (int j = -500; j < 500; j += 200) {
-                objects.add(new Hull(i, j));
+                objects.add(new Hull_Long(i, j));
             }
         }
 
