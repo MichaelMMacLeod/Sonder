@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Sonder:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sonder_jar</output-path>
+    <root id="archive" name="Sonder.jar">
+      <element id="module-output" name="Sonder" />
+    </root>
+  </artifact>
+</component>
