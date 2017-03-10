@@ -5,145 +5,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 public class Poly {
-    public void thrust(double force) {
-        vector.x += force * Math.cos(rotation);
-        vector.y += force * Math.sin(rotation);
-    }
-
-    public void rotate(double theta) {
-        rotate(theta, getCenterX(), getCenterY());
-    }
-
-    public void update() {
-        translate(vector.x, vector.y);
-    }
-
-    private final Node[] nodes;
-    private Node origin;
-
-    private Point2D.Double vector;
-
-    private void setVector(Point2D.Double vector) {
-        this.vector = vector;
-
-        for (Node n : nodes) {
-            if (n.poly != null) {
-                n.poly.setVector(vector);
-            }
-        }
-    }
-    private Point2D.Double getVector() {
-        return vector;
-    }
-
-    private void setOrigin(Node origin) {
-        this.origin = origin;
-    }
-
-    /**
-     * The connector is where this Poly connects to other Polys.
-     */
-
-    private final Point2D.Double connector;
-
-    public double getXConnector() {
-        return connector.x;
-    }
-
-    public double getYConnector() {
-        return connector.y;
-    }
-
-    public double[] getXNodes() {
-        double[] xNodes = new double[nodes.length];
-        for (int i = 0; i < xNodes.length; i++) {
-            xNodes[i] = nodes[i].point.x;
-        }
-        return xNodes;
-    }
-
-    public double[] getYNodes() {
-        double[] yNodes = new double[nodes.length];
-        for (int i = 0; i < yNodes.length; i++) {
-            yNodes[i] = nodes[i].point.y;
-        }
-        return yNodes;
-    }
-
-    public int getNumberOfNodes() {
-        return nodes.length;
-    }
-
-    /**
-     * The points defining the shape of the Poly
-     */
-    private final Point2D.Double[] vertices;
-
-    public double[] getXVertices() {
-        double[] xVertices = new double[vertices.length];
-        for (int i = 0; i < xVertices.length; i++) {
-            xVertices[i] = vertices[i].x;
-        }
-        return xVertices;
-    }
-
-    public double[] getYVertices() {
-        double[] yVertices = new double[vertices.length];
-        for (int i = 0; i < yVertices.length; i++) {
-            yVertices[i] = vertices[i].y;
-        }
-        return yVertices;
-    }
-
-    public int getNumberOfVertices() {
-        return vertices.length;
-    }
-
-    /**
-     * The center of the Poly. It is defined when the object is created.
-     */
-    private final Point2D.Double center;
-
-    public double getCenterX() {
-        return center.x;
-    }
-
-    public double getCenterY() {
-        return center.y;
-    }
-
-    /**
-     * The rotation of the Poly in radians. A polygon has 0 rotation when created.
-     */
-    private double rotation;
-
-    private double getRotation() {
-        return rotation;
-    }
-
-    /**
-     * The color of the Poly.
-     */
-    private Color outline;
-    private Color fill;
-
-    public Color getOutline() {
-        return outline;
-    }
-
-    public Color getFill() {
-        return fill;
-    }
-
-    private void setFill(Color color) {
-        this.fill = color;
-        for (Node node : nodes) {
-            if (node.poly != null) {
-                node.poly.setFill(color);
-            }
-        }
-    }
-
     /**
      * Creates a Polygon.
      *
@@ -202,16 +63,209 @@ public class Poly {
         moveTo(x, y);
     }
 
-    public void attatch(Poly poly, int node) {
+    ////////////////////////////////
+    // Polygon shape and position //
+    ////////////////////////////////
+
+    // Contains the (x, y) points defining the vertices of the polygon.
+    private final Point2D.Double[] vertices;
+
+    // Returns every x value in vertices.
+    double[] getXVertices() {
+        double[] xVertices = new double[vertices.length];
+        for (int i = 0; i < xVertices.length; i++) {
+            xVertices[i] = vertices[i].x;
+        }
+        return xVertices;
+    }
+
+    // Returns every y value in vertices.
+    double[] getYVertices() {
+        double[] yVertices = new double[vertices.length];
+        for (int i = 0; i < yVertices.length; i++) {
+            yVertices[i] = vertices[i].y;
+        }
+        return yVertices;
+    }
+
+    // Returns the number of vertices.
+    int getNumberOfVertices() {
+        return vertices.length;
+    }
+
+    // The (x, y) location of the center of this polygon.
+    private final Point2D.Double center;
+
+    // Returns the x value of the center.
+    public double getCenterX() {
+        return center.x;
+    }
+
+    // Returns the y value of the center.
+    public double getCenterY() {
+        return center.y;
+    }
+
+    // This polygon's rotation in radians.
+    private double rotation;
+
+    // Returns this polygon's rotation in radians.
+    private double getRotation() {
+        return rotation;
+    }
+
+    ///////////////////
+    // Polygon chain //
+    ///////////////////
+
+    /**
+     * A Node represents a connection between a parent polygon and a child polygon.
+     *
+     * When a polygon is dragged close to another polygon, the dragged polygon will "snap" to one of the other polygon's
+     * Nodes. The snapping polygon will be rotated to the rotation of the Node, and also translated to
+     * the location of the Node.
+     *
+     * When the parent polygon is translated/rotated, a message is sent to all of its child Nodes. Each Node will then
+     * relay the message to the child polygon. The child will then relay the message to all of its children, and so on.
+     *
+     * Each Node contains a reference to the parent (non-null) polygon (source), and a reference to the (possibly null)
+     * child polygon (poly).
+     *
+     * Each polygon contains exactly one (possibly null) reference to its parent Node, and zero or more (non-null)
+     * references to its child nodes. The parent reference is null when the polygon is not attached to another polygon.
+     *
+     * Nodes will never detach from their source polygon. They can, however, detach their child polygon.
+     */
+    private class Node {
+        // The polygon that this Node is attached to.
+        private final Poly source;
+
+        // The polygon which is attached to this Node.
+        private Poly poly;
+
+        // The (x, y) location of this Node
+        private final Point2D.Double point;
+
+        // The rotation in radians that a polygon attached to this Node will have.
+        private double rotation;
+
+        /**
+         * Creates a Node
+         *
+         * @param source   is the polygon that this Node is attached to.
+         * @param point    is the (x, y) location of this Node.
+         * @param rotation is the rotation in radians that a polygon attached to this Node will have.
+         */
+        Node(Poly source, Point2D.Double point, double rotation) {
+            this.source = source;
+            this.point = point;
+            this.rotation = rotation;
+        }
+
+        // Detaches the polygon currently attached to this Node.
+        void detach() {
+            if (poly != null) {
+                poly.setOrigin(null);
+                poly.setVector(new Point2D.Double(poly.getVector().x, poly.getVector().y));
+                poly = null;
+            }
+        }
+
+        // Attaches a polygon to this Node.
+        void attach(Poly poly) {
+            if (this.poly == null) {
+                poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
+                poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
+                poly.setOrigin(this);
+                poly.setVector(source.getVector());
+                this.poly = poly;
+            }
+        }
+    }
+
+    // The references to the Nodes attached to this polygon.
+    private final Node[] nodes;
+
+    // Returns the x position values of each Node attached to this polygon.
+    public double[] getXNodes() {
+        double[] xNodes = new double[nodes.length];
+        for (int i = 0; i < xNodes.length; i++) {
+            xNodes[i] = nodes[i].point.x;
+        }
+        return xNodes;
+    }
+
+    // Returns the y position values of each Node attached to this polygon.
+    public double[] getYNodes() {
+        double[] yNodes = new double[nodes.length];
+        for (int i = 0; i < yNodes.length; i++) {
+            yNodes[i] = nodes[i].point.y;
+        }
+        return yNodes;
+    }
+
+    // Returns the number of Nodes attached to this polygon.
+    public int getNumberOfNodes() {
+        return nodes.length;
+    }
+
+    // Checks if this polygon contains a certain other polygon in its chain.
+    public boolean hasPoly(Poly poly) {
+        if (this == poly)
+            return true;
+
+        boolean polyInNodes = false;
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                if (n.poly.hasPoly(poly)) {
+                    polyInNodes = true;
+                    break;
+                }
+            }
+        }
+
+        return polyInNodes;
+    }
+
+    // Attaches a polygon to one of this polygon's Nodes.
+    public void attach(Poly poly, int node) {
         nodes[node].attach(poly);
     }
 
-    public void detatch() {
+    // The reference to the Node that this polygon is attached to.
+    private Node origin;
+
+    // Changes what Node this polygon is attached to.
+    private void setOrigin(Node origin) {
+        this.origin = origin;
+    }
+
+    // The (x, y) point where this polygon attaches to other Nodes.
+    private final Point2D.Double connector;
+
+    // Returns the x value of the connector.
+    public double getXConnector() {
+        return connector.x;
+    }
+
+    // Returns the y value of the connector.
+    public double getYConnector() {
+        return connector.y;
+    }
+
+    // Detaches this polygon from its parent Node.
+    public void detach() {
         if (origin != null) {
             origin.detach();
         }
     }
 
+    //////////////////////
+    // Polygon movement //
+    //////////////////////
+
+    // Moves this polygon to a certain (x, y) point. After calling moveTo(a, b), center.x will be a, and center.y will
+    // be b.
     private void moveTo(double x, double y) {
         double dx = x - center.x;
         double dy = y - center.y;
@@ -228,6 +282,7 @@ public class Poly {
         }
     }
 
+    // Translates this polygon by dx in the x dimension, and dy in the y dimension.
     public void translate(double dx, double dy) {
         Transform.translate(dx, dy, center);
         Transform.translate(dx, dy, connector);
@@ -238,6 +293,7 @@ public class Poly {
         }
     }
 
+    // Rotates this polygon around a certain (x, y) point by the radian value theta.
     private void rotate(double theta, double x, double y) {
         rotation += theta;
 
@@ -254,6 +310,105 @@ public class Poly {
         }
     }
 
+    // The vector representing the speed and direction of this polygon's movement.
+    private Point2D.Double vector;
+
+    // Increases this polygon's vector in the direction it is facing by a certain value.
+    public void thrust(double force) {
+        vector.x += force * Math.cos(rotation);
+        vector.y += force * Math.sin(rotation);
+    }
+
+    // Rotates this polygon by a certain radian value.
+    public void rotate(double theta) {
+        rotate(theta, getCenterX(), getCenterY());
+    }
+
+    // Sets this polygon's vector reference to a different vector reference.
+    //
+    // Polygons in the same chain all have their vector reference pointing to the same vector.
+    private void setVector(Point2D.Double vector) {
+        this.vector = vector;
+
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                n.poly.setVector(vector);
+            }
+        }
+    }
+
+    // Returns this polygon's vector.
+    private Point2D.Double getVector() {
+        return vector;
+    }
+
+    /////////////////////
+    // Polygon updates //
+    /////////////////////
+
+    // Updates this polygon.
+    public void update() {
+        translate(vector.x, vector.y);
+    }
+
+    ///////////////
+    // Utilities //
+    ///////////////
+
+    /**
+     * Contains methods which modify (x, y) values in Point2D.Double objects.
+     */
+    private static class Transform {
+        // Translates point(s) by dx in the x dimension, and dy in the y dimension.
+        static void translate(double dx, double dy, Point2D.Double... points) {
+            for (Point2D.Double point : points) {
+                point.x += dx;
+                point.y += dy;
+            }
+        }
+
+        // Rotates point(s) around a certain (x, y) point by the radian value theta.
+        static void rotate(double theta, double x, double y, Point2D.Double... points) {
+            double cos = Math.cos(theta), sin = Math.sin(theta);
+
+            for (Point2D.Double point : points) {
+                point.x -= x;
+                point.y -= y;
+
+                double xPrime = point.x * cos - point.y * sin;
+                double yPrime = point.x * sin + point.y * cos;
+
+                point.x = xPrime + x;
+                point.y = yPrime + y;
+            }
+        }
+    }
+
+    /////////////////////
+    // Polygon visuals //
+    /////////////////////
+
+    // The outline Color of this polygon.
+    private Color outline;
+
+    // Returns the Color of this polygon's outline.
+    Color getOutline() {
+        return outline;
+    }
+
+    // The fill Color of this polygon.
+    private Color fill;
+
+    // Returns the Color of this polygon's fill.
+    Color getFill() {
+        return fill;
+    }
+
+    ////////////////////////////////////////
+    // Polygon collision and intersection //
+    ////////////////////////////////////////
+
+    // Checks if this polygon contains a certain (x, y) point.
     public boolean contains(double x, double y) {
         int[] xvertsPrime = new int[vertices.length];
         int[] yvertsPrime = new int[vertices.length];
@@ -268,6 +423,7 @@ public class Poly {
         return p.contains(x, y);
     }
 
+    // Checks if this polygon overlaps a certain other polygon.
     public boolean contains(Poly other) {
         double[] otherx = other.getXVertices();
         double[] othery = other.getYVertices();
@@ -296,77 +452,5 @@ public class Poly {
         area.intersect(otherArea);
 
         return !area.isEmpty();
-    }
-
-    public boolean hasPoly(Poly poly) {
-        if (this == poly)
-            return true;
-
-        boolean polyInNodes = false;
-        for (Node n : nodes) {
-            if (n.poly != null) {
-                if (n.poly.hasPoly(poly)) {
-                    polyInNodes = true;
-                    break;
-                }
-            }
-        }
-
-        return polyInNodes;
-    }
-
-    private static class Transform {
-        static void translate(double dx, double dy, Point2D.Double... points) {
-            for (Point2D.Double point : points) {
-                point.x += dx;
-                point.y += dy;
-            }
-        }
-
-        static void rotate(double theta, double x, double y, Point2D.Double... points) {
-            double cos = Math.cos(theta), sin = Math.sin(theta);
-
-            for (Point2D.Double point : points) {
-                point.x -= x;
-                point.y -= y;
-
-                double xPrime = point.x * cos - point.y * sin;
-                double yPrime = point.x * sin + point.y * cos;
-
-                point.x = xPrime + x;
-                point.y = yPrime + y;
-            }
-        }
-    }
-
-    private class Node {
-        private final Poly source;
-        private Poly poly;
-        private final Point2D.Double point;
-        private double rotation;
-
-        Node(Poly source, Point2D.Double point, double rotation) {
-            this.source = source;
-            this.point = point;
-            this.rotation = rotation;
-        }
-
-        void detach() {
-            if (poly != null) {
-                poly.setOrigin(null);
-                poly.setVector(new Point2D.Double(poly.getVector().x, poly.getVector().y));
-                poly = null;
-            }
-        }
-
-        void attach(Poly poly) {
-            if (this.poly == null) {
-                poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
-                poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
-                poly.setOrigin(this);
-                poly.setVector(source.getVector());
-                this.poly = poly;
-            }
-        }
     }
 }
