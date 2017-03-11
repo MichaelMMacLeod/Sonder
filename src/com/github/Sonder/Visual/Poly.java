@@ -276,9 +276,6 @@ public class Poly {
 
         for (Node n : nodes) {
             Transform.translate(dx, dy, n.point);
-//            if (n.poly != null) {
-//                n.poly.translate(dx, dy);
-//            }
         }
     }
 
@@ -324,9 +321,6 @@ public class Poly {
         for (Node n : nodes) {
             n.rotation += theta;
             Transform.rotate(theta, x, y, n.point);
-//            if (n.poly != null) {
-//                n.poly.rotate(theta, x, y);
-//            }
         }
     }
 
