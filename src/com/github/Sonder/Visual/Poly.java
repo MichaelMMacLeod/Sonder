@@ -174,8 +174,8 @@ public class Poly {
         // Attaches a polygon to this Node.
         void attach(Poly poly) {
             if (this.poly == null) {
-                poly.translate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
-                poly.rotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
+                poly.chainTranslate(point.x - poly.getXConnector(), point.y - poly.getYConnector());
+                poly.chainRotate(rotation - poly.getRotation(), poly.getXConnector(), poly.getYConnector());
                 poly.setOrigin(this);
                 poly.setVector(source.getVector());
                 this.poly = poly;
@@ -276,8 +276,18 @@ public class Poly {
 
         for (Node n : nodes) {
             Transform.translate(dx, dy, n.point);
+//            if (n.poly != null) {
+//                n.poly.translate(dx, dy);
+//            }
+        }
+    }
+
+    // Executes moveTo down the polygon chain.
+    private void chainMoveTo(double x, double y) {
+        moveTo(x, y);
+        for (Node n : nodes) {
             if (n.poly != null) {
-                n.poly.translate(dx, dy);
+                n.poly.chainMoveTo(x, y);
             }
         }
     }
@@ -293,6 +303,16 @@ public class Poly {
         }
     }
 
+    // Executes translate down the polygon chain.
+    public void chainTranslate(double x, double y) {
+        translate(x, y);
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                n.poly.chainTranslate(x, y);
+            }
+        }
+    }
+
     // Rotates this polygon around a certain (x, y) point by the radian value theta.
     private void rotate(double theta, double x, double y) {
         rotation += theta;
@@ -304,8 +324,18 @@ public class Poly {
         for (Node n : nodes) {
             n.rotation += theta;
             Transform.rotate(theta, x, y, n.point);
+//            if (n.poly != null) {
+//                n.poly.rotate(theta, x, y);
+//            }
+        }
+    }
+
+    // Executes rotate down the polygon chain.
+    private void chainRotate(double theta, double x, double y) {
+        rotate(theta, x, y);
+        for (Node n : nodes) {
             if (n.poly != null) {
-                n.poly.rotate(theta, x, y);
+                n.poly.chainRotate(theta, x, y);
             }
         }
     }
@@ -322,6 +352,15 @@ public class Poly {
     // Rotates this polygon by a certain radian value.
     public void rotate(double theta) {
         rotate(theta, getCenterX(), getCenterY());
+    }
+
+    public void chainRotate(double theta) {
+        rotate(theta);
+        for (Node n : nodes) {
+            if (n.poly != null) {
+                n.poly.chainRotate(theta, getCenterX(), getCenterY());
+            }
+        }
     }
 
     // Sets this polygon's vector reference to a different vector reference.

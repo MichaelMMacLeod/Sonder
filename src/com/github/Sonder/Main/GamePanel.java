@@ -90,9 +90,9 @@ class GamePanel extends JPanel {
             objects.add(new Hull_Long(mousex, mousey));
 
         if (input.held("a"))
-            player.rotate(-Math.PI / 128);
+            player.chainRotate(-Math.PI / 128);
         if (input.held("d"))
-            player.rotate(Math.PI / 128);
+            player.chainRotate(Math.PI / 128);
         if (input.held("w"))
             player.thrust(0.05);
 
@@ -126,7 +126,7 @@ class GamePanel extends JPanel {
         if (selected != null && input.held("mouse")) {
             Camera.shouldDrawNodes = true;
 
-            selected.translate(mousex - selected.getXConnector(), mousey - selected.getYConnector());
+            selected.chainTranslate(mousex - selected.getXConnector(), mousey - selected.getYConnector());
 
             double smallestDist = Integer.MAX_VALUE;
             Poly closestPoly = selected;
