@@ -5,6 +5,36 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 public class Poly {
+    Poly(
+            Point2D.Double[] vertices,
+            Point2D.Double center,
+            Point2D.Double location,
+            Color outline,
+            Color fill,
+            Point2D.Double[] nodes,
+            double[] nodeRotations,
+            Point2D.Double connector,
+            Point2D.Double vector) {
+        this.vertices = vertices;
+        this.center = center;
+        this.outline = outline;
+        this.fill = fill;
+        this.connector = connector;
+        this.vector = vector;
+
+        this.nodes = new Node[nodes.length];
+        for (int i = 0; i < this.nodes.length; i++) {
+            this.nodes[i] = new Node(
+                    this,
+                    new Point2D.Double(nodes[i].x, nodes[i].y),
+                    nodeRotations[i]);
+        }
+
+        origin = null;
+
+        moveTo(location.x, location.y);
+    }
+
     /**
      * Creates a Polygon.
      *
@@ -24,44 +54,44 @@ public class Poly {
      * @param xconnector    is the x coordinate of the point where this Poly connects to other Polys.
      * @param yconnector    is the y coordinate of the point where this Poly connects to other Polys.
      */
-    Poly(
-            double[] xVerts,
-            double[] yVerts,
-            int verts,
-            double cx,
-            double cy,
-            double x,
-            double y,
-            Color outline,
-            Color fill,
-            double[] xNodes,
-            double[] yNodes,
-            double[] nodeRotations,
-            int nodes,
-            double xconnector,
-            double yconnector) {
-        vertices = new Point2D.Double[verts];
-        for (int i = 0; i < vertices.length; i++) {
-            vertices[i] = new Point2D.Double(xVerts[i], yVerts[i]);
-        }
-        center = new Point2D.Double(cx, cy);
-        this.outline = outline;
-
-        this.fill = fill;
-
-        connector = new Point2D.Double(xconnector, yconnector);
-
-        this.nodes = new Node[nodes];
-        for (int i = 0; i < this.nodes.length; i++) {
-            this.nodes[i] = new Node(this, new Point2D.Double(xNodes[i], yNodes[i]), nodeRotations[i]);
-        }
-
-        origin = null;
-
-        vector = new Point2D.Double(0, 0);
-
-        moveTo(x, y);
-    }
+//    Poly(
+//            double[] xVerts,
+//            double[] yVerts,
+//            int verts,
+//            double cx,
+//            double cy,
+//            double x,
+//            double y,
+//            Color outline,
+//            Color fill,
+//            double[] xNodes,
+//            double[] yNodes,
+//            double[] nodeRotations,
+//            int nodes,
+//            double xconnector,
+//            double yconnector) {
+//        vertices = new Point2D.Double[verts];
+//        for (int i = 0; i < vertices.length; i++) {
+//            vertices[i] = new Point2D.Double(xVerts[i], yVerts[i]);
+//        }
+//        center = new Point2D.Double(cx, cy);
+//        this.outline = outline;
+//
+//        this.fill = fill;
+//
+//        connector = new Point2D.Double(xconnector, yconnector);
+//
+//        this.nodes = new Node[nodes];
+//        for (int i = 0; i < this.nodes.length; i++) {
+//            this.nodes[i] = new Node(this, new Point2D.Double(xNodes[i], yNodes[i]), nodeRotations[i]);
+//        }
+//
+//        origin = null;
+//
+//        vector = new Point2D.Double(0, 0);
+//
+//        moveTo(x, y);
+//    }
 
     ////////////////////////////////
     // Polygon shape and position //
