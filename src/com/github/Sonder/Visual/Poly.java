@@ -35,64 +35,6 @@ public class Poly {
         moveTo(location.x, location.y);
     }
 
-    /**
-     * Creates a Polygon.
-     *
-     * @param xVerts        are the x points defining the shape of the Poly.
-     * @param yVerts        are the y points defining the shape of the Poly.
-     * @param verts         is the number of vertices.
-     * @param cx            is the x coordinate of the center of the Poly.
-     * @param cy            is the y coordinate of the center of the Poly.
-     * @param x             is the x coordinate of the location of the Poly.
-     * @param y             is the y coordinate of the location of the Poly.
-     * @param outline       is the color of the outline of the Poly.
-     * @param fill          is the color of the inside of the Poly.
-     * @param xNodes        are the x points which other shapes can connect to.
-     * @param yNodes        are the y points which other shapes can connect to.
-     * @param nodeRotations are the rotations that connected parts have.
-     * @param nodes         is the number of nodes.
-     * @param xconnector    is the x coordinate of the point where this Poly connects to other Polys.
-     * @param yconnector    is the y coordinate of the point where this Poly connects to other Polys.
-     */
-//    Poly(
-//            double[] xVerts,
-//            double[] yVerts,
-//            int verts,
-//            double cx,
-//            double cy,
-//            double x,
-//            double y,
-//            Color outline,
-//            Color fill,
-//            double[] xNodes,
-//            double[] yNodes,
-//            double[] nodeRotations,
-//            int nodes,
-//            double xconnector,
-//            double yconnector) {
-//        vertices = new Point2D.Double[verts];
-//        for (int i = 0; i < vertices.length; i++) {
-//            vertices[i] = new Point2D.Double(xVerts[i], yVerts[i]);
-//        }
-//        center = new Point2D.Double(cx, cy);
-//        this.outline = outline;
-//
-//        this.fill = fill;
-//
-//        connector = new Point2D.Double(xconnector, yconnector);
-//
-//        this.nodes = new Node[nodes];
-//        for (int i = 0; i < this.nodes.length; i++) {
-//            this.nodes[i] = new Node(this, new Point2D.Double(xNodes[i], yNodes[i]), nodeRotations[i]);
-//        }
-//
-//        origin = null;
-//
-//        vector = new Point2D.Double(0, 0);
-//
-//        moveTo(x, y);
-//    }
-
     ////////////////////////////////
     // Polygon shape and position //
     ////////////////////////////////
