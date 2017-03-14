@@ -2,13 +2,13 @@ package com.github.Sonder.Visual;
 
 import java.awt.geom.Point2D;
 
-public abstract class Visual {
+public abstract class Outline {
     /**
      * Creates a visual object defined by a series of points which can be translated and rotated.
      * @param points is the list of points to be copied into this object.
      * @param center is the center of rotation to be copied into this object.
      */
-    public Visual(Point2D.Double[] points, Point2D.Double center) {
+    public Outline(Point2D.Double[] points, Point2D.Double center) {
         this.points = new Point2D.Double[points.length];
         for (int i = 0; i < this.points.length; i++)
             this.points[i] = new Point2D.Double(points[i].x, points[i].y);
