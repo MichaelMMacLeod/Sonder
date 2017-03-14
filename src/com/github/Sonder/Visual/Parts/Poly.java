@@ -1,4 +1,4 @@
-package com.github.Sonder.Visual;
+package com.github.Sonder.Visual.Parts;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -43,7 +43,7 @@ public class Poly {
     private final Point2D.Double[] vertices;
 
     // Returns every x value in vertices.
-    double[] getXVertices() {
+    public double[] getXVertices() {
         double[] xVertices = new double[vertices.length];
         for (int i = 0; i < xVertices.length; i++) {
             xVertices[i] = vertices[i].x;
@@ -52,7 +52,7 @@ public class Poly {
     }
 
     // Returns every y value in vertices.
-    double[] getYVertices() {
+    public double[] getYVertices() {
         double[] yVertices = new double[vertices.length];
         for (int i = 0; i < yVertices.length; i++) {
             yVertices[i] = vertices[i].y;
@@ -61,7 +61,7 @@ public class Poly {
     }
 
     // Returns the number of vertices.
-    int getNumberOfVertices() {
+    public int getNumberOfVertices() {
         return vertices.length;
     }
 
@@ -397,7 +397,7 @@ public class Poly {
     private Color outline;
 
     // Returns the Color of this polygon's outline.
-    Color getOutline() {
+    public Color getOutline() {
         return outline;
     }
 
@@ -405,7 +405,7 @@ public class Poly {
     private Color fill;
 
     // Returns the Color of this polygon's fill.
-    Color getFill() {
+    public Color getFill() {
         return fill;
     }
 

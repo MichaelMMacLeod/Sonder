@@ -1,5 +1,7 @@
 package com.github.Sonder.Visual;
 
+import com.github.Sonder.Visual.Parts.Poly;
+
 import java.awt.*;
 
 public class Camera {

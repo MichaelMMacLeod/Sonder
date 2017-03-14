@@ -1,7 +1,17 @@
 package com.github.Sonder.Visual;
 
 abstract class Moveable {
-    private double dx, dy, dr;
+    /**
+     * Creates a Moveable object with an anchor and initial rotation of zero.
+     * @param ax is the x coordinate of the anchor.
+     * @param ay is the y coordinate of the anchor.
+     */
+    Moveable(double ax, double ay) {
+        this.ax = ax;
+        this.ay = ay;
+    }
+
+    private double ax, ay, dx, dy, dr, r;
 
     /**
      * Applies the current transformation.
@@ -15,6 +25,19 @@ abstract class Moveable {
         dr = 0;
     }
 
+    /**
+     * @return the current center of rotation.
+     */
+    final double getAX() {
+        return ax;
+    }
+
+    /**
+     * @return the current center of rotation.
+     */
+    final double getAY() {
+        return ay;
+    }
     /**
      * @return the current translation in the x dimension.
      */
@@ -37,6 +60,22 @@ abstract class Moveable {
     }
 
     /**
+     * @return the angle of rotation in radians.
+     */
+    final double getR() {
+        return r;
+    }
+    /**
+     * Sets the anchor of this object to a certain point.
+     * @param ax is the x coordinate.
+     * @param ay is the y coordinate.
+     */
+    protected final void setAnchor(double ax, double ay) {
+        this.ax = ax;
+        this.ay = ay;
+    }
+
+    /**
      * Appends a translation to the current transformation.
      * @param dx is the distance in the x dimension.
      * @param dy is the distance in the y dimension.
@@ -55,12 +94,23 @@ abstract class Moveable {
     }
 
     /**
-     * Applies the current translation.
+     * Applies the current translation to the anchor of this object.
+     *
+     * Overriding methods MUST call super.translate().
      */
-    protected abstract void translate();
+    protected void translate() {
+        ax += dx;
+        ay += dy;
+    }
 
     /**
-     * Applies the current rotation.
+     * Applies the current rotation around the anchor of this object.
+     *
+     * Overriding methods MUST call super.rotate().
      */
-    protected abstract void rotate();
+    protected void rotate() {
+        r += dr;
+
+        // Rotating a point around itself doesn't do anything.
+    }
 }

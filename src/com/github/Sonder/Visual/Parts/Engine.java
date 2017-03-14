@@ -1,4 +1,4 @@
-package com.github.Sonder.Visual;
+package com.github.Sonder.Visual.Parts;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
