@@ -2,9 +2,9 @@ package com.github.Sonder.Visual;
 
 import java.awt.geom.Point2D;
 
-public abstract class Outline {
+public abstract class Outline extends Moveable {
     /**
-     * Creates a visual object defined by a series of points which can be translated and rotated.
+     * Creates a Outline object defined by a series of points which can be translated and rotated.
      * @param points is the list of points to be copied into this object.
      * @param center is the center of rotation to be copied into this object.
      */
@@ -16,7 +16,6 @@ public abstract class Outline {
         this.center = new Point2D.Double(center.x, center.y);
     }
 
-    private double dx, dy, dt;
     private Point2D.Double center;
     private Point2D.Double[] points;
 
@@ -40,56 +39,21 @@ public abstract class Outline {
         center.setLocation(x, y);
     }
 
-    /**
-     * Applies the current transformation.
-     */
-    public final void transform() {
-        translate();
-        rotate();
-    }
-
-    /**
-     * Appends a translation to the current transformation.
-     * @param dx is the distance in the x dimension.
-     * @param dy is the distance in the y dimension.
-     */
-    public final void translate(double dx, double dy) {
-        this.dx += dx;
-        this.dy += dy;
-    }
-
-    /**
-     * Appends a rotation to the current transformation.
-     * @param dt is the angle in radians.
-     */
-    public final void rotate(double dt) {
-        this.dt += dt;
-    }
-
-    /**
-     * Applies the current translation and then resets it to zero.
-     */
-    private void translate() {
+    @Override
+    protected void translate() {
         for (Point2D.Double point : points)
-            point.setLocation(point.x + dx, point.y + dy);
+            point.setLocation(point.x + getDX(), point.y + getDY());
 
-        center.setLocation(center.x + dx, center.y + dy);
-
-        dx = 0;
-        dy = 0;
+        center.setLocation(center.x + getDX(), center.y + getDY());
     }
 
-    /**
-     * Applies the current rotation and then resets it to zero.
-     */
-    private void rotate() {
-        double cos = Math.cos(dt), sin = Math.sin(dt);
+    @Override
+    protected void rotate() {
+        double cos = Math.cos(getDR()), sin = Math.sin(getDR());
 
         for (Point2D.Double point : points) {
             Point2D.Double prime = new Point2D.Double(point.x - center.x, point.y - center.y);
             point.setLocation(prime.x * cos - prime.y * sin, prime.x * sin + prime.y * cos);
         }
-
-        dt = 0;
     }
 }
