@@ -72,6 +72,14 @@ public abstract class Chain extends Outline {
     }
 
     @Override
+    public void transform() {
+        super.transform();
+
+        for (Connection c : children)
+            c.transform();
+    }
+
+    @Override
     protected void setAnchor(double ax, double ay) {
         super.setAnchor(ax, ay);
 
@@ -98,11 +106,8 @@ public abstract class Chain extends Outline {
     @Override
     protected void translate() {
         super.translate();
-
+        
         link.setLocation(link.x + getDX(), link.y + getDY());
-
-        for (Connection c : children)
-            c.translate();
     }
 
     @Override
@@ -116,8 +121,5 @@ public abstract class Chain extends Outline {
         link.setLocation(
                 prime.x * cos - prime.y * sin + getAX(),
                 prime.x * sin + prime.y * cos + getAY());
-
-        for (Connection c : children)
-            c.rotate();
     }
 }

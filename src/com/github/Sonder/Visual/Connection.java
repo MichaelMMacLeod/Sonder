@@ -24,7 +24,7 @@ public class Connection extends Moveable {
 
     @Override
     public void rotate(double dt) {
-        super.rotate();
+        super.rotate(dt);
 
         if (reference != null)
             reference.rotate(dt);

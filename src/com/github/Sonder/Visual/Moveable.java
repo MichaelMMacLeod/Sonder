@@ -17,8 +17,10 @@ abstract class Moveable {
 
     /**
      * Applies the current transformation.
+     *
+     * Overriding methods MUST call super.transform().
      */
-    public final void transform() {
+    public void transform() {
         translate();
         dx = 0;
         dy = 0;
