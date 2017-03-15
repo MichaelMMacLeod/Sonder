@@ -21,18 +21,10 @@ public abstract class Chain extends Outline {
     private Connection parent;
     private Connection[] children;
 
-    public double[] getConnectionXPoints() {
-        double[] points = new double[children.length];
+    public Point2D.Double[] getConnectionPoints() {
+        Point2D.Double[] points = new Point2D.Double[children.length];
         for (int i = 0; i < points.length; i++) {
-            points[i] = children[i].getAX();
-        }
-        return points;
-    }
-
-    public double[] getConnectionYPoints() {
-        double[] points = new double[children.length];
-        for (int i = 0; i < points.length; i++) {
-            points[i] = children[i].getAY();
+            points[i] = new Point2D.Double(children[i].getAX(), children[i].getAY());
         }
         return points;
     }
@@ -71,12 +63,8 @@ public abstract class Chain extends Outline {
         }
     }
 
-    double getLinkX() {
-        return link.x;
-    }
-
-    double getLinkY() {
-        return link.y;
+    Point2D.Double getLink() {
+        return new Point2D.Double(link.x, link.y);
     }
 
     @Override
