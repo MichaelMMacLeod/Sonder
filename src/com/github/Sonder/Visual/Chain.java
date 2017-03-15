@@ -46,6 +46,15 @@ public abstract class Chain extends Outline {
         parent = null;
     }
 
+    void attachChild(Connection connection, Chain chain) {
+        for (Connection child : children) {
+            if (child == connection) {
+                child.attachReference(chain);
+                break;
+            }
+        }
+    }
+
     double getLinkX() {
         return link.x;
     }
