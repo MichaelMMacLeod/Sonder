@@ -1,28 +1,47 @@
 package com.github.Sonder.Visual;
 
-public abstract class Connection extends Moveable {
-    private Outline source;
-    private Outline reference;
+class Connection extends Moveable {
+    private Chain source;
+    private Chain reference;
 
-    private Connection(double ax, double ay, Outline source) {
-        super(ax, ay);
+    Connection(double ax, double ay, double r, Chain source) {
+        super(ax, ay, r);
 
         this.source = source;
     }
 
-    public final void setReference(Outline reference) {
-        this.reference = reference;
+    @Override
+    protected void translate(double dx, double dy) {
+        super.translate(dx, dy);
+
+        if (reference != null)
+            reference.translate(dx, dy);
     }
 
-    public static class Parent extends Connection {
-        public Parent(double ax, double ay, Outline source) {
-            super(ax, ay, source);
+    @Override
+    protected void rotate(double dt) {
+        super.rotate();
+
+        if (reference != null)
+            reference.rotate(dt);
+    }
+
+    public final void detachReference() {
+        if (reference != null) {
+            reference.detachFromParent();
+            reference = null;
         }
     }
 
-    public static class Child extends Connection {
-        public Child(double ax, double ay, Outline source) {
-            super(ax, ay, source);
+    public final void attachReference(Chain chain) {
+        if (reference == null) {
+            chain.translate(getAX() - chain.getLinkX(), getAY() - chain.getLinkY());
+            chain.setAnchor(chain.getLinkX(), chain.getLinkY());
+            chain.rotate(getR() - chain.getR());
+
+            chain.setParent(this);
+
+            reference = chain;
         }
     }
 }

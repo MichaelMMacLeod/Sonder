@@ -7,8 +7,8 @@ public abstract class Outline extends Moveable {
      * Creates a Outline object defined by a series of points which can be translated and rotated.
      * @param points is the list of points to be copied into this object.
      */
-    public Outline(double ax, double ay, Point2D.Double[] points) {
-        super(ax, ay);
+    Outline(double ax, double ay, double r, Point2D.Double[] points) {
+        super(ax, ay, r);
 
         this.points = new Point2D.Double[points.length];
         for (int i = 0; i < this.points.length; i++)
