@@ -25,12 +25,12 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    private ArrayList<Chain> objects;
+    private ArrayList<Outline> objects;
 
     private Pod player;
 
-    private Chain selected;
-    private Chain connectTo;
+    private Linked selected;
+    private Linked connectTo;
     private Connection closestConnection;
 
     /**
@@ -75,20 +75,14 @@ class GamePanel extends JPanel {
      * Calculates logic updates.
      */
     void update() {
-        for (Chain c : objects)
-            c.transform();
+        for (Outline o : objects)
+            o.transform();
 
         double mousex = input.getMouseX() - getWidth() / 2 + player.getAX();
         double mousey = input.getMouseY() - getHeight() / 2 + player.getAY();
 
-//        if (input.pressed("c"))
-//            objects.add(new Cannon(mousex, mousey));
-//        if (input.pressed("e"))
-//            objects.add(new Engine(mousex, mousey));
         if (input.pressed("h"))
             objects.add(new Pod(mousex, mousey, 0));
-//        if (input.pressed("l"))
-//            objects.add(new Hull_Long(mousex, mousey));
 
         if (input.held("a"))
             player.rotate(-Math.PI / 128);
@@ -99,10 +93,10 @@ class GamePanel extends JPanel {
 
         boolean updateSelected = input.pressed("mouse");
 
-        for (Chain c : objects) {
+        for (Outline o : objects) {
             if (updateSelected) {
-                if (c.contains(mousex, mousey)) {
-                    selected = c;
+                if (o.contains(mousex, mousey)) {
+                    selected = o;
                     updateSelected = false;
                 }
             }
@@ -130,10 +124,10 @@ class GamePanel extends JPanel {
             selected.translate(mousex - selected.getLink().x, mousey - selected.getLink().y);
 
             double smallestDist = Integer.MAX_VALUE;
-            Chain closestChain = selected;
+            Linked closestChain = selected;
             closestConnection = null;
 
-            for (Chain chain : objects) {
+            for (Linked chain : objects) {
                 if (chain != selected) {
                     Connection[] connections = chain.getConnections();
                     Point2D.Double[] connectionPoints = chain.getConnectionPoints();
@@ -169,7 +163,7 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Chain[0]), player.getAX(), player.getAY());
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Outline[0]), player.getAX(), player.getAY());
     }
 
     /**

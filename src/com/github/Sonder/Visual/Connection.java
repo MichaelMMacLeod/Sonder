@@ -1,8 +1,8 @@
 package com.github.Sonder.Visual;
 
 public class Connection extends Moveable {
-    private Chain source;
-    private Chain reference;
+    private Linked source;
+    private Linked reference;
 
     Connection(double ax, double ay, double r, Chain source) {
         super(ax, ay, r);
@@ -10,7 +10,7 @@ public class Connection extends Moveable {
         this.source = source;
     }
 
-    final Chain getReference() {
+    final Linked getReference() {
         return reference;
     }
 
@@ -37,7 +37,7 @@ public class Connection extends Moveable {
         }
     }
 
-    public final void attachReference(Chain chain) {
+    public final void attachReference(Linked chain) {
         if (reference == null) {
             chain.translate(getAX() - chain.getLink().x, getAY() - chain.getLink().y);
             chain.setAnchor(chain.getLink().x, chain.getLink().y);

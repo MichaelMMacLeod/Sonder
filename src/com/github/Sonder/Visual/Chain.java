@@ -2,12 +2,12 @@ package com.github.Sonder.Visual;
 
 import java.awt.geom.Point2D;
 
-public abstract class Chain extends Outline {
-    Chain(double ax, double ay, double r, Point2D.Double[] points,
+public abstract class Chain extends Moveable implements Linked {
+    Chain(double ax, double ay, double r,
                  Point2D.Double[] childPoints,
                  double[] childRotations,
                  Point2D.Double link) {
-        super(ax, ay, r, points);
+        super(ax, ay, r);
 
         children = new Connection[childPoints.length];
         for (int i = 0; i < children.length; i++) {
@@ -21,10 +21,12 @@ public abstract class Chain extends Outline {
     private Connection parent;
     private Connection[] children;
 
+    @Override
     public Connection[] getConnections() {
         return children;
     }
 
+    @Override
     public Point2D.Double[] getConnectionPoints() {
         Point2D.Double[] points = new Point2D.Double[children.length];
         for (int i = 0; i < points.length; i++) {
@@ -33,14 +35,15 @@ public abstract class Chain extends Outline {
         return points;
     }
 
-    public boolean hasInChain(Chain chain) {
+    @Override
+    public boolean hasInChain(Linked chain) {
         if (this == chain)
             return true;
 
         boolean inChain = false;
 
         for (Connection c : children) {
-            Chain reference = c.getReference();
+            Linked reference = c.getReference();
             if (reference != null && reference.hasInChain(chain)) {
                 inChain = true;
                 break;
@@ -50,21 +53,25 @@ public abstract class Chain extends Outline {
         return inChain;
     }
 
-    void setParent(Connection parent) {
+    @Override
+    public void setParent(Connection parent) {
         this.parent = parent;
     }
 
+    @Override
     public void detach() {
         parent = null;
     }
 
+    @Override
     public void detachFromParent() {
         if (parent != null) {
             parent.detachReference();
         }
     }
 
-    public void attachChild(Connection connection, Chain chain) {
+    @Override
+    public void attachChild(Connection connection, Linked chain) {
         for (Connection child : children) {
             if (child == connection) {
                 child.attachReference(chain);
@@ -73,6 +80,7 @@ public abstract class Chain extends Outline {
         }
     }
 
+    @Override
     public Point2D.Double getLink() {
         return new Point2D.Double(link.x, link.y);
     }
@@ -102,14 +110,14 @@ public abstract class Chain extends Outline {
     }
 
     @Override
-    protected void translate() {
+    public void translate() {
         super.translate();
 
         link.setLocation(link.x + getDX(), link.y + getDY());
     }
 
     @Override
-    protected void rotate() {
+    public void rotate() {
         super.rotate();
 
         double cos = Math.cos(getDR()), sin = Math.sin(getDR());

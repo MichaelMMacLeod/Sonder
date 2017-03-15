@@ -1,6 +1,6 @@
 package com.github.Sonder.Visual;
 
-abstract class Moveable {
+abstract class Moveable implements Transformable {
     /**
      * Creates a Moveable object with an anchor and initial rotation of zero.
      * @param ax is the x coordinate of the anchor.
@@ -66,9 +66,11 @@ abstract class Moveable {
     /**
      * @return the angle of rotation in radians.
      */
-    public final double getR() {
+    @Override
+    public double getR() {
         return r;
     }
+
     /**
      * Sets the anchor of this object to a certain point.
      *
@@ -76,7 +78,8 @@ abstract class Moveable {
      * @param ax is the x coordinate.
      * @param ay is the y coordinate.
      */
-    protected void setAnchor(double ax, double ay) {
+    @Override
+    public void setAnchor(double ax, double ay) {
         this.ax = ax;
         this.ay = ay;
     }
@@ -108,17 +111,12 @@ abstract class Moveable {
      *
      * Overriding methods MUST call super.translate().
      */
-    protected void translate() {
+    public void translate() {
         ax += dx;
         ay += dy;
     }
 
-    /**
-     * Applies the current rotation around the anchor of this object.
-     *
-     * Overriding methods MUST call super.rotate().
-     */
-    protected void rotate() {
+    public void rotate() {
         r += dr;
 
         // Rotating a point around itself doesn't do anything.

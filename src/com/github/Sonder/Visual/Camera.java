@@ -19,7 +19,7 @@ public class Camera {
             Graphics g,
             double width,
             double height,
-            Chain[] shapes, // TODO: don't use Chain here, fix inheritance and use Outline.
+            Outline[] shapes, // TODO: don't use Chain here, fix inheritance and use Part.
             double fx,
             double fy) {
         int offsetx = -(int) (fy % gridSize);
@@ -34,7 +34,7 @@ public class Camera {
             g.drawLine(i, 0, i, (int) height);
         }
 
-        for (Chain shape : shapes) {
+        for (Outline shape : shapes) {
             Point2D.Double[] points = shape.getPoints();
 
             for (Point2D.Double point : points) {
@@ -42,20 +42,6 @@ public class Camera {
                         (point.x - fx) * zoom + width / 2,
                         (point.y - fy) * zoom + height / 2);
             }
-
-            Point2D.Double[] connections = shape.getConnectionPoints();
-
-            for (Point2D.Double connection : connections) {
-                connection.setLocation(
-                        (connection.x - fx) * zoom + width / 2,
-                        (connection.y - fy) * zoom + height / 2);
-            }
-
-            Point2D.Double link = shape.getLink();
-
-            link.setLocation(
-                    (link.x - fx) * zoom + width / 2,
-                    (link.y - fy) * zoom + height / 2);
 
             int[] xPoints = new int[points.length];
             int[] yPoints = new int[points.length];
@@ -65,21 +51,13 @@ public class Camera {
                 yPoints[i] = (int) points[i].y;
             }
 
-            // TODO: use color in Outline class?
+            // TODO: use color in Part class?
 
             g.setColor(Color.WHITE);
             g.fillPolygon(xPoints, yPoints, points.length);
 
             g.setColor(Color.LIGHT_GRAY);
             g.drawPolygon(xPoints, yPoints, points.length);
-
-            if (/*shouldDrawNodes*/true) {
-                g.setColor(Color.LIGHT_GRAY);
-                for (Point2D.Double connection : connections) {
-                    g.drawOval((int) connection.x - 5, (int) connection.y - 5, 10, 10);
-                }
-                g.fillOval((int) link.x - 5, (int) link.y - 5, 10, 10);
-            }
         }
     }
 }
