@@ -21,6 +21,23 @@ public abstract class Chain extends Outline {
     private Connection parent;
     private Connection[] children;
 
+    public boolean hasInChain(Chain chain) {
+        if (this == chain)
+            return true;
+
+        boolean inChain = false;
+
+        for (Connection c : children) {
+            Chain reference = c.getReference();
+            if (reference != null && reference.hasInChain(chain)) {
+                inChain = true;
+                break;
+            }
+        }
+
+        return inChain;
+    }
+
     void setParent(Connection parent) {
         this.parent = parent;
     }

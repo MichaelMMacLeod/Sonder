@@ -10,6 +10,10 @@ class Connection extends Moveable {
         this.source = source;
     }
 
+    final Chain getReference() {
+        return reference;
+    }
+
     @Override
     protected void translate(double dx, double dy) {
         super.translate(dx, dy);
