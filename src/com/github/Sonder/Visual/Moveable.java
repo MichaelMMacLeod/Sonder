@@ -26,14 +26,14 @@ abstract class Moveable {
     }
 
     /**
-     * @return the current center of rotation.
+     * @return the x coordinate of the center of rotation.
      */
     final double getAX() {
         return ax;
     }
 
     /**
-     * @return the current center of rotation.
+     * @return the y coordinate of the center of rotation.
      */
     final double getAY() {
         return ay;
