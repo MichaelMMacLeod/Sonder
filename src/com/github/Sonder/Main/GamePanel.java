@@ -7,6 +7,7 @@ import com.github.Sonder.Visual.Parts.*;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -25,13 +26,13 @@ class GamePanel extends JPanel {
      */
     private final InputManager input;
 
-    private ArrayList<Poly> objects;
+    private ArrayList<Chain> objects;
 
-    private Capsule player;
+    private Pod player;
 
-    private Poly selected;
-    private Poly connectTo;
-    private int closestNode;
+    private Chain selected;
+    private Chain connectTo;
+    private Connection closestConnection;
 
     /**
      * Creates a GamePanel object.
@@ -63,46 +64,46 @@ class GamePanel extends JPanel {
     private void restart() {
         objects = new ArrayList<>();
 
-        player = new Capsule(0, 0);
+        player = new Pod(0, 0, 0);
         objects.add(player);
 
         selected = null;
         connectTo = null;
-        closestNode = -1;
+        closestConnection = null;
     }
 
     /**
      * Calculates logic updates.
      */
     void update() {
-        for (Poly p : objects)
-            p.update();
+        for (Chain c : objects)
+            c.transform();
 
-        double mousex = input.getMouseX() - getWidth() / 2 + player.getCenterX();
-        double mousey = input.getMouseY() - getHeight() / 2 + player.getCenterY();
+        double mousex = input.getMouseX() - getWidth() / 2 + player.getAX();
+        double mousey = input.getMouseY() - getHeight() / 2 + player.getAY();
 
-        if (input.pressed("c"))
-            objects.add(new Cannon(mousex, mousey));
-        if (input.pressed("e"))
-            objects.add(new Engine(mousex, mousey));
+//        if (input.pressed("c"))
+//            objects.add(new Cannon(mousex, mousey));
+//        if (input.pressed("e"))
+//            objects.add(new Engine(mousex, mousey));
         if (input.pressed("h"))
-            objects.add(new Hull(mousex, mousey));
-        if (input.pressed("l"))
-            objects.add(new Hull_Long(mousex, mousey));
+            objects.add(new Pod(mousex, mousey, 0));
+//        if (input.pressed("l"))
+//            objects.add(new Hull_Long(mousex, mousey));
 
         if (input.held("a"))
-            player.chainRotate(-Math.PI / 128);
+            player.rotate(-Math.PI / 128);
         if (input.held("d"))
-            player.chainRotate(Math.PI / 128);
+            player.rotate(Math.PI / 128);
         if (input.held("w"))
-            player.thrust(0.05);
+            player.translate(Math.cos(player.getR()), Math.sin(player.getR()));
 
         boolean updateSelected = input.pressed("mouse");
 
-        for (Poly poly : objects) {
+        for (Chain c : objects) {
             if (updateSelected) {
-                if (poly.contains(mousex, mousey)) {
-                    selected = poly;
+                if (c.contains(mousex, mousey)) {
+                    selected = c;
                     updateSelected = false;
                 }
             }
@@ -115,38 +116,38 @@ class GamePanel extends JPanel {
         if (!input.held("mouse")
                 && selected != null
                 && connectTo != null
-                && !selected.hasPoly(connectTo)) {
-            connectTo.attach(selected, closestNode);
+                && !selected.hasInChain(connectTo)) {
+            connectTo.attachChild(closestConnection, selected);
             selected = null;
             connectTo = null;
         } else if (selected != null
                 && connectTo == null) {
-            selected.detach();
+            selected.detachFromParent();
         }
 
         if (selected != null && input.held("mouse")) {
             Camera.shouldDrawNodes = true;
 
-            selected.chainTranslate(mousex - selected.getXConnector(), mousey - selected.getYConnector());
+            selected.translate(mousex - selected.getLink().x, mousey - selected.getLink().y);
 
             double smallestDist = Integer.MAX_VALUE;
-            Poly closestPoly = selected;
-            closestNode = -1;
+            Chain closestChain = selected;
+            closestConnection = null;
 
-            for (Poly poly : objects) {
-                if (poly != selected) {
-                    double[] xnodes = poly.getXNodes();
-                    double[] ynodes = poly.getYNodes();
+            for (Chain chain : objects) {
+                if (chain != selected) {
+                    Connection[] connections = chain.getConnections();
+                    Point2D.Double[] connectionPoints = chain.getConnectionPoints();
 
-                    for (int i = 0; i < poly.getNumberOfNodes(); i++) {
+                    for (int i = 0; i < connectionPoints.length; i++) {
                         double distance =
                                 Math.sqrt(
-                                        (xnodes[i] - selected.getXConnector()) * (xnodes[i] - selected.getXConnector())
-                                        + (ynodes[i] - selected.getYConnector()) * (ynodes[i] - selected.getYConnector())
+                                        (connectionPoints[i].x - selected.getLink().x) * (connectionPoints[i].x - selected.getLink().x)
+                                        + (connectionPoints[i].x - selected.getLink().x) * (connectionPoints[i].x - selected.getLink().x)
                                 );
                         if (distance < smallestDist) {
-                            closestPoly = poly;
-                            closestNode = i;
+                            closestChain = chain;
+                            closestConnection = connections[i];
                             smallestDist = distance;
                         }
                     }
@@ -154,7 +155,7 @@ class GamePanel extends JPanel {
             }
 
             if (smallestDist < 15) {
-                connectTo = closestPoly;
+                connectTo = closestChain;
             } else {
                 connectTo = null;
             }
@@ -169,7 +170,7 @@ class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Poly[0]), player.getCenterX(), player.getCenterY());
+        Camera.draw(g, getWidth(), getHeight(), objects.toArray(new Chain[0]), player.getAX(), player.getAY());
     }
 
     /**

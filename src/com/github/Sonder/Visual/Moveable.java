@@ -30,14 +30,14 @@ abstract class Moveable {
     /**
      * @return the x coordinate of the center of rotation.
      */
-    final double getAX() {
+    public final double getAX() {
         return ax;
     }
 
     /**
      * @return the y coordinate of the center of rotation.
      */
-    final double getAY() {
+    public final double getAY() {
         return ay;
     }
     /**
@@ -64,7 +64,7 @@ abstract class Moveable {
     /**
      * @return the angle of rotation in radians.
      */
-    final double getR() {
+    public final double getR() {
         return r;
     }
     /**
@@ -86,7 +86,7 @@ abstract class Moveable {
      * @param dx is the distance in the x dimension.
      * @param dy is the distance in the y dimension.
      */
-    protected void translate(double dx, double dy) {
+    public void translate(double dx, double dy) {
         this.dx += dx;
         this.dy += dy;
     }
@@ -97,7 +97,7 @@ abstract class Moveable {
      * Overriding methods MUST call super.rotate(dt).
      * @param dt is the angle in radians.
      */
-    protected void rotate(double dt) {
+    public void rotate(double dt) {
         this.dr += dt;
     }
 

@@ -1,6 +1,6 @@
 package com.github.Sonder.Visual;
 
-class Connection extends Moveable {
+public class Connection extends Moveable {
     private Chain source;
     private Chain reference;
 
@@ -15,7 +15,7 @@ class Connection extends Moveable {
     }
 
     @Override
-    protected void translate(double dx, double dy) {
+    public void translate(double dx, double dy) {
         super.translate(dx, dy);
 
         if (reference != null)
@@ -23,7 +23,7 @@ class Connection extends Moveable {
     }
 
     @Override
-    protected void rotate(double dt) {
+    public void rotate(double dt) {
         super.rotate();
 
         if (reference != null)
@@ -39,8 +39,8 @@ class Connection extends Moveable {
 
     public final void attachReference(Chain chain) {
         if (reference == null) {
-            chain.translate(getAX() - chain.getLinkX(), getAY() - chain.getLinkY());
-            chain.setAnchor(chain.getLinkX(), chain.getLinkY());
+            chain.translate(getAX() - chain.getLink().x, getAY() - chain.getLink().y);
+            chain.setAnchor(chain.getLink().x, chain.getLink().y);
             chain.rotate(getR() - chain.getR());
 
             chain.setParent(this);
