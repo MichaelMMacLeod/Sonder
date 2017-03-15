@@ -32,7 +32,7 @@ public class Connection extends Moveable {
 
     public final void detachReference() {
         if (reference != null) {
-            reference.detachFromParent();
+            reference.detach();
             reference = null;
         }
     }

@@ -11,10 +11,10 @@ public abstract class Chain extends Outline {
 
         children = new Connection[childPoints.length];
         for (int i = 0; i < children.length; i++) {
-            children[i] = new Connection(childPoints[i].x, childPoints[i].y, childRotations[i], this);
+            children[i] = new Connection(childPoints[i].x + ax, childPoints[i].y + ay, childRotations[i], this);
         }
 
-        this.link = new Point2D.Double(link.x, link.y);
+        this.link = new Point2D.Double(link.x + ax, link.y + ay);
     }
 
     private Point2D.Double link;
@@ -54,8 +54,14 @@ public abstract class Chain extends Outline {
         this.parent = parent;
     }
 
-    public void detachFromParent() {
+    public void detach() {
         parent = null;
+    }
+
+    public void detachFromParent() {
+        if (parent != null) {
+            parent.detachReference();
+        }
     }
 
     public void attachChild(Connection connection, Chain chain) {
@@ -80,14 +86,6 @@ public abstract class Chain extends Outline {
     }
 
     @Override
-    protected void setAnchor(double ax, double ay) {
-        super.setAnchor(ax, ay);
-
-        for (Connection c : children)
-            c.setAnchor(ax, ay);
-    }
-
-    @Override
     public void translate(double dx, double dy) {
         super.translate(dx, dy);
 
@@ -106,7 +104,7 @@ public abstract class Chain extends Outline {
     @Override
     protected void translate() {
         super.translate();
-        
+
         link.setLocation(link.x + getDX(), link.y + getDY());
     }
 

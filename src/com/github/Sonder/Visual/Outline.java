@@ -13,7 +13,7 @@ public abstract class Outline extends Moveable {
 
         this.points = new Point2D.Double[points.length];
         for (int i = 0; i < this.points.length; i++)
-            this.points[i] = new Point2D.Double(points[i].x, points[i].y);
+            this.points[i] = new Point2D.Double(points[i].x + ax, points[i].y + ay);
     }
 
     private Point2D.Double[] points;

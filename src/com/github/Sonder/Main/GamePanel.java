@@ -2,7 +2,6 @@ package com.github.Sonder.Main;
 
 import com.github.Sonder.Input.InputManager;
 import com.github.Sonder.Visual.*;
-import com.github.Sonder.Visual.Parts.*;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
