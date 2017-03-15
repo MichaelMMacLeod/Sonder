@@ -21,6 +21,22 @@ public abstract class Chain extends Outline {
     private Connection parent;
     private Connection[] children;
 
+    public double[] getConnectionXPoints() {
+        double[] points = new double[children.length];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = children[i].getAX();
+        }
+        return points;
+    }
+
+    public double[] getConnectionYPoints() {
+        double[] points = new double[children.length];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = children[i].getAY();
+        }
+        return points;
+    }
+
     public boolean hasInChain(Chain chain) {
         if (this == chain)
             return true;
