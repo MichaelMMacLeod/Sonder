@@ -1,5 +1,6 @@
 package com.github.Sonder.Visual;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 public abstract class Outline extends Moveable {
@@ -50,5 +51,19 @@ public abstract class Outline extends Moveable {
                     prime.x * cos - prime.y * sin + getAX(),
                     prime.x * sin + prime.y * cos + getAY());
         }
+    }
+
+    public final boolean contains(double x, double y) {
+        int[] xPointsPrime = new int[points.length];
+        int[] yPointsPrime = new int[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            xPointsPrime[i] = (int) points[i].x;
+            yPointsPrime[i] = (int) points[i].y;
+        }
+
+        Polygon p = new Polygon(xPointsPrime, yPointsPrime, points.length);
+
+        return p.contains(x, y);
     }
 }
