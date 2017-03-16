@@ -1,7 +1,5 @@
 package com.github.Sonder.Visual;
 
-import com.github.Sonder.Visual.Parts.Poly;
-
 import java.awt.*;
 import java.awt.geom.Point2D;
 
